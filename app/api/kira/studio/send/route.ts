@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 import { createSupabaseServiceClient } from '@/lib/supabase-server'
 import { buildPlanEmail, type PlanJSON } from '@/lib/planEmail'
 
 export async function POST(req: NextRequest) {
+  const { Resend } = await import('resend')
   const resend = new Resend(process.env.RESEND_API_KEY)
   const secret = req.headers.get('x-studio-secret')
   if (secret !== process.env.KIRA_STUDIO_SECRET) {
