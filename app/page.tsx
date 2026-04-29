@@ -48,6 +48,7 @@ const initialForm: FormData = {
 export default function Home() {
   const [form, setForm] = useState<FormData>(initialForm)
   const [submitting, setSubmitting] = useState(false)
+  const [agreed, setAgreed] = useState(false)
   const [error, setError] = useState('')
   const [applied, setApplied] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
@@ -81,6 +82,10 @@ export default function Home() {
     e.preventDefault()
     if (!form.name || !form.age || !form.country || !form.email) {
       setError('Please fill in the required fields.')
+      return
+    }
+    if (!agreed) {
+      setError('Please confirm you have read and agree to the Terms & Conditions and Privacy Policy.')
       return
     }
     setError('')
@@ -422,16 +427,32 @@ export default function Home() {
                 </p>
               )}
 
+              <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer', marginTop: 8 }}>
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={e => setAgreed(e.target.checked)}
+                  style={{ marginTop: 2, width: 16, height: 16, flexShrink: 0, accentColor: 'var(--sage)', cursor: 'pointer' }}
+                />
+                <span style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.6 }}>
+                  I confirm I have read and agree to the{' '}
+                  <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--sage)', fontWeight: 500 }}>Terms & Conditions</a>
+                  {' '}and{' '}
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--sage)', fontWeight: 500 }}>Privacy Policy</a>,
+                  including the health disclaimer and results disclaimer.
+                </span>
+              </label>
+
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !agreed}
                 style={{
                   marginTop: 8, padding: '16px 32px',
-                  background: submitting ? 'var(--border)' : 'var(--ink)',
-                  color: submitting ? 'var(--ink-muted)' : '#F8F6F1',
+                  background: submitting || !agreed ? 'var(--border)' : 'var(--ink)',
+                  color: submitting || !agreed ? 'var(--ink-muted)' : '#F8F6F1',
                   border: 'none', borderRadius: 99,
                   fontFamily: 'DM Sans, sans-serif', fontSize: 15, fontWeight: 600,
-                  letterSpacing: '0.04em', cursor: submitting ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
+                  letterSpacing: '0.04em', cursor: submitting || !agreed ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
                 }}
               >
                 {submitting ? 'Submitting...' : 'Send my application →'}
@@ -439,13 +460,6 @@ export default function Home() {
 
               <p style={{ fontSize: 12, color: 'var(--ink-faint)', textAlign: 'center', marginTop: 16 }}>
                 You'll be redirected to Stripe to complete payment. Secure checkout.
-              </p>
-
-              <p style={{ fontSize: 11, color: 'var(--ink-faint)', textAlign: 'center', marginTop: 8 }}>
-                By applying you agree to our{' '}
-                <a href="/terms" style={{ color: 'var(--sage)' }}>Terms & Conditions</a>{' '}
-                and{' '}
-                <a href="/privacy" style={{ color: 'var(--sage)' }}>Privacy Policy</a>.
               </p>
             </form>
 
