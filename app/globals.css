@@ -96,7 +96,7 @@ body {
 .pill-select {
   cursor: pointer;
   padding: 8px 16px;
-  border-radius: 99px;
+  border-radius: 8px;
   border: 1.5px solid var(--border);
   background: var(--surface);
   color: var(--ink-muted);

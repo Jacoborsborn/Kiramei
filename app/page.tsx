@@ -557,6 +557,7 @@ function HeroSection({ onNavTap }: { onNavTap: () => void }) {
         alt="Kira Mei — Online Personal Trainer"
         fill
         priority
+        quality={100}
         style={{ objectFit: 'cover', objectPosition: 'top center' }}
         sizes="100vw"
       />
@@ -590,20 +591,20 @@ function HeroSection({ onNavTap }: { onNavTap: () => void }) {
         padding: 'clamp(32px, 6vw, 72px)',
         maxWidth: 700,
       }}>
-        <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 14 }}>
+        <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.82)', marginBottom: 14 }}>
           Online Personal Training · Fit Over 40
         </p>
         <h1 className="font-display" style={{
           fontSize: 'clamp(72px, 16vw, 140px)',
           lineHeight: 0.92,
           fontWeight: 600,
-          color: '#F8F6F1',
+          color: '#FFFFFF',
           letterSpacing: '-0.02em',
           marginBottom: 28,
         }}>
           Kira<br />Mei.
         </h1>
-        <p style={{ fontSize: 'clamp(16px, 3vw, 20px)', color: 'rgba(248,246,241,0.7)', lineHeight: 1.55, maxWidth: 380, marginBottom: 40, fontWeight: 300 }}>
+        <p style={{ fontSize: 'clamp(16px, 3vw, 20px)', color: 'rgba(255,255,255,0.88)', lineHeight: 1.55, maxWidth: 380, marginBottom: 40, fontWeight: 300 }}>
           AI-built programme. Adapts as you progress.<br />No fluff, no fads.
         </p>
         <a href="#apply" style={{
@@ -679,7 +680,7 @@ function ProgrammeSection() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, alignItems: 'stretch' }}>
 
           {/* Workout card */}
           <div className="paper-card" style={{ overflow: 'hidden' }}>
@@ -778,7 +779,7 @@ function ProFeaturesSection() {
   ]
 
   return (
-    <section style={{ background: 'var(--ink)', padding: 'clamp(64px, 10vw, 100px) 24px' }}>
+    <section style={{ background: '#2C2A26', padding: 'clamp(64px, 10vw, 100px) 24px' }}>
       <div style={{ maxWidth: 980, margin: '0 auto' }}>
 
         <div style={{ marginBottom: 52 }}>
