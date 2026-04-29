@@ -179,19 +179,19 @@ export default function Home() {
       </section>
 
       {/* ── WHAT'S INCLUDED ── */}
-      <section style={{ padding: '80px 24px', maxWidth: 900, margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 40 }}>
+      <section style={{ padding: '60px 24px', maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 28 }}>
           <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', borderBottom: '1.5px solid var(--sage)', paddingBottom: 2 }}>
             What's included
           </span>
         </div>
 
-        <h2 className="font-display" style={{ fontSize: 'clamp(36px, 8vw, 56px)', fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 48 }}>
+        <h2 className="font-display" style={{ fontSize: 'clamp(32px, 7vw, 48px)', fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 32 }}>
           Everything you need.<br />
           <span style={{ color: 'var(--sage)' }}>Nothing you don't.</span>
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
           {[
             ['01', 'Custom workout plan', 'Built around your schedule, equipment, and goals.'],
             ['02', 'Full meal plan', 'Real food, realistic portions, no misery.'],
@@ -200,10 +200,10 @@ export default function Home() {
             ['05', 'Weekly email check-ins', 'Accountability without the judgement.'],
             ['06', 'Programme adjustments', 'Tweaked as you progress, not left to gather dust.'],
           ].map(([num, title, desc]) => (
-            <div key={num} className="paper-card" style={{ padding: '24px 24px 28px' }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--ink-faint)', letterSpacing: '0.1em', marginBottom: 12 }}>{num}</div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ink)', marginBottom: 6 }}>{title}</div>
-              <div style={{ fontSize: 14, color: 'var(--ink-muted)', lineHeight: 1.6 }}>{desc}</div>
+            <div key={num} className="paper-card" style={{ padding: '16px 18px 20px' }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-faint)', letterSpacing: '0.1em', marginBottom: 8 }}>{num}</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)', marginBottom: 4 }}>{title}</div>
+              <div style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.5 }}>{desc}</div>
             </div>
           ))}
         </div>
@@ -263,6 +263,12 @@ export default function Home() {
                   <span style={{ fontSize: 14, color: 'var(--ink-muted)' }}>{f}</span>
                 </div>
               ))}
+              {['Body composition analysis', 'Weekly progress check-ins', 'Auto plan adjustments', 'Priority plan rebuilds mid-cycle'].map(f => (
+                <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ color: 'var(--ink-faint)', fontSize: 13, lineHeight: 1 }}>✕</span>
+                  <span style={{ fontSize: 14, color: 'var(--ink-faint)', textDecoration: 'line-through' }}>{f}</span>
+                </div>
+              ))}
             </div>
             <a href="#apply" style={{ display: 'block', textAlign: 'center', padding: '13px', borderRadius: 99, border: '1.5px solid var(--border)', color: 'var(--ink)', fontSize: 14, fontWeight: 600, textDecoration: 'none', letterSpacing: '0.03em' }}>
               Apply — Standard
@@ -285,8 +291,8 @@ export default function Home() {
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20, marginBottom: 28, display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 'Everything in Standard',
-                'AI body composition analysis',
-                'AI weekly progress check-ins',
+                'Body composition analysis',
+                'Weekly progress check-ins',
                 'Auto plan adjustments',
                 'Priority plan rebuilds mid-cycle',
               ].map(f => (
@@ -353,7 +359,7 @@ export default function Home() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                   {[
                     { value: 'monthly', label: 'Standard', price: '£99.99', desc: 'Custom workout + meal plan + macros + recipes' },
-                    { value: 'bundle', label: 'Pro', price: '£149.99', desc: 'Everything + AI body analysis + AI weekly coaching', badge: 'AI-Powered' },
+                    { value: 'bundle', label: 'Pro', price: '£149.99', desc: 'Everything + body analysis + weekly coaching', badge: 'Full Service' },
                   ].map(opt => (
                     <button
                       key={opt.value}
@@ -434,6 +440,13 @@ export default function Home() {
               <p style={{ fontSize: 12, color: 'var(--ink-faint)', textAlign: 'center', marginTop: 16 }}>
                 You'll be redirected to Stripe to complete payment. Secure checkout.
               </p>
+
+              <p style={{ fontSize: 11, color: 'var(--ink-faint)', textAlign: 'center', marginTop: 8 }}>
+                By applying you agree to our{' '}
+                <a href="/terms" style={{ color: 'var(--sage)' }}>Terms & Conditions</a>{' '}
+                and{' '}
+                <a href="/privacy" style={{ color: 'var(--sage)' }}>Privacy Policy</a>.
+              </p>
             </form>
 
             {/* ── Right: Sticky order summary ── */}
@@ -463,7 +476,7 @@ export default function Home() {
                   </div>
                   {form.plan === 'bundle' && (
                     <span style={{ display: 'inline-block', marginTop: 12, background: 'var(--sage)', color: 'white', fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '4px 10px', borderRadius: 99 }}>
-                      AI-Powered
+                      Full Service
                     </span>
                   )}
                 </div>
@@ -480,8 +493,8 @@ export default function Home() {
                       'Weekly shopping list',
                       'Recipes tailored to your plan',
                       ...(form.plan === 'bundle' ? [
-                        'AI body composition analysis',
-                        'AI weekly progress check-ins',
+                        'Body composition analysis',
+                        'Weekly progress check-ins',
                         'Auto plan adjustments',
                         'Priority rebuilds mid-cycle',
                       ] : []),
@@ -501,7 +514,7 @@ export default function Home() {
                   </p>
                   {[
                     ['01', 'Payment via Stripe'],
-                    ['02', 'Kira analyses your answers'],
+                    ['02', 'Kira reviews your answers'],
                     ['03', 'Programme delivered within 4 days'],
                   ].map(([n, t]) => (
                     <div key={n} style={{ display: 'flex', gap: 10, marginBottom: 8, alignItems: 'flex-start' }}>
@@ -528,6 +541,10 @@ export default function Home() {
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           Kira Mei — Online PT · Worldwide · 2025
         </p>
+        <div style={{ marginTop: 12, display: 'flex', justifyContent: 'center', gap: 24 }}>
+          <a href="/terms" style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', textDecoration: 'none', letterSpacing: '0.06em' }}>Terms & Conditions</a>
+          <a href="/privacy" style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', textDecoration: 'none', letterSpacing: '0.06em' }}>Privacy Policy</a>
+        </div>
       </footer>
 
       {showPasswordModal && !showStudio && (
@@ -562,7 +579,7 @@ function HeroSection({ onNavTap }: { onNavTap: () => void }) {
         sizes="100vw"
       />
 
-      {/* Gradient overlay — dark at top for nav, heavier at bottom for text */}
+      {/* Gradient overlay */}
       <div style={{
         position: 'absolute', inset: 0,
         background: 'linear-gradient(to bottom, rgba(10,20,12,0.55) 0%, rgba(10,20,12,0.1) 35%, rgba(10,20,12,0.15) 55%, rgba(10,20,12,0.82) 100%)',
@@ -605,7 +622,7 @@ function HeroSection({ onNavTap }: { onNavTap: () => void }) {
           Kira<br />Mei.
         </h1>
         <p style={{ fontSize: 'clamp(16px, 3vw, 20px)', color: 'rgba(255,255,255,0.88)', lineHeight: 1.55, maxWidth: 380, marginBottom: 40, fontWeight: 300 }}>
-          AI-built programme. Adapts as you progress.<br />No fluff, no fads.
+          Built for your body. Adapts as you progress.<br />No fluff, no fads.
         </p>
         <a href="#apply" style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -626,43 +643,92 @@ function HeroSection({ onNavTap }: { onNavTap: () => void }) {
 
 // ── Programme Preview ───────────────────────────────────
 
-const WORKOUT_DAYS = [
-  { day: 'Monday',    label: 'Upper Body',    exercises: [
-    { key: 'A', name: 'Bench Press',     sets: '4 × 8',   note: 'RPE 8' },
-    { key: 'B', name: 'Barbell Row',     sets: '4 × 8',   note: 'RPE 8' },
-    { key: 'C', name: 'Overhead Press', sets: '3 × 10',  note: 'RPE 7' },
-    { key: 'D', name: 'Pull-ups',        sets: '3 × max', note: '' },
-    { key: 'E', name: 'Tricep Pushdown', sets: '3 × 12',  note: '' },
-    { key: 'F', name: 'Bicep Curl',      sets: '3 × 12',  note: '' },
+type ExerciseDetail = {
+  key: string
+  name: string
+  sets: string
+  note: string
+  form: string
+  tempo: string
+  muscles: string
+  rest: string
+}
+
+const WORKOUT_DAYS: { day: string; label: string; exercises: ExerciseDetail[] }[] = [
+  { day: 'Monday', label: 'Upper Body', exercises: [
+    { key: 'A', name: 'Bench Press',     sets: '4 × 8',   note: 'RPE 8', form: 'Retract shoulder blades, feet flat on floor. Bar path slightly diagonal toward lower chest.', tempo: '3-1-1-0', muscles: 'Chest, front delts, triceps', rest: '90 sec' },
+    { key: 'B', name: 'Barbell Row',     sets: '4 × 8',   note: 'RPE 8', form: 'Hinge at hips, pull bar to lower chest. Control the eccentric — don\'t let it drop.', tempo: '2-1-1-1', muscles: 'Upper back, lats, biceps', rest: '90 sec' },
+    { key: 'C', name: 'Overhead Press', sets: '3 × 10',  note: 'RPE 7', form: 'Brace core and glutes. Press straight up, slight forward lean at lockout is fine.', tempo: '2-1-1-0', muscles: 'Shoulders, triceps, upper traps', rest: '75 sec' },
+    { key: 'D', name: 'Pull-ups',        sets: '3 × max', note: '',       form: 'Full hang to start. Chin clears bar at top. No kipping — slow and controlled.', tempo: '2-0-1-1', muscles: 'Lats, biceps, rear delts', rest: '90 sec' },
+    { key: 'E', name: 'Tricep Pushdown', sets: '3 × 12',  note: '',       form: 'Elbows fixed at sides throughout. Full extension at bottom, controlled return.', tempo: '2-1-2-0', muscles: 'Triceps (all three heads)', rest: '60 sec' },
+    { key: 'F', name: 'Bicep Curl',      sets: '3 × 12',  note: '',       form: 'No swinging. Supinate the wrist at top. Control the descent — that\'s where growth happens.', tempo: '2-1-2-0', muscles: 'Biceps, brachialis', rest: '60 sec' },
   ]},
-  { day: 'Wednesday', label: 'Lower Body',    exercises: [
-    { key: 'A', name: 'Back Squat',      sets: '4 × 6',   note: 'RPE 8' },
-    { key: 'B', name: 'Romanian DL',     sets: '3 × 10',  note: 'RPE 7' },
-    { key: 'C', name: 'Leg Press',       sets: '3 × 12',  note: '' },
-    { key: 'D', name: 'Walking Lunges',  sets: '3 × 10',  note: 'each' },
-    { key: 'E', name: 'Hip Thrust',      sets: '3 × 15',  note: '' },
-    { key: 'F', name: 'Calf Raise',      sets: '4 × 15',  note: '' },
+  { day: 'Wednesday', label: 'Lower Body', exercises: [
+    { key: 'A', name: 'Back Squat',      sets: '4 × 6',   note: 'RPE 8', form: 'Bar on traps, chest up, knees tracking over toes. Hip crease below parallel.', tempo: '3-1-1-0', muscles: 'Quads, glutes, hamstrings', rest: '2 min' },
+    { key: 'B', name: 'Romanian DL',     sets: '3 × 10',  note: 'RPE 7', form: 'Soft knee, hinge from hip, bar stays close to legs. Feel the hamstring stretch at the bottom.', tempo: '3-1-1-0', muscles: 'Hamstrings, glutes, lower back', rest: '90 sec' },
+    { key: 'C', name: 'Leg Press',       sets: '3 × 12',  note: '',       form: 'Feet mid-platform. Don\'t lock out knees. Full depth — thighs to parallel or below.', tempo: '2-1-2-0', muscles: 'Quads, glutes', rest: '90 sec' },
+    { key: 'D', name: 'Walking Lunges',  sets: '3 × 10',  note: 'each',  form: 'Step forward, back knee lightly taps the floor. Torso upright. Drive through front heel.', tempo: 'Controlled', muscles: 'Quads, glutes, hip flexors', rest: '60 sec' },
+    { key: 'E', name: 'Hip Thrust',      sets: '3 × 15',  note: '',       form: 'Shoulders on bench, drive through heels. Full hip extension at top — squeeze hard.', tempo: '2-1-2-1', muscles: 'Glutes, hamstrings', rest: '60 sec' },
+    { key: 'F', name: 'Calf Raise',      sets: '4 × 15',  note: '',       form: 'Full range of motion — deep stretch at bottom, pause at top. Don\'t bounce.', tempo: '2-1-3-1', muscles: 'Gastrocnemius, soleus', rest: '45 sec' },
   ]},
-  { day: 'Friday',    label: 'Full Body',     exercises: [
-    { key: 'A', name: 'Deadlift',        sets: '4 × 5',   note: 'RPE 8' },
-    { key: 'B', name: 'Incline Press',   sets: '3 × 10',  note: 'RPE 7' },
-    { key: 'C', name: 'Cable Row',       sets: '3 × 12',  note: '' },
-    { key: 'D', name: 'Goblet Squat',    sets: '3 × 12',  note: '' },
-    { key: 'E', name: 'Face Pull',       sets: '3 × 15',  note: '' },
-    { key: 'F', name: 'Plank',           sets: '3 × 45s', note: '' },
+  { day: 'Friday', label: 'Full Body', exercises: [
+    { key: 'A', name: 'Deadlift',        sets: '4 × 5',   note: 'RPE 8', form: 'Bar over mid-foot, neutral spine, lats engaged. Think: push the floor away, not pull the bar up.', tempo: '1-1-2-0', muscles: 'Full posterior chain, quads', rest: '2–3 min' },
+    { key: 'B', name: 'Incline Press',   sets: '3 × 10',  note: 'RPE 7', form: '30–45° incline. Elbows at ~45° to the body. Touch upper chest, drive up.', tempo: '3-1-1-0', muscles: 'Upper chest, front delts, triceps', rest: '90 sec' },
+    { key: 'C', name: 'Cable Row',       sets: '3 × 12',  note: '',       form: 'Sit tall, no torso rocking. Drive elbows back, squeeze shoulder blades together at end.', tempo: '2-1-2-1', muscles: 'Mid back, lats, biceps', rest: '75 sec' },
+    { key: 'D', name: 'Goblet Squat',    sets: '3 × 12',  note: '',       form: 'Hold dumbbell at chest height. Squat deep, elbows inside knees at the bottom.', tempo: '2-1-2-0', muscles: 'Quads, glutes, core', rest: '60 sec' },
+    { key: 'E', name: 'Face Pull',       sets: '3 × 15',  note: '',       form: 'Rope at eye level. Pull to forehead with external rotation at the end — elbows high and wide.', tempo: '2-1-2-1', muscles: 'Rear delts, external rotators, upper traps', rest: '60 sec' },
+    { key: 'F', name: 'Plank',           sets: '3 × 45s', note: '',       form: 'Neutral spine — no hips sagging or piking. Brace abs like you\'re about to take a punch. Breathe steadily.', tempo: 'Hold', muscles: 'Core, shoulders, glutes', rest: '45 sec' },
   ]},
 ]
 
-const MEAL_DAY = [
-  { time: 'Breakfast',  kcal: 420,  p: 38, c: 52, f: 10, desc: 'Oat porridge, berries, Greek yoghurt, honey' },
-  { time: 'Lunch',      kcal: 560,  p: 48, c: 58, f: 18, desc: 'Grilled chicken thigh, jasmine rice, roasted veg, olive oil' },
-  { time: 'Snack',      kcal: 280,  p: 26, c: 22, f: 10, desc: 'Cottage cheese, apple, small handful of almonds' },
-  { time: 'Dinner',     kcal: 520,  p: 44, c: 46, f: 20, desc: 'Baked salmon, sweet potato, steamed broccoli, lemon butter' },
-  { time: 'Post-gym',   kcal: 180,  p: 28, c: 18, f:  2, desc: 'Whey protein shake, banana' },
+type MealDetail = {
+  time: string
+  kcal: number
+  p: number
+  c: number
+  f: number
+  desc: string
+  recipe: string
+  ingredients: string[]
+}
+
+const MEAL_DAY: MealDetail[] = [
+  {
+    time: 'Breakfast', kcal: 420, p: 38, c: 52, f: 10,
+    desc: 'Oat porridge, berries, Greek yoghurt, honey',
+    recipe: 'Cook oats with water or milk for 5 min, stirring occasionally. Pour into a bowl and top with Greek yoghurt, mixed berries and a drizzle of honey.',
+    ingredients: ['80g rolled oats', '150g Greek yoghurt (0% fat)', '80g mixed berries', '1 tsp honey', '200ml water or semi-skimmed milk'],
+  },
+  {
+    time: 'Lunch', kcal: 560, p: 48, c: 58, f: 18,
+    desc: 'Grilled chicken thigh, jasmine rice, roasted veg, olive oil',
+    recipe: 'Season chicken with salt, pepper and garlic powder. Grill on medium-high 6–8 min each side until cooked through. Cook jasmine rice per packet. Toss veg in olive oil and roast at 200°C for 25 min.',
+    ingredients: ['160g chicken thigh (skinless, boneless)', '150g cooked jasmine rice', '200g mixed veg (peppers, courgette, red onion)', '1 tbsp olive oil', 'Garlic powder, salt, pepper'],
+  },
+  {
+    time: 'Snack', kcal: 280, p: 26, c: 22, f: 10,
+    desc: 'Cottage cheese, apple, small handful of almonds',
+    recipe: 'No cooking required. Portion into a bowl or container.',
+    ingredients: ['150g cottage cheese (full fat or low fat)', '1 medium apple', '20g almonds (unsalted)'],
+  },
+  {
+    time: 'Dinner', kcal: 520, p: 44, c: 46, f: 20,
+    desc: 'Baked salmon, sweet potato, steamed broccoli, lemon butter',
+    recipe: 'Rub salmon with garlic, lemon juice, salt and dill. Bake at 200°C for 16–18 min. Pierce sweet potato and bake at 200°C for 45 min. Steam broccoli 5 min. Finish with a small knob of butter on the potato.',
+    ingredients: ['180g salmon fillet', '200g sweet potato', '150g broccoli', '1 tsp butter', 'Garlic, lemon juice, dill, salt'],
+  },
+  {
+    time: 'Post-gym', kcal: 180, p: 28, c: 18, f: 2,
+    desc: 'Whey protein shake, banana',
+    recipe: 'Shake or blend protein powder with cold water or milk. Eat banana alongside.',
+    ingredients: ['30g whey protein powder (any flavour)', '1 medium banana', '250ml cold water or milk'],
+  },
 ]
 
 function ProgrammeSection() {
   const [activeDay, setActiveDay] = useState(0)
+  const [selectedExercise, setSelectedExercise] = useState<ExerciseDetail | null>(null)
+  const [selectedMeal, setSelectedMeal] = useState<MealDetail | null>(null)
 
   return (
     <section style={{ padding: 'clamp(64px, 10vw, 100px) 24px', background: 'var(--paper)' }}>
@@ -678,6 +744,7 @@ function ProgrammeSection() {
           <p style={{ fontSize: 15, color: 'var(--ink-muted)', maxWidth: 440, lineHeight: 1.7 }}>
             Every plan is built from scratch for you. This is a real example from a 3-day programme.
           </p>
+          <p style={{ fontSize: 12, color: 'var(--ink-faint)', marginTop: 8 }}>Tap any exercise or meal to see full details.</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, alignItems: 'stretch' }}>
@@ -691,7 +758,6 @@ function ProgrammeSection() {
               <p className="font-display" style={{ fontSize: 26, fontWeight: 600, color: '#F8F6F1', lineHeight: 1.1, marginBottom: 16 }}>
                 {WORKOUT_DAYS[activeDay].label} — {WORKOUT_DAYS[activeDay].day}
               </p>
-              {/* Day tabs */}
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 {WORKOUT_DAYS.map((d, i) => (
                   <button key={d.day} onClick={() => setActiveDay(i)} style={{
@@ -706,18 +772,30 @@ function ProgrammeSection() {
             </div>
             <div>
               {WORKOUT_DAYS[activeDay].exercises.map((ex, i, arr) => (
-                <div key={ex.key} style={{
-                  display: 'grid', gridTemplateColumns: '22px 1fr auto',
-                  alignItems: 'center', gap: '0 10px',
-                  padding: '11px 24px',
-                  borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none',
-                }}>
+                <button
+                  key={ex.key}
+                  onClick={() => setSelectedExercise(ex)}
+                  style={{
+                    display: 'grid', gridTemplateColumns: '22px 1fr auto',
+                    alignItems: 'center', gap: '0 10px',
+                    padding: '11px 24px', width: '100%', textAlign: 'left',
+                    borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none',
+                    background: 'transparent', border: i < arr.length - 1 ? '0 0 1px 0 solid var(--border)' : 'none',
+                    borderTop: 'none', borderLeft: 'none', borderRight: 'none',
+                    borderBottomColor: i < arr.length - 1 ? 'var(--border)' : 'transparent',
+                    borderBottomWidth: i < arr.length - 1 ? 1 : 0,
+                    borderBottomStyle: 'solid',
+                    cursor: 'pointer', transition: 'background 0.1s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--paper)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
                   <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--sage)', letterSpacing: '0.06em' }}>{ex.key}</span>
                   <span style={{ fontSize: 14, color: 'var(--ink)', fontWeight: 500 }}>{ex.name}</span>
                   <span style={{ fontSize: 12, color: 'var(--ink-muted)', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>
                     {ex.sets}{ex.note ? ` · ${ex.note}` : ''}
                   </span>
-                </div>
+                </button>
               ))}
             </div>
             <div style={{ padding: '12px 24px', borderTop: '1px solid var(--border)', background: 'var(--paper)', display: 'flex', justifyContent: 'space-between' }}>
@@ -741,10 +819,20 @@ function ProgrammeSection() {
             </div>
             <div>
               {MEAL_DAY.map((m, i) => (
-                <div key={m.time} style={{
-                  padding: '13px 24px',
-                  borderBottom: i < MEAL_DAY.length - 1 ? '1px solid var(--border)' : 'none',
-                }}>
+                <button
+                  key={m.time}
+                  onClick={() => setSelectedMeal(m)}
+                  style={{
+                    display: 'block', width: '100%', textAlign: 'left',
+                    padding: '13px 24px', background: 'transparent',
+                    border: 'none', borderBottom: i < MEAL_DAY.length - 1 ? '1px solid var(--border)' : 'none',
+                    borderBottomStyle: 'solid', borderBottomColor: i < MEAL_DAY.length - 1 ? 'var(--border)' : 'transparent',
+                    borderBottomWidth: i < MEAL_DAY.length - 1 ? 1 : 0,
+                    cursor: 'pointer', transition: 'background 0.1s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--paper)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 3 }}>
                     <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--sage)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{m.time}</span>
                     <span style={{ fontSize: 11, color: 'var(--ink-faint)', fontVariantNumeric: 'tabular-nums' }}>
@@ -752,7 +840,7 @@ function ProgrammeSection() {
                     </span>
                   </div>
                   <span style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.5 }}>{m.desc}</span>
-                </div>
+                </button>
               ))}
             </div>
             <div style={{ padding: '12px 24px', borderTop: '1px solid var(--border)', background: 'var(--paper)' }}>
@@ -762,7 +850,94 @@ function ProgrammeSection() {
 
         </div>
       </div>
+
+      {/* Exercise detail modal */}
+      {selectedExercise && (
+        <DetailModal onClose={() => setSelectedExercise(null)}>
+          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 8 }}>
+            Exercise Details
+          </p>
+          <h3 className="font-display" style={{ fontSize: 28, fontWeight: 600, color: 'var(--ink)', marginBottom: 4 }}>
+            {selectedExercise.name}
+          </h3>
+          <p style={{ fontSize: 13, color: 'var(--ink-faint)', marginBottom: 20 }}>
+            {selectedExercise.sets}{selectedExercise.note ? ` · ${selectedExercise.note}` : ''}
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {[
+              ['Muscles', selectedExercise.muscles],
+              ['Form', selectedExercise.form],
+              ['Tempo', selectedExercise.tempo],
+              ['Rest', selectedExercise.rest],
+            ].map(([label, val]) => (
+              <div key={label} style={{ borderTop: '1px solid var(--border)', paddingTop: 14 }}>
+                <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 6 }}>{label}</p>
+                <p style={{ fontSize: 14, color: 'var(--ink)', lineHeight: 1.6 }}>{val}</p>
+              </div>
+            ))}
+          </div>
+        </DetailModal>
+      )}
+
+      {/* Meal detail modal */}
+      {selectedMeal && (
+        <DetailModal onClose={() => setSelectedMeal(null)}>
+          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 8 }}>
+            {selectedMeal.time}
+          </p>
+          <h3 className="font-display" style={{ fontSize: 26, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.2, marginBottom: 6 }}>
+            {selectedMeal.desc}
+          </h3>
+          <p style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 20, fontVariantNumeric: 'tabular-nums' }}>
+            {selectedMeal.kcal} kcal · {selectedMeal.p}g protein · {selectedMeal.c}g carbs · {selectedMeal.f}g fat
+          </p>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginBottom: 16 }}>
+            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 10 }}>Ingredients</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {selectedMeal.ingredients.map(ing => (
+                <div key={ing} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                  <span style={{ color: 'var(--sage)', fontSize: 12, marginTop: 2, flexShrink: 0 }}>·</span>
+                  <span style={{ fontSize: 14, color: 'var(--ink)', lineHeight: 1.5 }}>{ing}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16 }}>
+            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 10 }}>How to make it</p>
+            <p style={{ fontSize: 14, color: 'var(--ink)', lineHeight: 1.7 }}>{selectedMeal.recipe}</p>
+          </div>
+        </DetailModal>
+      )}
     </section>
+  )
+}
+
+function DetailModal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100,
+        background: 'rgba(26,25,22,0.6)',
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+        padding: '0',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: 'var(--surface)',
+          borderRadius: '20px 20px 0 0',
+          padding: '28px 24px 40px',
+          width: '100%', maxWidth: 540,
+          maxHeight: '85vh', overflowY: 'auto',
+          boxShadow: '0 -8px 40px rgba(26,25,22,0.2)',
+        }}
+      >
+        <div style={{ width: 36, height: 4, borderRadius: 99, background: 'var(--border)', margin: '0 auto 24px' }} />
+        {children}
+      </div>
+    </div>
   )
 }
 
@@ -788,10 +963,10 @@ function ProFeaturesSection() {
           </span>
           <h2 className="font-display" style={{ fontSize: 'clamp(36px, 7vw, 56px)', fontWeight: 600, color: '#F8F6F1', lineHeight: 1.1, marginTop: 20, marginBottom: 8 }}>
             Not just a plan.<br />
-            <span style={{ color: 'var(--sage)' }}>An AI that coaches.</span>
+            <span style={{ color: 'var(--sage)' }}>A coach that adapts.</span>
           </h2>
           <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.4)', maxWidth: 480, lineHeight: 1.7 }}>
-            Pro clients get Kira as a live AI coach — she analyses your body, tracks your progress week to week, and adjusts your plan in real time. No human bottleneck. Always on.
+            Pro clients get full-service coaching — Kira analyses your body, tracks your progress week to week, and adjusts your plan in real time. No waiting. Always responsive.
           </p>
         </div>
 
@@ -801,13 +976,13 @@ function ProFeaturesSection() {
           <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, overflow: 'hidden' }}>
             <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
               <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)' }}>
-                AI Body Analysis
+                Body Analysis
               </span>
               <p className="font-display" style={{ fontSize: 22, fontWeight: 600, color: '#F8F6F1', marginTop: 8, lineHeight: 1.2 }}>
                 Built around<br />your actual body.
               </p>
               <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', marginTop: 6, lineHeight: 1.6 }}>
-                Send measurements + photos. Kira generates a full body composition report — frame type, body fat estimate, hormonal patterns, priority areas.
+                Send measurements + photos. Kira produces a full body composition report — frame type, body fat estimate, hormonal patterns, priority areas.
               </p>
             </div>
             <div style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -828,11 +1003,11 @@ function ProFeaturesSection() {
             </div>
           </div>
 
-          {/* AI check-in card */}
+          {/* Check-in card */}
           <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, overflow: 'hidden' }}>
             <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
               <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)' }}>
-                AI Weekly Check-in
+                Weekly Check-in
               </span>
               <p className="font-display" style={{ fontSize: 22, fontWeight: 600, color: '#F8F6F1', marginTop: 8, lineHeight: 1.2 }}>
                 She adapts your plan.<br />Every week. Automatically.
@@ -849,7 +1024,7 @@ function ProFeaturesSection() {
                   padding: '10px 14px',
                 }}>
                   {msg.from === 'kira' && (
-                    <p style={{ fontSize: 9, fontWeight: 700, color: 'var(--sage)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5 }}>Kira AI</p>
+                    <p style={{ fontSize: 9, fontWeight: 700, color: 'var(--sage)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 5 }}>Kira</p>
                   )}
                   <p style={{ fontSize: 12, color: msg.from === 'kira' ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.5)', lineHeight: 1.65 }}>{msg.text}</p>
                 </div>
@@ -877,7 +1052,7 @@ function ProFeaturesSection() {
           <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, overflow: 'hidden' }}>
             <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
               <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)' }}>
-                AI Progress Tracking
+                Progress Tracking
               </span>
               <p className="font-display" style={{ fontSize: 22, fontWeight: 600, color: '#F8F6F1', marginTop: 8, lineHeight: 1.2 }}>
                 Numbers that<br />actually move.
