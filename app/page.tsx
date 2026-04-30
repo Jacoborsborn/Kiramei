@@ -576,6 +576,30 @@ export default function Home() {
   )
 }
 
+// ── Nav link ──────────────────────────────────────────
+
+function NavLink({ href, label, highlight }: { href: string; label: string; highlight?: boolean }) {
+  return (
+    <a
+      href={href}
+      style={{
+        display: 'inline-block',
+        padding: highlight ? '8px 18px' : '8px 14px',
+        borderRadius: 99,
+        fontSize: 13, fontWeight: 600, textDecoration: 'none',
+        letterSpacing: '0.02em',
+        background: highlight ? 'rgba(255,255,255,0.15)' : 'transparent',
+        color: highlight ? '#fff' : 'rgba(255,255,255,0.72)',
+        border: highlight ? '1px solid rgba(255,255,255,0.25)' : '1px solid transparent',
+        backdropFilter: highlight ? 'blur(8px)' : 'none',
+        transition: 'all 0.15s',
+      }}
+    >
+      {label}
+    </a>
+  )
+}
+
 // ── Hero ───────────────────────────────────────────────
 
 function HeroSection({ onNavTap }: { onNavTap: () => void }) {
@@ -607,13 +631,24 @@ function HeroSection({ onNavTap }: { onNavTap: () => void }) {
       </div>
 
       {/* Nav */}
-      <div style={{ position: 'absolute', top: 20, right: 24, zIndex: 10 }}>
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '18px 24px',
+      }}>
+        {/* Brand — triple tap triggers admin */}
         <span
           onClick={onNavTap}
-          style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', cursor: 'default', userSelect: 'none' }}
+          style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', cursor: 'default', userSelect: 'none' }}
         >
           Kira Mei
         </span>
+
+        {/* Nav links */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <NavLink href="/#apply" label="Apply" />
+          <NavLink href="/login" label="Client login" highlight />
+        </div>
       </div>
 
       {/* Content — anchored bottom-left */}
