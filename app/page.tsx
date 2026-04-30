@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 
 const PasswordModal = dynamic(() => import('./components/PasswordModal'), { ssr: false })
-const Studio = dynamic(() => import('./components/Studio'), { ssr: false })
+const FounderDashboard = dynamic(() => import('./components/FounderDashboard'), { ssr: false })
 
 const GOALS = ['Lose weight', 'Build muscle', 'More energy', 'General fitness', 'Confidence', 'All of the above']
 const FITNESS_LEVELS = ['Complete beginner', 'Some experience', 'Train occasionally', 'Train regularly']
@@ -52,7 +52,7 @@ export default function Home() {
   const [error, setError] = useState('')
   const [applied, setApplied] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
-  const [showStudio, setShowStudio] = useState(false)
+  const [showFounderDashboard, setShowFounderDashboard] = useState(false)
   const tapCount = useRef(0)
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -561,15 +561,15 @@ export default function Home() {
         </div>
       </footer>
 
-      {showPasswordModal && !showStudio && (
+      {showPasswordModal && !showFounderDashboard && (
         <PasswordModal
-          onSuccess={() => { setShowPasswordModal(false); setShowStudio(true) }}
+          onSuccess={() => { setShowPasswordModal(false); setShowFounderDashboard(true) }}
           onClose={() => setShowPasswordModal(false)}
         />
       )}
 
-      {showStudio && (
-        <Studio onClose={() => setShowStudio(false)} />
+      {showFounderDashboard && (
+        <FounderDashboard onClose={() => setShowFounderDashboard(false)} />
       )}
 
     </main>
@@ -623,12 +623,7 @@ function HeroSection({ onNavTap }: { onNavTap: () => void }) {
         background: 'linear-gradient(to bottom, rgba(10,20,12,0.55) 0%, rgba(10,20,12,0.1) 35%, rgba(10,20,12,0.15) 55%, rgba(10,20,12,0.82) 100%)',
       }} />
 
-      {/* Badge */}
-      <div style={{ position: 'absolute', top: 24, left: 24, zIndex: 10 }}>
-        <span className="tag-amber" style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '5px 12px' }}>
-          ⚡ Launch Pricing
-        </span>
-      </div>
+
 
       {/* Nav */}
       <div style={{
