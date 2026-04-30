@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   const supabase = createSupabaseServiceClient()
   const { data: lead, error } = await supabase
     .from('kira_leads')
-    .select('name, email')
+    .select('name, email, user_id')
     .eq('id', lead_id)
     .single()
 
@@ -36,6 +36,15 @@ export async function POST(req: NextRequest) {
   if (emailError) {
     console.error('Resend error:', emailError)
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
+  }
+
+  // Store programme in DB so client can view it in the portal
+  if (lead.user_id) {
+    await supabase.from('kira_programmes').insert({
+      lead_id,
+      user_id: lead.user_id,
+      programme: plan,
+    })
   }
 
   await supabase
