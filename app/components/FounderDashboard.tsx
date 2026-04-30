@@ -48,7 +48,7 @@ type OverviewData = {
   recent_activity: ActivityItem[]
 }
 
-type Tab = 'overview' | 'clients' | 'activity' | 'studio' | 'bodycomp'
+type Tab = 'overview' | 'clients' | 'activity' | 'studio' | 'bodycomp' | 'preview'
 
 const STATUS_CYCLE: EnrichedLead['status'][] = ['pending', 'paid', 'accepted', 'rejected']
 const STATUS_COLORS: Record<string, string> = {
@@ -92,7 +92,7 @@ export default function FounderDashboard({ onClose }: Props) {
   }, [])
 
   useEffect(() => {
-    if (tab !== 'studio') fetchOverview()
+    if (tab !== 'studio' && tab !== 'preview') fetchOverview()
   }, [tab])
 
   async function fetchOverview() {
@@ -138,6 +138,7 @@ export default function FounderDashboard({ onClose }: Props) {
     { id: 'activity', label: 'Activity' },
     { id: 'studio', label: 'Studio' },
     { id: 'bodycomp', label: 'Body Comp' },
+    { id: 'preview', label: '👁 Client View' },
   ]
 
   const needsAttention = data?.leads.filter(l => flagClient(l).length > 0) ?? []
@@ -201,6 +202,8 @@ export default function FounderDashboard({ onClose }: Props) {
           <div style={{ position: 'absolute', inset: 0 }}>
             <Studio onClose={() => setTab('overview')} />
           </div>
+        ) : tab === 'preview' ? (
+          <PortalPreview />
         ) : loading ? (
           <div style={{ padding: 48, textAlign: 'center', color: 'var(--ink-muted)', fontSize: 14 }}>Loading...</div>
         ) : error ? (
@@ -672,6 +675,472 @@ function BCField({ label, value, onChange, placeholder }: { label: string; value
     <div>
       <label style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--sage)', display: 'block', marginBottom: 8 }}>{label}</label>
       <input className="kira-input" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} />
+    </div>
+  )
+}
+
+// ── Portal Preview Tab ─────────────────────────────────────────────────────
+
+type PreviewSection = 'home' | 'programme' | 'billing' | 'account' | 'checkins' | 'bodycomp' | 'progress'
+
+const MOCK_PROGRAMME = {
+  title: '8-Week Body Reset',
+  personal_note: 'This plan is built specifically around your goals and where you are right now. Trust the process, focus on consistency over perfection, and check in each week so we can keep adjusting.',
+  duration_weeks: 8,
+  days_per_week: 4,
+  split: 'Upper/Lower',
+  weeks: [
+    {
+      week_number: 1,
+      week_theme: 'Foundation',
+      sessions: [
+        {
+          day: 'Monday',
+          label: 'Upper Body',
+          exercises: [
+            { name: 'Dumbbell Bench Press', sets: 3, reps: '10–12', rest: '60s', notes: 'Control the eccentric — 3 seconds down. Keep shoulder blades retracted throughout.' },
+            { name: 'Seated Cable Row', sets: 3, reps: '10–12', rest: '60s', notes: 'Drive elbows back, squeeze at the top. Avoid rounding the lower back.' },
+            { name: 'Lateral Raises', sets: 3, reps: '12–15', rest: '45s', notes: 'Slight forward lean. Lead with your elbows, not your wrists.' },
+            { name: 'Tricep Pushdown', sets: 3, reps: '12–15', rest: '45s' },
+          ],
+        },
+        {
+          day: 'Wednesday',
+          label: 'Lower Body',
+          exercises: [
+            { name: 'Goblet Squat', sets: 4, reps: '10–12', rest: '90s', notes: 'Keep chest tall, knees tracking over toes. Push the floor away on the way up.' },
+            { name: 'Romanian Deadlift', sets: 3, reps: '10–12', rest: '90s', notes: 'Hinge at the hips, soft knee bend. Feel the hamstring stretch — not lower back strain.' },
+            { name: 'Hip Thrust', sets: 3, reps: '12–15', rest: '60s', notes: 'Full hip extension at the top. Squeeze glutes hard for 1 second.' },
+            { name: 'Leg Press Calf Raise', sets: 3, reps: '15–20', rest: '45s' },
+          ],
+        },
+      ],
+    },
+  ],
+  nutrition: {
+    daily_calories: 1850,
+    protein_g: 140,
+    carbs_g: 185,
+    fats_g: 62,
+    meals: [
+      { name: 'Breakfast', description: 'Greek yoghurt with berries and granola', calories: 380, protein_g: 28 },
+      { name: 'Mid-morning snack', description: 'Rice cakes with cottage cheese', calories: 210, protein_g: 18 },
+      { name: 'Lunch', description: 'Grilled chicken salad with quinoa', calories: 480, protein_g: 42 },
+      { name: 'Pre-workout', description: 'Banana and a protein shake', calories: 280, protein_g: 28 },
+      { name: 'Dinner', description: 'Salmon, roasted veg, and sweet potato', calories: 500, protein_g: 38 },
+    ],
+    recipes: [
+      {
+        name: 'High-Protein Overnight Oats',
+        ingredients: ['80g rolled oats', '200ml oat milk', '1 scoop vanilla protein', '1 tbsp chia seeds', 'Blueberries to top'],
+        method: 'Mix oats, oat milk, protein powder and chia seeds in a jar the night before. Refrigerate overnight. Top with fresh blueberries in the morning. Ready in 2 minutes.',
+        macros: { calories: 420, protein_g: 38, carbs_g: 48, fats_g: 9 },
+      },
+    ],
+    shopping_list: {
+      Protein: ['Chicken breast', 'Salmon fillets', 'Greek yoghurt', 'Cottage cheese', 'Eggs'],
+      Carbs: ['Sweet potatoes', 'Quinoa', 'Rolled oats', 'Rice cakes', 'Bananas'],
+      Veg: ['Mixed salad leaves', 'Broccoli', 'Courgette', 'Bell peppers', 'Spinach'],
+    },
+  },
+}
+
+const MOCK_CHECKINS = [
+  { id: '1', week_number: 1, energy: 7, sleep_hrs: 7, sessions_completed: 4, weight: 65.2, notes: 'Felt good, legs were sore after Wednesday.', submitted_at: '2025-04-07T10:00:00Z' },
+  { id: '2', week_number: 2, energy: 8, sleep_hrs: 7.5, sessions_completed: 4, weight: 64.9, notes: 'Much better — starting to feel stronger.', submitted_at: '2025-04-14T10:00:00Z' },
+  { id: '3', week_number: 3, energy: 6, sleep_hrs: 6, sessions_completed: 3, weight: 65.0, notes: 'Missed Friday session, work was hectic.', submitted_at: '2025-04-21T10:00:00Z' },
+]
+
+const MOCK_PROGRESS = [
+  { id: '1', week_number: 1, waist: 74, hips: 96, weight: 65.2, energy_score: 7, strength_notes: null, logged_at: '2025-04-07T10:00:00Z' },
+  { id: '2', week_number: 2, waist: 73.5, hips: 95.5, weight: 64.9, energy_score: 8, strength_notes: 'Hip thrust up to 40kg!', logged_at: '2025-04-14T10:00:00Z' },
+  { id: '3', week_number: 3, waist: 73, hips: 95, weight: 65.0, energy_score: 6, strength_notes: null, logged_at: '2025-04-21T10:00:00Z' },
+]
+
+function PortalPreview() {
+  const [section, setSection] = useState<PreviewSection>('home')
+
+  const navItems: { id: PreviewSection; label: string; proOnly?: boolean }[] = [
+    { id: 'home', label: 'Home' },
+    { id: 'programme', label: 'My Programme' },
+    { id: 'billing', label: 'Billing' },
+    { id: 'account', label: 'Account' },
+    { id: 'checkins', label: 'Check-ins', proOnly: true },
+    { id: 'bodycomp', label: 'Body Comp', proOnly: true },
+    { id: 'progress', label: 'Progress', proOnly: true },
+  ]
+
+  return (
+    <div style={{ display: 'flex', minHeight: '100%', background: 'var(--paper)' }}>
+      {/* Sidebar */}
+      <div style={{
+        width: 220, flexShrink: 0,
+        borderRight: '1px solid var(--border)',
+        background: '#FDFCF9',
+        padding: '24px 12px',
+        display: 'flex', flexDirection: 'column', gap: 2,
+      }}>
+        <div style={{ padding: '0 12px 20px', marginBottom: 8, borderBottom: '1px solid var(--border)' }}>
+          <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 4 }}>Preview mode</p>
+          <p className="font-display" style={{ fontSize: 18, fontWeight: 600, color: 'var(--ink)' }}>Jane Smith</p>
+          <p style={{ fontSize: 12, color: 'var(--ink-muted)' }}>jane@example.com</p>
+          <span style={{ display: 'inline-block', marginTop: 8, padding: '3px 10px', background: 'var(--ink)', color: '#F8F6F1', borderRadius: 99, fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Pro</span>
+        </div>
+        {navItems.map(item => (
+          <button
+            key={item.id}
+            onClick={() => setSection(item.id)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '10px 12px', borderRadius: 8, border: 'none', textAlign: 'left',
+              fontSize: 14, fontWeight: section === item.id ? 600 : 400,
+              color: section === item.id ? 'var(--ink)' : 'var(--ink-muted)',
+              background: section === item.id ? 'var(--border)' : 'transparent',
+              cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
+              transition: 'background 0.15s',
+            }}
+          >
+            {item.label}
+            {item.proOnly && (
+              <span style={{ fontSize: 9, fontWeight: 700, background: 'var(--ink)', color: '#F8F6F1', borderRadius: 99, padding: '1px 5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Pro</span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, padding: '40px 36px 80px', overflowY: 'auto', maxWidth: 760 }}>
+        {section === 'home' && <PreviewHome />}
+        {section === 'programme' && <PreviewProgramme />}
+        {section === 'billing' && <PreviewBilling />}
+        {section === 'account' && <PreviewAccount />}
+        {section === 'checkins' && <PreviewCheckins />}
+        {section === 'bodycomp' && <PreviewBodyComp />}
+        {section === 'progress' && <PreviewProgress />}
+      </div>
+    </div>
+  )
+}
+
+function PreviewHome() {
+  return (
+    <div>
+      <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 10 }}>Client Portal</p>
+      <h1 className="font-display" style={{ fontSize: 40, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 12 }}>Welcome back, Jane.</h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 40 }}>
+        <span style={{ padding: '4px 12px', borderRadius: 99, background: 'var(--ink)', color: '#F8F6F1', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Pro Bundle</span>
+        <span style={{ fontSize: 13, color: 'var(--ink-muted)' }}>plan active</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16, marginBottom: 40 }}>
+        {[
+          { label: 'View My Programme', desc: 'Your plan is ready', icon: '◎' },
+          { label: 'Manage Billing', desc: 'Subscription & invoices', icon: '◈' },
+          { label: 'Account Settings', desc: 'Profile, email & password', icon: '◉' },
+        ].map(item => (
+          <div key={item.label} style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: 16, padding: '24px' }}>
+            <div style={{ fontSize: 24, marginBottom: 12 }}>{item.icon}</div>
+            <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)', marginBottom: 4 }}>{item.label}</p>
+            <p style={{ fontSize: 13, color: 'var(--ink-muted)' }}>{item.desc}</p>
+          </div>
+        ))}
+      </div>
+      <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>Pro Features</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+        {[
+          { label: 'Weekly Check-in', desc: 'Log your weekly progress', icon: '✓' },
+          { label: 'Body Composition', desc: 'Your analysis report', icon: '◐' },
+          { label: 'Progress Tracker', desc: 'Measurements & trends', icon: '↗' },
+        ].map(item => (
+          <div key={item.label} style={{ background: 'var(--ink)', borderRadius: 16, padding: '24px' }}>
+            <div style={{ fontSize: 22, marginBottom: 12, color: 'var(--sage)' }}>{item.icon}</div>
+            <p style={{ fontSize: 15, fontWeight: 600, color: '#F8F6F1', marginBottom: 4 }}>{item.label}</p>
+            <p style={{ fontSize: 13, color: 'rgba(248,246,241,0.55)' }}>{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PreviewProgramme() {
+  const [tab, setTab] = useState<'training' | 'nutrition' | 'recipes' | 'shopping'>('training')
+  const [openExercise, setOpenExercise] = useState<any | null>(null)
+  const plan = MOCK_PROGRAMME
+
+  return (
+    <div>
+      <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 10 }}>My Programme</p>
+      <h1 className="font-display" style={{ fontSize: 38, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 8 }}>{plan.title}</h1>
+      <p style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 16 }}>{plan.duration_weeks} weeks · {plan.days_per_week} days/week · {plan.split}</p>
+      <div style={{ borderLeft: '2px solid var(--sage)', paddingLeft: 20, marginBottom: 32 }}>
+        <p style={{ fontSize: 15, fontStyle: 'italic', color: 'var(--ink)', lineHeight: 1.75 }}>{plan.personal_note}</p>
+        <p style={{ fontSize: 13, color: 'var(--ink-muted)', marginTop: 8 }}>— Kira</p>
+      </div>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 32, flexWrap: 'wrap' }}>
+        {(['training', 'nutrition', 'recipes', 'shopping'] as const).map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{ padding: '8px 18px', borderRadius: 99, border: tab === t ? 'none' : '1px solid var(--border)', background: tab === t ? 'var(--ink)' : 'transparent', color: tab === t ? '#F8F6F1' : 'var(--ink-muted)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', transition: 'all 0.15s', textTransform: 'capitalize' }}>{t === 'shopping' ? 'Shopping List' : t.charAt(0).toUpperCase() + t.slice(1)}</button>
+        ))}
+      </div>
+
+      {tab === 'training' && plan.weeks.map(week => (
+        <div key={week.week_number} style={{ marginBottom: 32 }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>Week {week.week_number} — {week.week_theme}</p>
+          {week.sessions.map((sess, si) => (
+            <div key={si} style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', marginBottom: 16 }}>
+              <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--sage)' }}>{sess.day}</span>
+                  <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--ink)', marginTop: 2 }}>{sess.label}</p>
+                </div>
+                <span style={{ fontSize: 12, color: 'var(--ink-muted)' }}>{sess.exercises.length} exercises</span>
+              </div>
+              {sess.exercises.map((ex, ei) => (
+                <button key={ei} onClick={() => setOpenExercise(ex)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', background: ei % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.015)', borderTop: ei === 0 ? 'none' : '1px solid var(--border)', border: 'none', borderLeft: 'none', borderRight: 'none', borderBottom: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'DM Sans, sans-serif' }}>
+                  <div>
+                    <p style={{ fontSize: 14, fontWeight: 500, color: 'var(--ink)', marginBottom: 2 }}>{ex.name}</p>
+                    <p style={{ fontSize: 12, color: 'var(--ink-muted)' }}>{ex.sets} sets · {ex.reps} reps{ex.rest ? ` · ${ex.rest} rest` : ''}</p>
+                  </div>
+                  <span style={{ fontSize: 12, color: 'var(--sage)', fontWeight: 600 }}>Details →</span>
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      ))}
+
+      {tab === 'nutrition' && (
+        <div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 32 }}>
+            {[{ l: 'Calories', v: plan.nutrition.daily_calories, u: 'kcal' }, { l: 'Protein', v: plan.nutrition.protein_g, u: 'g' }, { l: 'Carbs', v: plan.nutrition.carbs_g, u: 'g' }, { l: 'Fats', v: plan.nutrition.fats_g, u: 'g' }].map(m => (
+              <div key={m.l} style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: 12, padding: '20px 16px', textAlign: 'center' }}>
+                <p className="font-display" style={{ fontSize: 28, fontWeight: 600, color: 'var(--ink)', marginBottom: 4 }}>{m.v}</p>
+                <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>{m.l} <span style={{ color: 'var(--ink-faint)' }}>{m.u}</span></p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>Daily Meals</p>
+          {plan.nutrition.meals.map((meal, i) => (
+            <div key={i} style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: i === 0 ? '12px 12px 0 0' : i === plan.nutrition.meals.length - 1 ? '0 0 12px 12px' : '0', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: i === 0 ? 0 : -1 }}>
+              <div>
+                <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)', marginBottom: 3 }}>{meal.name}</p>
+                <p style={{ fontSize: 13, color: 'var(--ink-muted)' }}>{meal.description}</p>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>{meal.calories} kcal</p>
+                <p style={{ fontSize: 12, color: 'var(--sage)' }}>{meal.protein_g}g protein</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'recipes' && plan.nutrition.recipes.map((r, i) => (
+        <div key={i} style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: 12, padding: '24px', marginBottom: 16 }}>
+          <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--ink)', marginBottom: 6 }}>{r.name}</p>
+          <p style={{ fontSize: 12, color: 'var(--sage)', marginBottom: 16 }}>{r.macros.calories} kcal · {r.macros.protein_g}g protein · {r.macros.carbs_g}g carbs · {r.macros.fats_g}g fats</p>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 8 }}>Ingredients</p>
+          {r.ingredients.map((ing, j) => <p key={j} style={{ fontSize: 14, color: 'var(--ink)', marginBottom: 4 }}>· {ing}</p>)}
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)', margin: '16px 0 8px' }}>Method</p>
+          <p style={{ fontSize: 14, color: 'var(--ink)', lineHeight: 1.75 }}>{r.method}</p>
+        </div>
+      ))}
+
+      {tab === 'shopping' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px,1fr))', gap: 24 }}>
+          {Object.entries(plan.nutrition.shopping_list).map(([cat, items]) => (
+            <div key={cat}>
+              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 12 }}>{cat}</p>
+              {(items as string[]).map((item, i) => <p key={i} style={{ fontSize: 14, color: 'var(--ink)', marginBottom: 6 }}>· {item}</p>)}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {openExercise && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }} onClick={() => setOpenExercise(null)}>
+          <div style={{ background: 'var(--paper)', borderRadius: '20px 20px 0 0', padding: '28px 24px 48px', width: '100%', maxWidth: 520, maxHeight: '80vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}><button onClick={() => setOpenExercise(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: 'var(--ink-muted)' }}>✕</button></div>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 12 }}>Exercise</p>
+            <h2 className="font-display" style={{ fontSize: 26, fontWeight: 600, color: 'var(--ink)', marginBottom: 20 }}>{openExercise.name}</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
+              {([['Sets', openExercise.sets], ['Reps', openExercise.reps], openExercise.rest ? ['Rest', openExercise.rest] : null] as ([string, string | number] | null)[]).filter((x): x is [string, string | number] => x !== null).map(([l, v]) => (
+                <div key={String(l)} style={{ background: '#F4F2EE', borderRadius: 10, padding: '12px 16px' }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 4 }}>{l}</p>
+                  <p style={{ fontSize: 18, fontWeight: 600, color: 'var(--ink)' }}>{v}</p>
+                </div>
+              ))}
+            </div>
+            {openExercise.notes && <div style={{ background: '#F4F2EE', borderRadius: 10, padding: '14px 16px' }}><p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 6 }}>Notes</p><p style={{ fontSize: 14, color: 'var(--ink)', lineHeight: 1.65 }}>{openExercise.notes}</p></div>}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function PreviewBilling() {
+  return (
+    <div style={{ maxWidth: 520 }}>
+      <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 10 }}>Subscription</p>
+      <h1 className="font-display" style={{ fontSize: 38, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 32 }}>Billing.</h1>
+      <div className="paper-card" style={{ padding: '32px', marginBottom: 24 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>Manage your plan</p>
+        <p style={{ fontSize: 15, color: 'var(--ink-muted)', lineHeight: 1.7, marginBottom: 24 }}>View your invoices, update your payment method, change your subscription, or cancel — all managed securely through Stripe.</p>
+        <div style={{ padding: '14px 28px', background: 'var(--ink)', color: '#F8F6F1', borderRadius: 99, display: 'inline-block', fontSize: 15, fontWeight: 600 }}>Open billing portal →</div>
+      </div>
+      <div style={{ background: '#F4F2EE', borderRadius: 12, padding: '18px 20px' }}>
+        <p style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.65 }}>You'll be redirected to Stripe's secure portal. Any changes take effect immediately. To cancel, please do so at least 24 hours before your next billing date.</p>
+      </div>
+    </div>
+  )
+}
+
+function PreviewAccount() {
+  return (
+    <div style={{ maxWidth: 520 }}>
+      <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 10 }}>Settings</p>
+      <h1 className="font-display" style={{ fontSize: 38, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 40 }}>Account.</h1>
+      <div style={{ marginBottom: 32 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>Profile</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
+          <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-muted)' }}>Full name</label>
+          <input className="kira-input" defaultValue="Jane Smith" readOnly />
+        </div>
+        <div style={{ padding: '12px 24px', background: 'var(--border)', color: 'var(--ink-muted)', borderRadius: 99, display: 'inline-block', fontSize: 14, fontWeight: 600 }}>Save name</div>
+      </div>
+      <div style={{ borderTop: '1px solid var(--border)', paddingTop: 32, marginBottom: 32 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>Email address</p>
+        <p style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 16 }}>Current: <strong style={{ color: 'var(--ink)' }}>jane@example.com</strong></p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
+          <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-muted)' }}>New email address</label>
+          <input className="kira-input" placeholder="new@email.com" readOnly />
+        </div>
+        <div style={{ padding: '12px 24px', background: 'var(--ink)', color: '#F8F6F1', borderRadius: 99, display: 'inline-block', fontSize: 14, fontWeight: 600 }}>Update email</div>
+      </div>
+      <div style={{ borderTop: '1px solid var(--border)', paddingTop: 32 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>Change password</p>
+        {['Current password', 'New password', 'Confirm new password'].map(label => (
+          <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
+            <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-muted)' }}>{label}</label>
+            <input className="kira-input" type="password" placeholder="••••••••" readOnly />
+          </div>
+        ))}
+        <div style={{ padding: '12px 24px', background: 'var(--ink)', color: '#F8F6F1', borderRadius: 99, display: 'inline-block', fontSize: 14, fontWeight: 600 }}>Update password</div>
+      </div>
+    </div>
+  )
+}
+
+function PreviewCheckins() {
+  return (
+    <div>
+      <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 10 }}>Pro Feature</p>
+      <h1 className="font-display" style={{ fontSize: 38, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 8 }}>Weekly Check-in.</h1>
+      <p style={{ fontSize: 15, color: 'var(--ink-muted)', marginBottom: 32 }}>Log your weekly stats so we can track your progress together.</p>
+      <div className="paper-card" style={{ padding: '28px', marginBottom: 32 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 20 }}>Week 4 check-in</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px,1fr))', gap: 14, marginBottom: 16 }}>
+          {[['Week number', '4'], ['Sessions completed', ''], ['Avg sleep (hrs)', ''], ['Weight (kg) — optional', '']].map(([label, val]) => (
+            <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-muted)' }}>{label}</label>
+              <input className="kira-input" defaultValue={val} placeholder={val === '' ? 'e.g. 7' : undefined} readOnly />
+            </div>
+          ))}
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-muted)', display: 'block', marginBottom: 6 }}>Energy level — 7/10</label>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 12, color: 'var(--ink-muted)' }}>Low</span>
+            <div style={{ flex: 1, height: 4, background: 'var(--border)', borderRadius: 99, position: 'relative' }}>
+              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '70%', background: 'var(--sage)', borderRadius: 99 }} />
+            </div>
+            <span style={{ fontSize: 12, color: 'var(--ink-muted)' }}>High</span>
+          </div>
+        </div>
+        <div style={{ padding: '13px 28px', background: 'var(--ink)', color: '#F8F6F1', borderRadius: 99, display: 'inline-block', fontSize: 15, fontWeight: 600 }}>Submit check-in →</div>
+      </div>
+      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>History</p>
+      {MOCK_CHECKINS.map(c => (
+        <div key={c.id} style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: 12, padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(110px,1fr))', gap: 16, marginBottom: 12 }}>
+          {[['Week', `Week ${c.week_number}`], ['Energy', `${c.energy}/10`], ['Sleep', `${c.sleep_hrs}h`], ['Sessions', String(c.sessions_completed)], ['Weight', `${c.weight}kg`]].map(([l, v]) => (
+            <div key={String(l)}>
+              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 3 }}>{l}</p>
+              <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>{v}</p>
+            </div>
+          ))}
+          {c.notes && <div style={{ gridColumn: '1 / -1' }}><p style={{ fontSize: 13, color: 'var(--ink-muted)', fontStyle: 'italic' }}>{c.notes}</p></div>}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function PreviewBodyComp() {
+  return (
+    <div style={{ maxWidth: 680 }}>
+      <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 10 }}>Pro Feature</p>
+      <h1 className="font-display" style={{ fontSize: 38, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 8 }}>Body Composition.</h1>
+      <p style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 32 }}>Analysed 14 April 2025</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {[['Frame Type', 'Mesomorph'], ['Estimated Body Fat', '22–25%'], ['Priority Focus Areas', 'Glutes, core strength, shoulder definition']].map(([label, value]) => (
+          <div key={label} style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: 16, padding: '24px' }}>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 8 }}>{label}</p>
+            <p className="font-display" style={{ fontSize: 22, fontWeight: 600, color: 'var(--ink)' }}>{value}</p>
+          </div>
+        ))}
+        <div style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: 16, padding: '24px' }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 12 }}>Hormonal Considerations</p>
+          <p style={{ fontSize: 15, color: 'var(--ink)', lineHeight: 1.75 }}>Training output tends to peak in the follicular phase — schedule your heavier sessions in the first two weeks of your cycle. In the luteal phase, focus on moderate intensity and prioritise recovery. Adequate sleep (7–9hrs) is especially important for cortisol management given your activity level.</p>
+        </div>
+        <div style={{ background: '#FDFCF9', border: '1px solid var(--border)', borderRadius: 16, padding: '24px' }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 16 }}>Measurements</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(140px,1fr))', gap: 16 }}>
+            {[['Waist', '74cm'], ['Hips', '96cm'], ['Bust', '88cm'], ['Thigh', '57cm']].map(([k, v]) => (
+              <div key={k}>
+                <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)', marginBottom: 4 }}>{k}</p>
+                <p style={{ fontSize: 18, fontWeight: 600, color: 'var(--ink)' }}>{v}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PreviewProgress() {
+  return (
+    <div>
+      <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 10 }}>Pro Feature</p>
+      <h1 className="font-display" style={{ fontSize: 38, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.1, marginBottom: 8 }}>Progress.</h1>
+      <p style={{ fontSize: 15, color: 'var(--ink-muted)', marginBottom: 32 }}>Log your measurements each week and watch the trends develop.</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-faint)' }}>3 entries logged</p>
+        <div style={{ padding: '10px 20px', background: 'var(--ink)', color: '#F8F6F1', borderRadius: 99, fontSize: 13, fontWeight: 600 }}>+ Log this week</div>
+      </div>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+          <thead>
+            <tr style={{ borderBottom: '2px solid var(--border)' }}>
+              {['Week', 'Waist', 'Hips', 'Weight', 'Energy', 'Notes'].map(h => (
+                <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)' }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {MOCK_PROGRESS.map((e, i) => (
+              <tr key={e.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.015)' }}>
+                <td style={{ padding: '12px' }}><strong>Week {e.week_number}</strong></td>
+                <td style={{ padding: '12px', color: 'var(--ink-muted)' }}>{e.waist}cm</td>
+                <td style={{ padding: '12px', color: 'var(--ink-muted)' }}>{e.hips}cm</td>
+                <td style={{ padding: '12px', color: 'var(--ink-muted)' }}>{e.weight}kg</td>
+                <td style={{ padding: '12px', color: 'var(--sage)', fontWeight: 600 }}>{e.energy_score}/10</td>
+                <td style={{ padding: '12px', color: 'var(--ink-muted)' }}>{e.strength_notes ?? '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
