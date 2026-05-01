@@ -1,13 +1,6 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
-
-const PRICE_MAP: Record<string, string> = {
-  [process.env.STRIPE_TRAINING_PRICE_ID ?? '']: 'Training Blueprint',
-  [process.env.STRIPE_NUTRITION_PRICE_ID ?? '']: 'Nutrition Blueprint',
-  [process.env.STRIPE_BUNDLE_PRICE_ID ?? '']: 'Full Stack Bundle',
-}
 
 function productKey(priceId: string): 'training' | 'nutrition' | 'bundle' | 'unknown' {
   if (priceId === process.env.STRIPE_TRAINING_PRICE_ID) return 'training'
@@ -26,6 +19,14 @@ function productPrice(key: string): number {
 export async function GET(req: Request) {
   if (req.headers.get('x-studio-secret') !== process.env.STUDIO_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
+
+  const PRICE_MAP: Record<string, string> = {
+    [process.env.STRIPE_TRAINING_PRICE_ID ?? '']: 'Training Blueprint',
+    [process.env.STRIPE_NUTRITION_PRICE_ID ?? '']: 'Nutrition Blueprint',
+    [process.env.STRIPE_BUNDLE_PRICE_ID ?? '']: 'Full Stack Bundle',
   }
 
   const sessions = await stripe.checkout.sessions.list({
