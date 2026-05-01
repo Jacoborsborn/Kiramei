@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Kira Mei — Online Personal Training',
-  description: 'Custom programmes for people 40+ who are serious about results. No fluff, no fads.',
+  title: 'Kira Mei — Digital Fitness Education',
+  description: 'Buy this once. Never buy a plan again. 8 weeks of training and nutrition education by Kira Mei.',
   openGraph: {
-    title: 'Kira Mei — Online Personal Training',
-    description: 'Custom programmes for people 40+ who are serious about results.',
+    title: 'Kira Mei — Digital Fitness Education',
+    description: 'Buy this once. Never buy a plan again.',
     url: 'https://kiramei.co.uk',
     siteName: 'Kira Mei',
   },
