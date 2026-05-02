@@ -2,18 +2,13 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
 
-function productKey(priceId: string): 'training' | 'nutrition' | 'bundle' | 'unknown' {
+function productKey(priceId: string): 'training' | 'nutrition' | 'bundle' | 'programme' | 'template' | 'unknown' {
   if (priceId === process.env.STRIPE_TRAINING_PRICE_ID) return 'training'
   if (priceId === process.env.STRIPE_NUTRITION_PRICE_ID) return 'nutrition'
   if (priceId === process.env.STRIPE_BUNDLE_PRICE_ID) return 'bundle'
+  if (priceId === process.env.STRIPE_PROGRAMME_PRICE_ID) return 'programme'
+  if (priceId === process.env.STRIPE_TEMPLATE_PRICE_ID) return 'template'
   return 'unknown'
-}
-
-function productPrice(key: string): number {
-  if (key === 'training') return 49.99
-  if (key === 'nutrition') return 39.99
-  if (key === 'bundle') return 79.99
-  return 0
 }
 
 export async function GET(req: Request) {
@@ -24,9 +19,11 @@ export async function GET(req: Request) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
   const PRICE_MAP: Record<string, string> = {
-    [process.env.STRIPE_TRAINING_PRICE_ID ?? '']: 'Training Blueprint',
-    [process.env.STRIPE_NUTRITION_PRICE_ID ?? '']: 'Nutrition Blueprint',
+    [process.env.STRIPE_TRAINING_PRICE_ID ?? '']: 'Training Blueprint PDF',
+    [process.env.STRIPE_NUTRITION_PRICE_ID ?? '']: 'Nutrition Blueprint PDF',
     [process.env.STRIPE_BUNDLE_PRICE_ID ?? '']: 'Full Stack Bundle',
+    [process.env.STRIPE_PROGRAMME_PRICE_ID ?? '']: 'Training Blueprint Programme',
+    [process.env.STRIPE_TEMPLATE_PRICE_ID ?? '']: 'Build Your Own Template',
   }
 
   const sessions = await stripe.checkout.sessions.list({
@@ -42,7 +39,7 @@ export async function GET(req: Request) {
   let revenueToday = 0
   let revenueWeek = 0
   let revenueAllTime = 0
-  const breakdown = { training: 0, nutrition: 0, bundle: 0 }
+  const breakdown = { training: 0, nutrition: 0, bundle: 0, programme: 0, template: 0 }
   const recentSales: {
     id: string
     name: string
@@ -64,7 +61,7 @@ export async function GET(req: Request) {
     revenueAllTime += amount
     if (created >= weekAgo) revenueWeek += amount
     if (created >= dayAgo) revenueToday += amount
-    if (created >= monthAgo && key !== 'unknown') breakdown[key]++
+    if (created >= monthAgo && key !== 'unknown') breakdown[key as keyof typeof breakdown]++
 
     if (recentSales.length < 30) {
       recentSales.push({
