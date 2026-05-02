@@ -18,9 +18,16 @@ export async function POST(req: NextRequest) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
 
-    // ── One-time payment: PDF delivery ───────────────────
     if (session.mode === 'payment') {
-      await handlePdfDelivery(stripe, session)
+      const product = session.metadata?.product
+      if (product === 'programme') {
+        await handleProgrammeAccess(stripe, session, 'programme_access')
+      } else if (product === 'template') {
+        await handleProgrammeAccess(stripe, session, 'template_access')
+      } else {
+        // PDF delivery for training / nutrition / bundle
+        await handlePdfDelivery(stripe, session)
+      }
       return NextResponse.json({ received: true })
     }
 
@@ -52,6 +59,71 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({ received: true })
+}
+
+// ── Programme / template access grant ──────────────────────────
+
+async function handleProgrammeAccess(
+  stripe: Stripe,
+  session: Stripe.Checkout.Session,
+  field: 'programme_access' | 'template_access',
+) {
+  const email = session.customer_details?.email
+  const name  = session.customer_details?.name || ''
+  if (!email) return
+
+  const supabase = createSupabaseServiceClient()
+
+  // Find existing user by email
+  const { data: { users } } = await supabase.auth.admin.listUsers()
+  const existing = users.find(u => u.email === email)
+
+  let userId: string
+  let loginUrl: string
+
+  if (existing) {
+    userId = existing.id
+    // grant access
+    await supabase.from('profiles').upsert({ id: userId, email, [field]: true }, { onConflict: 'id' })
+    // magic link so they can log straight in
+    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email })
+    loginUrl = linkData?.properties?.action_link ?? `${process.env.NEXT_PUBLIC_APP_URL}/login`
+  } else {
+    // create new user
+    const { data: userData } = await supabase.auth.admin.createUser({ email, email_confirm: true, user_metadata: { full_name: name } })
+    if (!userData?.user) return
+    userId = userData.user.id
+    await supabase.from('profiles').upsert({ id: userId, email, full_name: name, [field]: true }, { onConflict: 'id' })
+    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email })
+    loginUrl = linkData?.properties?.action_link ?? `${process.env.NEXT_PUBLIC_APP_URL}/login`
+  }
+
+  const firstName = name.split(' ')[0] || 'there'
+  const { Resend } = await import('resend')
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
+  await resend.emails.send({
+    from: 'Kira Mei <kira@kiramei.co.uk>',
+    to: email,
+    subject: `Your Training Blueprint programme is ready, ${firstName}.`,
+    html: `
+      <div style="font-family:'DM Sans',Arial,sans-serif;max-width:520px;color:#1A1916;background:#F8F6F1;padding:40px 32px;border-radius:12px;">
+        <p style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#4A7C59;margin-bottom:24px;">Kira Mei — Training Programme</p>
+        <h1 style="font-family:Georgia,serif;font-size:34px;font-weight:600;color:#1A1916;line-height:1.1;margin-bottom:16px;">You're in.</h1>
+        <p style="font-size:15px;line-height:1.7;color:#7A7870;margin-bottom:32px;">
+          Hi ${firstName} — your 8-week interactive programme is ready. Click below to access it. This link signs you straight in.
+        </p>
+        <a href="${loginUrl}" style="display:inline-block;padding:16px 32px;background:#1A1916;color:#F8F6F1;font-size:14px;font-weight:600;text-decoration:none;border-radius:99px;letter-spacing:0.04em;">
+          Access your programme →
+        </a>
+        <p style="font-size:12px;color:#B5B0A6;margin-top:24px;line-height:1.6;">
+          If this link expires, visit kiramei.co.uk/login to sign in with this email address.
+        </p>
+        <hr style="border:none;border-top:1px solid #E5E1D8;margin:32px 0;" />
+        <p style="font-size:11px;color:#B5B0A6;letter-spacing:0.08em;text-transform:uppercase;">Kira Mei · kiramei.co.uk</p>
+      </div>
+    `,
+  })
 }
 
 // ── PDF delivery for digital products ──────────────────────────

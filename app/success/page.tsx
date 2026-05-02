@@ -11,14 +11,12 @@ export default function SuccessPage() {
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px' }}>
         <div style={{ textAlign: 'center', maxWidth: 520 }}>
 
-          {/* Check circle */}
           <div style={{
             width: 56, height: 56, borderRadius: '50%',
             background: 'rgba(74,124,89,0.12)',
             border: '1.5px solid rgba(74,124,89,0.4)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 32px',
-            fontSize: 22, color: '#4A7C59',
+            margin: '0 auto 32px', fontSize: 22, color: '#4A7C59',
           }}>
             ✓
           </div>
@@ -34,11 +32,8 @@ export default function SuccessPage() {
             You're in.
           </h1>
 
-          <p style={{ fontSize: 16, color: 'rgba(238,234,228,0.6)', lineHeight: 1.75, marginBottom: 8 }}>
-            Your download links are on their way to your inbox. Check your email — and your spam folder just in case.
-          </p>
           <p style={{ fontSize: 16, color: 'rgba(238,234,228,0.6)', lineHeight: 1.75, marginBottom: 48 }}>
-            This is the last programme you'll ever need to buy.
+            Check your email — we've sent a login link to get you straight into your programme.
           </p>
 
           <div style={{
@@ -47,13 +42,13 @@ export default function SuccessPage() {
             textAlign: 'left', marginBottom: 40,
           }}>
             <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.3)', marginBottom: 14 }}>
-              What to expect
+              What happens next
             </p>
             {[
-              ['📬', 'Email with download links arrives within minutes'],
-              ['📄', 'Download your PDF(s) — save them somewhere safe'],
-              ['📖', 'Work through week by week — don\'t rush it'],
-              ['💪', 'By week 8, you build your own programme'],
+              ['✉️', 'Login link arrives in your inbox within a minute'],
+              ['🔑', 'Click it — you\'re taken straight into your programme'],
+              ['📅', 'Work through one week at a time — each unlocks the next'],
+              ['💪', 'By week 8 you can build your own programme for life'],
             ].map(([icon, text]) => (
               <div key={text as string} style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'flex-start' }}>
                 <span style={{ fontSize: 14 }}>{icon}</span>
@@ -62,16 +57,16 @@ export default function SuccessPage() {
             ))}
           </div>
 
-          <Link href="/" style={{
-            display: 'inline-block', padding: '12px 28px', borderRadius: 99,
-            border: '1px solid rgba(255,255,255,0.15)',
-            color: 'rgba(238,234,228,0.6)', fontSize: 14, fontWeight: 500,
-            textDecoration: 'none', transition: 'all 0.15s',
-          }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#EEEAE4'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.3)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(238,234,228,0.6)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.15)' }}
-          >
-            ← Back to home
+          <p style={{ fontSize: 13, color: 'rgba(238,234,228,0.3)', marginBottom: 24 }}>
+            Already have an account?
+          </p>
+
+          <Link href="/login" style={{
+            display: 'inline-block', padding: '14px 32px', borderRadius: 99,
+            background: '#EEEAE4', color: '#080808',
+            fontSize: 14, fontWeight: 600, textDecoration: 'none',
+          }}>
+            Sign in to your programme →
           </Link>
         </div>
       </div>
