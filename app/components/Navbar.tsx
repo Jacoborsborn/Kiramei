@@ -85,8 +85,18 @@ export default function Navbar({ transparent = false, onLogoTap }: NavbarProps) 
               {label}
             </Link>
           ))}
+          <Link href="/login" style={{
+            padding: '7px 14px', borderRadius: 99, fontSize: 13, fontWeight: 500,
+            color: 'rgba(238,234,228,0.65)', textDecoration: 'none',
+            transition: 'color 0.15s, background 0.15s', letterSpacing: '0.01em',
+          }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#EEEAE4'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.06)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(238,234,228,0.65)'; (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+          >
+            Sign in
+          </Link>
           <Link href="/#products" style={{
-            marginLeft: 8, padding: '8px 20px', borderRadius: 99,
+            marginLeft: 4, padding: '8px 20px', borderRadius: 99,
             background: '#EEEAE4', color: '#080808',
             fontSize: 13, fontWeight: 600, textDecoration: 'none',
             letterSpacing: '0.02em', transition: 'background 0.15s',
@@ -141,8 +151,15 @@ export default function Navbar({ transparent = false, onLogoTap }: NavbarProps) 
               {label}
             </Link>
           ))}
+          <Link href="/login" onClick={() => setMenuOpen(false)} style={{
+            marginTop: 16, fontSize: 18, fontWeight: 500,
+            color: 'rgba(238,234,228,0.5)', textDecoration: 'none',
+            padding: '10px 32px', letterSpacing: '0.02em',
+          }}>
+            Sign in
+          </Link>
           <Link href="/#products" onClick={() => setMenuOpen(false)} style={{
-            marginTop: 24, padding: '14px 40px', borderRadius: 99,
+            marginTop: 8, padding: '14px 40px', borderRadius: 99,
             background: '#EEEAE4', color: '#080808',
             fontSize: 15, fontWeight: 600, textDecoration: 'none',
           }}>
