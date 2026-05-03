@@ -81,20 +81,19 @@ async function handleProgrammeAccess(
   let userId: string
   let loginUrl: string
 
+  const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL}/programme`
+
   if (existing) {
     userId = existing.id
-    // grant access
     await supabase.from('profiles').upsert({ id: userId, email, [field]: true }, { onConflict: 'id' })
-    // magic link so they can log straight in
-    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email })
+    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } })
     loginUrl = linkData?.properties?.action_link ?? `${process.env.NEXT_PUBLIC_APP_URL}/login`
   } else {
-    // create new user
     const { data: userData } = await supabase.auth.admin.createUser({ email, email_confirm: true, user_metadata: { full_name: name } })
     if (!userData?.user) return
     userId = userData.user.id
     await supabase.from('profiles').upsert({ id: userId, email, full_name: name, [field]: true }, { onConflict: 'id' })
-    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email })
+    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } })
     loginUrl = linkData?.properties?.action_link ?? `${process.env.NEXT_PUBLIC_APP_URL}/login`
   }
 
@@ -223,10 +222,11 @@ async function handlePdfDelivery(stripe: Stripe, session: Stripe.Checkout.Sessio
   const supabase = createSupabaseServiceClient()
   const { data: { users } } = await supabase.auth.admin.listUsers()
   const existing = users.find(u => u.email === email)
+  const redirectTo = baseUrl
 
   let loginUrl = `${baseUrl}/login`
   if (existing) {
-    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email })
+    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } })
     loginUrl = linkData?.properties?.action_link ?? loginUrl
   } else {
     const { data: userData } = await supabase.auth.admin.createUser({
@@ -239,7 +239,7 @@ async function handlePdfDelivery(stripe: Stripe, session: Stripe.Checkout.Sessio
         { id: userData.user.id, email, full_name: name },
         { onConflict: 'id' },
       )
-      const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email })
+      const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } })
       loginUrl = linkData?.properties?.action_link ?? loginUrl
     }
   }
