@@ -20,11 +20,11 @@ const CANCEL_PATHS: Record<Product, string> = {
 }
 
 const SUCCESS_PATHS: Record<Product, string> = {
-  training:  '/success?session_id={CHECKOUT_SESSION_ID}',
-  nutrition: '/success?session_id={CHECKOUT_SESSION_ID}',
-  bundle:    '/success?session_id={CHECKOUT_SESSION_ID}',
-  programme: '/programme?activated=1',
-  template:  '/programme?template=1',
+  training:  '/success?type=pdf&session_id={CHECKOUT_SESSION_ID}',
+  nutrition: '/success?type=pdf&session_id={CHECKOUT_SESSION_ID}',
+  bundle:    '/success?type=pdf&session_id={CHECKOUT_SESSION_ID}',
+  programme: '/success?type=programme&session_id={CHECKOUT_SESSION_ID}',
+  template:  '/success?type=programme&session_id={CHECKOUT_SESSION_ID}',
 }
 
 const ALL_PRODUCTS: Product[] = ['training', 'nutrition', 'bundle', 'programme', 'template']
