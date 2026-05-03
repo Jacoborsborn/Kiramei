@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useSearchParams, Suspense } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import Navbar from '@/app/components/Navbar'
 
 const PROGRAMME_STEPS = [
