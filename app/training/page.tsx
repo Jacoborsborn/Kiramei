@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 import FadeIn from '@/app/components/FadeIn'
-import BuyButton from '@/app/components/BuyButton'
+import Link from 'next/link'
 
 const WEEKS = [
   {
@@ -79,7 +79,7 @@ export default function TrainingPage() {
                   <span style={{ fontSize: 20, color: 'rgba(238,234,228,0.4)' }}>.99</span>
                   <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.3)', marginTop: 2, letterSpacing: '0.06em' }}>one-time · instant download</p>
                 </div>
-                <BuyButton product="training" label="Buy Now →" />
+                <Link href="/pricing" style={{ display: 'inline-block', padding: '12px 28px', borderRadius: 99, background: '#EEEAE4', color: '#080808', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Get the Programme →</Link>
               </div>
             </FadeIn>
           </div>
@@ -210,7 +210,7 @@ export default function TrainingPage() {
             Ready to stop following<br />and start understanding?
           </h2>
           <p style={{ fontSize: 15, color: 'rgba(238,234,228,0.45)', marginBottom: 36 }}>One-time purchase. No subscription. Instant delivery.</p>
-          <BuyButton product="training" label="Get the Training Blueprint — £49.99" />
+          <Link href="/pricing" style={{ display: 'inline-block', padding: '15px 36px', borderRadius: 99, background: '#EEEAE4', color: '#080808', fontSize: 15, fontWeight: 600, textDecoration: 'none' }}>Get the Interactive Programme — £49.99</Link>
         </FadeIn>
       </section>
 

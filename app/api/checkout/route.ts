@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-type Product = 'training' | 'nutrition' | 'bundle' | 'programme' | 'template'
+type Product = 'nutrition' | 'bundle' | 'programme' | 'template'
 
 const PRICE_IDS: Record<Product, string> = {
-  training:  process.env.STRIPE_TRAINING_PRICE_ID!,
   nutrition: process.env.STRIPE_NUTRITION_PRICE_ID!,
   bundle:    process.env.STRIPE_BUNDLE_PRICE_ID!,
   programme: process.env.STRIPE_PROGRAMME_PRICE_ID!,
@@ -12,7 +11,6 @@ const PRICE_IDS: Record<Product, string> = {
 }
 
 const CANCEL_PATHS: Record<Product, string> = {
-  training:  '/training',
   nutrition: '/nutrition',
   bundle:    '/bundle',
   programme: '/pricing',
@@ -20,14 +18,13 @@ const CANCEL_PATHS: Record<Product, string> = {
 }
 
 const SUCCESS_PATHS: Record<Product, string> = {
-  training:  '/success?type=pdf&session_id={CHECKOUT_SESSION_ID}',
   nutrition: '/success?type=pdf&session_id={CHECKOUT_SESSION_ID}',
   bundle:    '/success?type=pdf&session_id={CHECKOUT_SESSION_ID}',
   programme: '/success?type=programme&session_id={CHECKOUT_SESSION_ID}',
   template:  '/success?type=programme&session_id={CHECKOUT_SESSION_ID}',
 }
 
-const ALL_PRODUCTS: Product[] = ['training', 'nutrition', 'bundle', 'programme', 'template']
+const ALL_PRODUCTS: Product[] = ['nutrition', 'bundle', 'programme', 'template']
 
 export async function POST(req: NextRequest) {
   const { product } = await req.json() as { product: Product }
@@ -37,7 +34,7 @@ export async function POST(req: NextRequest) {
   }
 
   const priceId = PRICE_IDS[product]
-  if (!priceId || priceId.startsWith('REPLACE')) {
+  if (!priceId) {
     return NextResponse.json({ error: 'Price not configured' }, { status: 500 })
   }
 
