@@ -13,14 +13,14 @@ const TRAINING_WEEKS = [
 ]
 
 const NUTRITION_WEEKS = [
-  { week: 'Week 1', topic: 'Calories' },
-  { week: 'Week 2', topic: 'Protein' },
-  { week: 'Week 3', topic: 'Carbohydrates' },
-  { week: 'Week 4', topic: 'Fats' },
-  { week: 'Week 5', topic: 'Eating around training' },
-  { week: 'Week 6', topic: 'Meal prep & shopping' },
-  { week: 'Week 7', topic: 'Social life & consistency' },
-  { week: 'Week 8', topic: 'Build your own approach' },
+  { week: 'Week 01', topic: 'Calories & TDEE' },
+  { week: 'Week 02', topic: 'Macros' },
+  { week: 'Week 03', topic: 'Protein sourcing' },
+  { week: 'Week 04', topic: 'Meal timing & training nutrition' },
+  { week: 'Week 05', topic: 'Meal prep & budget eating' },
+  { week: 'Week 06', topic: 'Fat loss without wrecking training' },
+  { week: 'Week 07', topic: 'Building & maintaining muscle' },
+  { week: 'Week 08', topic: 'Build your own approach' },
 ]
 
 export default function BundlePage() {
@@ -59,17 +59,16 @@ export default function BundlePage() {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 32, flexWrap: 'wrap', marginBottom: 40 }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 4 }}>
-                    <span className="font-display" style={{ fontSize: 56, fontWeight: 600, letterSpacing: '-0.02em' }}>£79</span>
-                    <span style={{ fontSize: 22, color: 'rgba(238,234,228,0.4)' }}>.99</span>
+                    <span className="font-display" style={{ fontSize: 56, fontWeight: 600, letterSpacing: '-0.02em' }}>£69</span>
                   </div>
-                  <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.3)', letterSpacing: '0.06em' }}>one-time · instant download</p>
+                  <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.3)', letterSpacing: '0.06em' }}>one-time · instant access</p>
                 </div>
                 <div style={{ paddingTop: 8 }}>
                   <p style={{ fontSize: 13, color: 'rgba(238,234,228,0.35)', textDecoration: 'line-through', marginBottom: 4 }}>
-                    £89.98 if bought separately
+                    £88 if bought separately
                   </p>
                   <p style={{ fontSize: 13, color: '#4A7C59', fontWeight: 600 }}>
-                    You save £10
+                    You save £19
                   </p>
                 </div>
               </div>
@@ -197,7 +196,7 @@ export default function BundlePage() {
             The complete system.<br />One purchase. Forever.
           </h2>
           <p style={{ fontSize: 15, color: 'rgba(238,234,228,0.45)', marginBottom: 36 }}>Training Blueprint + Nutrition Blueprint + Build Your Own Template</p>
-          <BuyButton product="bundle" label="Get the Full Stack Bundle — £79.99" />
+          <BuyButton product="bundle" label="Get the Full Stack Bundle — £69" />
         </FadeIn>
       </section>
 

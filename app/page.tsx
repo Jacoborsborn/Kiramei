@@ -1,407 +1,395 @@
-'use client'
-
-import { useState, useRef } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import FadeIn from './components/FadeIn'
-
-const PasswordModal = dynamic(() => import('./components/PasswordModal'), { ssr: false })
-const FounderDashboard = dynamic(() => import('./components/FounderDashboard'), { ssr: false })
+import KmNavbar from './components/KmNavbar'
+import KmFooter from './components/KmFooter'
 
 const PRODUCTS = [
   {
     id: 'training',
     href: '/training',
     label: 'Training Blueprint',
-    price: '£49.99',
-    badge: null,
-    desc: '8 weeks of structured training — full body, upper/lower, PPL. Every week explains the logic so you never need another programme.',
-    features: ['Full body to PPL progression', 'Week-by-week education', 'Progressive overload explained', 'Deload & beyond guidance'],
+    headline: 'Build your training brain.',
+    price: '£49',
+    priceSub: 'one-time',
+    featured: false,
+    tag: null,
+    features: [
+      '8 weeks of progressive training',
+      'Full body → Upper/Lower → PPL',
+      'Form notes & mind maps',
+      'Build-your-own template',
+    ],
   },
   {
     id: 'nutrition',
     href: '/nutrition',
     label: 'Nutrition Blueprint',
-    price: '£39.99',
-    badge: null,
-    desc: 'Calories, protein, carbs, fats — 8 weeks of nutrition education that teaches you to build your own approach forever.',
-    features: ['Macronutrient fundamentals', 'Eating around training', 'Meal prep & social eating', 'Build your own approach'],
+    headline: 'Stop guessing food.',
+    price: '£39',
+    priceSub: 'one-time',
+    featured: false,
+    tag: null,
+    features: [
+      'Calories, protein, carbs, fats',
+      'Eating around training',
+      'Meal prep system',
+      'Holidays & social eating',
+    ],
   },
   {
     id: 'bundle',
     href: '/bundle',
     label: 'Full Stack Bundle',
-    price: '£79.99',
-    badge: 'Best Value — Save £10',
-    desc: 'Training and nutrition together. The complete system for understanding your body inside and out.',
-    features: ['Everything in Training Blueprint', 'Everything in Nutrition Blueprint', 'Build Your Own Template PDF', 'Save £10 vs buying separately'],
-  },
-]
-
-const PHILOSOPHY = [
-  {
-    num: '01',
-    title: 'Try every method',
-    body: 'Full body, upper/lower, push pull legs — all in 8 weeks. You experience every major training style, not just one.',
-  },
-  {
-    num: '02',
-    title: 'Understand the why',
-    body: 'Every week explains the logic behind the training. Not just what to do — but why it works and what happens in your body.',
-  },
-  {
-    num: '03',
-    title: 'Build your own',
-    body: 'By week 8 you have the knowledge to design your own programme. You\'ll never need to pay for a plan again.',
+    headline: 'The whole education.',
+    price: '£69',
+    priceSub: 'one-time · save £19',
+    featured: true,
+    tag: 'Best value · save £19',
+    features: [
+      'Training Blueprint (full)',
+      'Nutrition Blueprint (full)',
+      'Build-your-own template',
+      'Lifetime updates',
+    ],
   },
 ]
 
 const TESTIMONIALS = [
   {
+    initial: 'S',
     name: 'Sophie R.',
-    age: 24,
-    city: 'Manchester',
-    quote: 'I\'ve bought three programmes before this and never finished any of them. Eight weeks later I actually understand what I\'m doing in the gym. I built my own plan last week. Never thought I\'d say that.',
+    loc: '24 · MANCHESTER',
+    quote: "I've bought three programmes before this and never finished any of them. Eight weeks later I actually understand what I'm doing in the gym. I built my own plan last week. Never thought I'd say that.",
   },
   {
+    initial: 'C',
     name: 'Chloe M.',
-    age: 27,
-    city: 'Leeds',
-    quote: 'The nutrition blueprint genuinely changed how I think about food. No more googling meal plans. I just know what to eat and why now.',
+    loc: '27 · LEEDS',
+    quote: "The nutrition blueprint genuinely changed how I think about food. No more googling meal plans. I just know what to eat and why now.",
   },
   {
+    initial: 'J',
     name: 'Jade T.',
-    age: 22,
-    city: 'London',
-    quote: 'Week 3 was when it clicked. I stopped just following the exercises and started actually understanding them. Worth every penny.',
+    loc: '22 · LONDON',
+    quote: "Week 3 was when it clicked. I stopped just following the exercises and started actually understanding them. Worth every penny.",
   },
   {
+    initial: 'R',
     name: 'Ryan K.',
-    age: 26,
-    city: 'Birmingham',
-    quote: 'Bought the bundle. Finished it. Built my own programme. That\'s literally what she promised and she delivered.',
+    loc: '26 · BIRMINGHAM',
+    quote: "Bought the bundle. Finished it. Built my own programme. That's literally what she promised and she delivered.",
   },
 ]
 
 export default function Home() {
-  const [showPasswordModal, setShowPasswordModal] = useState(false)
-  const [showFounderDashboard, setShowFounderDashboard] = useState(false)
-
   return (
-    <main style={{ background: '#080808', minHeight: '100vh', color: '#EEEAE4' }}>
-      <Navbar transparent onLogoTap={() => setShowPasswordModal(true)} />
+    <div className="km-page">
+      <KmNavbar activePage="home" />
 
-      {/* ── HERO ── */}
-      <section style={{ position: 'relative', minHeight: '100svh', overflow: 'hidden' }}>
-        <Image
-          src="/kira.jpg"
-          alt="Kira Mei"
-          fill
-          priority
-          quality={100}
-          style={{ objectFit: 'cover', objectPosition: 'top center' }}
-          sizes="100vw"
-        />
-        {/* Gradient overlay */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, rgba(8,8,8,0.05) 30%, rgba(8,8,8,0.2) 55%, rgba(8,8,8,0.92) 100%)',
-        }} />
+      <style>{`
+        .hero { position: relative; padding: 80px 0 100px; overflow: hidden; }
+        .hero-bg {
+          position: absolute; inset: 0;
+          background-image:
+            linear-gradient(to right, rgba(201,214,226,0.28) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(201,214,226,0.28) 1px, transparent 1px);
+          background-size: 32px 32px;
+          pointer-events: none;
+          mask-image: linear-gradient(to bottom, black 60%, transparent);
+          -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent);
+        }
+        .hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 60px; align-items: center; position: relative; }
+        .hero h1 { font-size: clamp(2.6rem, 5.6vw, 4.6rem); font-weight: 500; line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 28px; }
+        .hero h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+        .hero-tagline { font-size: 18px; line-height: 1.7; color: var(--ink-soft); max-width: 480px; margin-bottom: 36px; }
+        .hero-meta { display: flex; gap: 28px; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--paper-edge); }
+        .hero-meta div { font-size: 13px; }
+        .hero-meta .label { display: block; margin-bottom: 4px; }
+        .hero-meta strong { font-family: var(--serif); font-weight: 500; font-size: 18px; }
+        .hero-image-stack { position: relative; height: 520px; }
+        .hero-poly { position: absolute; }
+        .hero-poly-1 { top: 0; left: 30px; transform: rotate(-3.5deg); width: 280px; }
+        .hero-poly-2 { bottom: 20px; right: 0; transform: rotate(2.8deg); width: 240px; }
+        .hero-poly-note {
+          position: absolute; top: 200px; left: -10px;
+          background: #FBE9A8; padding: 14px 16px;
+          font-family: var(--hand); font-size: 21px; color: var(--ink);
+          line-height: 1.2; width: 180px; transform: rotate(-2deg);
+          box-shadow: 1px 2px 0 rgba(31,27,22,0.06), 0 14px 22px -14px rgba(31,27,22,0.3);
+          z-index: 5;
+        }
+        .hero-poly .ph { width: 100%; aspect-ratio: 4/5; }
+        @media (max-width: 900px) {
+          .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+          .hero-image-stack { height: 460px; max-width: 380px; margin: 0 auto; }
+        }
 
-        {/* Hero content */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 5,
-          padding: 'clamp(40px, 6vw, 80px) clamp(24px, 5vw, 72px)',
-          maxWidth: 780,
-        }}>
-          <p className="anim-fade-up" style={{
-            fontSize: 11, fontWeight: 600, letterSpacing: '0.18em',
-            textTransform: 'uppercase', color: 'rgba(238,234,228,0.7)',
-            marginBottom: 20,
-          }}>
-            Digital Fitness Education
-          </p>
-          <h1 className="font-display anim-fade-up delay-1" style={{
-            fontSize: 'clamp(52px, 11vw, 108px)',
-            lineHeight: 0.92, fontWeight: 600, color: '#FFFFFF',
-            letterSpacing: '-0.025em', marginBottom: 28,
-          }}>
-            Buy this once.<br />
-            Never buy a<br />
-            plan again.
-          </h1>
-          <p className="anim-fade-up delay-2" style={{
-            fontSize: 'clamp(15px, 2.5vw, 18px)',
-            color: 'rgba(255,255,255,0.72)', lineHeight: 1.65,
-            maxWidth: 420, marginBottom: 40, fontWeight: 300,
-          }}>
-            8 weeks of education, structure and real training. By the end you'll understand your body well enough to never need another programme.
-          </p>
-          <a
-            href="#products"
-            className="anim-fade-up delay-3"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-              background: '#EEEAE4', color: '#080808',
-              padding: '15px 32px', borderRadius: 99,
-              fontWeight: 600, fontSize: 14, letterSpacing: '0.03em',
-              textDecoration: 'none', transition: 'background 0.2s',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#fff' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#EEEAE4' }}
-          >
-            See the plans →
-          </a>
-        </div>
-      </section>
+        .principles { padding: 100px 0 60px; }
+        .principles-head { display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 32px; margin-bottom: 56px; }
+        .principles-head h2 { font-size: clamp(2rem, 3.4vw, 2.8rem); max-width: 540px; }
+        .principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--paper-edge); }
+        .principle { padding: 36px 28px 32px 0; border-right: 1px solid var(--paper-edge); }
+        .principle:last-child { border-right: none; padding-right: 0; }
+        .principle:not(:first-child) { padding-left: 28px; }
+        .principle-num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 18px; }
+        .principle h3 { font-family: var(--serif); font-size: 24px; font-weight: 500; margin-bottom: 14px; }
+        .principle p { font-size: 14.5px; line-height: 1.7; color: var(--ink-soft); }
+        .principle-icon { width: 56px; height: 56px; margin-bottom: 18px; color: var(--ink); }
+        @media (max-width: 800px) {
+          .principles-grid { grid-template-columns: 1fr; }
+          .principle { border-right: none; border-bottom: 1px solid var(--paper-edge); padding: 28px 0; }
+          .principles-head { grid-template-columns: 1fr; }
+        }
 
-      {/* ── PRODUCTS ── */}
-      <section id="products" style={{ padding: 'clamp(72px, 10vw, 120px) clamp(24px, 5vw, 72px)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <FadeIn>
-            <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.35)', marginBottom: 16 }}>
-              The programmes
-            </p>
-            <h2 className="font-display" style={{ fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 600, lineHeight: 1.05, marginBottom: 56, letterSpacing: '-0.02em' }}>
-              Choose your level.
-            </h2>
-          </FadeIn>
+        .products { padding: 80px 0; position: relative; }
+        .products-bg { position: absolute; inset: 40px 0; background: var(--paper-deep); z-index: 0; }
+        .products-inner { position: relative; z-index: 1; }
+        .products-head { text-align: center; margin-bottom: 56px; }
+        .products-grid { display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 22px; align-items: stretch; }
+        .product-card { background: var(--paper); border: 1px solid var(--paper-edge); padding: 28px; display: flex; flex-direction: column; position: relative; border-radius: 2px; }
+        .product-card.featured { background: var(--ink); color: var(--paper); border-color: var(--ink); transform: translateY(-6px); }
+        .product-card.featured .label, .product-card.featured .muted { color: rgba(245,239,227,0.7); }
+        .product-tag { position: absolute; top: -12px; right: 24px; background: var(--accent); color: var(--paper); font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; padding: 6px 10px; text-transform: uppercase; transform: rotate(2deg); }
+        .product-price { font-family: var(--serif); font-size: 44px; line-height: 1; font-weight: 500; letter-spacing: -0.02em; margin: 12px 0 6px; }
+        .product-price-sub { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+        .product-feats { list-style: none; padding: 0; margin: 24px 0 28px; border-top: 1px solid var(--paper-edge); }
+        .product-card.featured .product-feats { border-color: rgba(245,239,227,0.18); }
+        .product-feats li { padding: 10px 0; font-size: 13.5px; line-height: 1.5; border-bottom: 1px solid var(--paper-edge); display: flex; gap: 12px; align-items: flex-start; }
+        .product-card.featured .product-feats li { border-color: rgba(245,239,227,0.12); color: rgba(245,239,227,0.92); }
+        .product-feats li::before { content: '✓'; color: var(--accent); font-family: var(--serif); font-weight: 600; flex-shrink: 0; line-height: 1.4; }
+        .product-card.featured .product-feats li::before { color: var(--accent-soft); }
+        .product-card .btn { margin-top: auto; justify-content: center; }
+        .product-card.featured .btn { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+        @media (max-width: 900px) {
+          .products-grid { grid-template-columns: 1fr; }
+          .product-card.featured { transform: none; }
+        }
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 20,
-          }}>
-            {PRODUCTS.map((p, i) => (
-              <FadeIn key={p.id} delay={i * 0.1}>
-                <div
-                  style={{
-                    background: p.badge ? '#111' : '#101010',
-                    border: p.badge ? '1px solid rgba(255,255,255,0.18)' : '1px solid rgba(255,255,255,0.07)',
-                    borderRadius: 16, padding: '32px 28px',
-                    position: 'relative', overflow: 'hidden',
-                    height: '100%', display: 'flex', flexDirection: 'column',
-                    boxShadow: p.badge ? '0 0 0 1px rgba(255,255,255,0.04), 0 32px 80px rgba(0,0,0,0.6)' : 'none',
-                    transition: 'border-color 0.2s, transform 0.2s',
-                  }}
-                  onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLElement
-                    el.style.transform = 'translateY(-4px)'
-                    el.style.borderColor = p.badge ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.14)'
-                  }}
-                  onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLElement
-                    el.style.transform = 'translateY(0)'
-                    el.style.borderColor = p.badge ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)'
-                  }}
-                >
-                  {p.badge && (
-                    <div style={{
-                      position: 'absolute', top: 20, right: 20,
-                      background: '#4A7C59', color: '#fff',
-                      fontSize: 10, fontWeight: 700, letterSpacing: '0.07em',
-                      textTransform: 'uppercase', padding: '4px 12px', borderRadius: 99,
-                    }}>
-                      {p.badge}
-                    </div>
-                  )}
+        .method { padding: 100px 0; border-top: 1px solid var(--paper-edge); }
+        .method-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
+        .method h2 { font-size: clamp(2rem, 3.4vw, 2.8rem); margin-bottom: 16px; }
+        .method .lead { font-size: 17px; line-height: 1.7; color: var(--ink-soft); max-width: 320px; }
+        @media (max-width: 800px) { .method-grid { grid-template-columns: 1fr; gap: 32px; } }
 
-                  <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.3)', marginBottom: 20 }}>
-                    {p.label}
-                  </p>
+        .testimonials { padding: 80px 0; border-top: 1px solid var(--paper-edge); }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; margin-top: 48px; }
+        .testimonial { position: relative; padding: 32px 32px 28px; background: var(--paper); border: 1px solid var(--paper-edge); border-radius: 3px; box-shadow: 0 1px 0 rgba(31,27,22,0.04), 0 12px 24px -16px rgba(31,27,22,0.18); }
+        .testimonial:nth-child(2n) { transform: rotate(-0.4deg); }
+        .testimonial:nth-child(2n+1) { transform: rotate(0.5deg); }
+        .testimonial-quote { font-family: var(--serif); font-size: 19px; line-height: 1.55; font-weight: 400; color: var(--ink); margin-bottom: 22px; }
+        .testimonial-quote::before { content: '"'; font-family: var(--serif); font-size: 56px; color: var(--accent); line-height: 0; vertical-align: -22px; margin-right: 4px; }
+        .testimonial-meta { display: flex; align-items: center; gap: 14px; padding-top: 18px; border-top: 1px solid var(--paper-edge); }
+        .testimonial-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--paper-deep); border: 1.5px solid var(--paper-edge); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 500; font-size: 15px; color: var(--ink); }
+        .testimonial-name { font-size: 14px; font-weight: 500; }
+        .testimonial-loc { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-muted); }
+        @media (max-width: 720px) { .testimonials-grid { grid-template-columns: 1fr; } }
 
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4 }}>
-                    <span className="font-display" style={{ fontSize: 56, fontWeight: 600, lineHeight: 1, letterSpacing: '-0.02em' }}>
-                      {p.price.split('.')[0]}
-                    </span>
-                    <span style={{ fontSize: 20, color: 'rgba(238,234,228,0.4)' }}>
-                      .{p.price.split('.')[1]}
-                    </span>
-                  </div>
-                  <p style={{ fontSize: 11, color: 'rgba(238,234,228,0.25)', marginBottom: 24, letterSpacing: '0.06em' }}>
-                    one-time · instant delivery
-                  </p>
+        .bottom-cta { padding: 100px 0 80px; text-align: center; }
+        .bottom-cta h2 { font-size: clamp(2.2rem, 4.4vw, 3.6rem); font-weight: 500; letter-spacing: -0.02em; max-width: 720px; margin: 0 auto 20px; }
+        .bottom-cta .lead { font-size: 17px; color: var(--ink-soft); max-width: 480px; margin: 0 auto 36px; }
+      `}</style>
 
-                  <p style={{ fontSize: 14, color: 'rgba(238,234,228,0.6)', lineHeight: 1.7, marginBottom: 24, flexGrow: 1 }}>
-                    {p.desc}
-                  </p>
+      <main>
+        {/* HERO */}
+        <section className="hero">
+          <div className="hero-bg" />
+          <div className="km-container">
+            <div className="hero-grid">
+              <div style={{ position: 'relative' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
+                  <span className="stamp">8 weeks · self-paced</span>
+                  <span className="hand" style={{ color: 'var(--margin-red)', fontSize: 22 }}>↘ no subscriptions</span>
+                </div>
+                <h1>
+                  Buy this once.<br />
+                  <em>Never buy a plan</em><br />
+                  again.
+                </h1>
+                <p className="hero-tagline">
+                  Eight weeks of education, structure and real training. By the end you&apos;ll understand your body well enough to never need another programme.
+                </p>
+                <div className="flex gap-4" style={{ flexWrap: 'wrap' }}>
+                  <Link href="#products" className="btn btn-accent">See the plans →</Link>
+                  <Link href="/about" className="btn btn-ghost">About Kira</Link>
+                </div>
+                <div className="hero-meta">
+                  <div><span className="label">Format</span><strong>PDF + visuals</strong></div>
+                  <div><span className="label">Length</span><strong>8 weeks</strong></div>
+                  <div><span className="label">Access</span><strong>Yours forever</strong></div>
+                </div>
+              </div>
 
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20, marginBottom: 28 }}>
-                    {p.features.map(f => (
-                      <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                        <span style={{ color: '#4A7C59', fontSize: 12, flexShrink: 0 }}>✓</span>
-                        <span style={{ fontSize: 13, color: 'rgba(238,234,228,0.55)' }}>{f}</span>
+              <div className="hero-image-stack">
+                <div className="polaroid hero-poly hero-poly-1">
+                  <div className="ph" style={{ aspectRatio: '4/5' }}>PHOTO · KIRA TRAINING</div>
+                  <p className="hand" style={{ textAlign: 'center', marginTop: 8, color: 'var(--ink-soft)', fontSize: 18 }}>— Kira, Mar 2026</p>
+                </div>
+                <div className="polaroid hero-poly hero-poly-2">
+                  <div className="ph" style={{ aspectRatio: '1/1' }}>PROGRAMME PAGES</div>
+                  <p className="hand" style={{ textAlign: 'center', marginTop: 8, color: 'var(--ink-soft)', fontSize: 18 }}>inside the book</p>
+                </div>
+                <div className="hero-poly-note">
+                  &ldquo;the only programme<br />you&apos;ll ever need to buy.&rdquo;
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* PRINCIPLES */}
+        <section className="principles">
+          <div className="km-container">
+            <div className="principles-head">
+              <span className="eyebrow">The method</span>
+              <h2>Three ideas the whole programme is built on.</h2>
+              <span className="hand" style={{ color: 'var(--margin-red)', fontSize: 22, transform: 'rotate(-2deg)', display: 'inline-block' }}>★ keep this</span>
+            </div>
+            <div className="principles-grid">
+              <div className="principle">
+                <div className="principle-num">01 · Try every method</div>
+                <svg className="principle-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+                  <path d="M8 14 Q 14 8, 22 14 T 38 14 T 50 14"/>
+                  <path d="M8 28 Q 14 22, 22 28 T 38 28 T 50 28"/>
+                  <path d="M8 42 Q 14 36, 22 42 T 38 42 T 50 42"/>
+                </svg>
+                <h3>Try every split</h3>
+                <p>Full body, upper/lower, push pull legs — all in eight weeks. Most people spend years guessing which approach works. You&apos;ll try them all and feel the difference.</p>
+              </div>
+              <div className="principle">
+                <div className="principle-num">02 · Understand the why</div>
+                <svg className="principle-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+                  <circle cx="28" cy="28" r="18"/>
+                  <path d="M22 24 Q 28 16, 34 24 Q 28 28, 28 34"/>
+                  <circle cx="28" cy="40" r="1.4" fill="currentColor"/>
+                </svg>
+                <h3>Understand the why</h3>
+                <p>Every week explains the logic behind the training. Progressive overload, recovery, RPE, mind-muscle connection. Education, not instruction.</p>
+              </div>
+              <div className="principle">
+                <div className="principle-num">03 · Build your own</div>
+                <svg className="principle-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+                  <path d="M10 46 L 10 14 L 46 14 L 46 46"/>
+                  <path d="M10 46 L 28 32 L 46 46"/>
+                  <path d="M28 14 L 28 32"/>
+                </svg>
+                <h3>Then build your own</h3>
+                <p>By week eight you have the knowledge to never pay for a plan again. We teach you to fish. Most programmes don&apos;t — because they want you to keep buying.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* PRODUCTS */}
+        <section className="products" id="products">
+          <div className="products-bg" />
+          <div className="km-container products-inner">
+            <div className="products-head">
+              <span className="eyebrow" style={{ display: 'block', marginBottom: 18 }}>Choose your path</span>
+              <h2>One-time payment. Yours forever.</h2>
+              <p className="muted" style={{ fontSize: 15, marginTop: 6 }}>No subscription. No upsells after.</p>
+            </div>
+            <div className="products-grid">
+              {PRODUCTS.map(p => {
+                const isLocked = p.id === 'nutrition' || p.id === 'bundle'
+                return (
+                  <div key={p.id} className={`product-card lift${p.featured ? ' featured' : ''}`}>
+                    {p.tag && <span className="product-tag">{p.tag}</span>}
+                    {isLocked && (
+                      <span style={{ position: 'absolute', top: p.tag ? 28 : -12, left: 24, fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', background: 'var(--paper-deep)', color: 'var(--ink-muted)', border: '1px solid var(--paper-edge)', padding: '4px 8px', borderRadius: 2 }}>
+                        Coming Soon
+                      </span>
+                    )}
+                    <span className="label">{p.label}</span>
+                    <h3>{p.headline}</h3>
+                    <p className="product-price">{p.price}</p>
+                    <p className={`product-price-sub${p.featured ? '' : ' muted'}`} style={p.featured ? { color: 'var(--accent-soft)' } : {}}>{p.priceSub}</p>
+                    <ul className="product-feats">
+                      {p.features.map(f => <li key={f}>{f}</li>)}
+                    </ul>
+                    {isLocked ? (
+                      <div className="btn" style={{ marginTop: 'auto', justifyContent: 'center', opacity: 0.45, cursor: 'default', background: p.featured ? 'rgba(245,239,227,0.15)' : 'var(--paper-deep)', borderColor: 'var(--paper-edge)', color: p.featured ? 'rgba(245,239,227,0.6)' : 'var(--ink-muted)' }}>
+                        ⏳ Coming Soon
                       </div>
-                    ))}
+                    ) : (
+                      <Link href={p.href} className="btn">
+                        Open the programme →
+                      </Link>
+                    )}
                   </div>
-
-                  <Link href={p.href} style={{
-                    display: 'block', textAlign: 'center',
-                    padding: '13px', borderRadius: 99,
-                    background: p.badge ? '#EEEAE4' : 'transparent',
-                    color: p.badge ? '#080808' : '#EEEAE4',
-                    border: p.badge ? 'none' : '1px solid rgba(255,255,255,0.18)',
-                    fontSize: 14, fontWeight: 600, textDecoration: 'none',
-                    letterSpacing: '0.02em', transition: 'all 0.15s',
-                  }}
-                    onMouseEnter={e => {
-                      const el = e.currentTarget as HTMLElement
-                      if (p.badge) { el.style.background = '#fff' } else { el.style.background = 'rgba(255,255,255,0.08)' }
-                    }}
-                    onMouseLeave={e => {
-                      const el = e.currentTarget as HTMLElement
-                      if (p.badge) { el.style.background = '#EEEAE4' } else { el.style.background = 'transparent' }
-                    }}
-                  >
-                    Get Started →
-                  </Link>
-                </div>
-              </FadeIn>
-            ))}
+                )
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── PHILOSOPHY ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.06)',
-        padding: 'clamp(72px, 10vw, 120px) clamp(24px, 5vw, 72px)',
-      }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <FadeIn>
-            <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.35)', marginBottom: 16 }}>
-              The philosophy
-            </p>
-            <h2 className="font-display" style={{ fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 600, lineHeight: 1.05, marginBottom: 56, letterSpacing: '-0.02em', maxWidth: 600 }}>
-              This isn't a programme you follow. It's a programme that teaches.
+        {/* METHOD */}
+        <section className="method">
+          <div className="km-container">
+            <div className="method-grid">
+              <div>
+                <span className="eyebrow">Why it works</span>
+                <h2 style={{ marginTop: 14 }}>It&apos;s not a plan. It&apos;s a textbook.</h2>
+                <p className="lead">Most programmes hand you a calendar of workouts. This hands you the reasoning behind them — so the calendar becomes optional.</p>
+              </div>
+              <ol className="num-list">
+                <li>
+                  <h3 style={{ marginBottom: 6, fontSize: 18 }}>Read the week&apos;s chapter.</h3>
+                  <p className="muted" style={{ fontSize: 14.5, lineHeight: 1.7 }}>Each week opens with a short explainer. What the split is, why it exists, what to feel for. About 15 minutes.</p>
+                </li>
+                <li>
+                  <h3 style={{ marginBottom: 6, fontSize: 18 }}>Train the sessions.</h3>
+                  <p className="muted" style={{ fontSize: 14.5, lineHeight: 1.7 }}>Three to five workouts a week with hand-drawn exercise references and form cues. Adjust weights to your level.</p>
+                </li>
+                <li>
+                  <h3 style={{ marginBottom: 6, fontSize: 18 }}>Reflect, then continue.</h3>
+                  <p className="muted" style={{ fontSize: 14.5, lineHeight: 1.7 }}>A short reflection at the end of each week. By week eight you&apos;ll be writing your own programme on the blank template.</p>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        {/* TESTIMONIALS */}
+        <section className="testimonials">
+          <div className="km-container">
+            <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
+              <div>
+                <span className="eyebrow">From real readers</span>
+                <h2 style={{ marginTop: 12 }}>What people are saying.</h2>
+              </div>
+              <p className="hand" style={{ color: 'var(--margin-red)', fontSize: 24 }}>↓ ↓ ↓</p>
+            </div>
+            <div className="testimonials-grid">
+              {TESTIMONIALS.map(t => (
+                <div key={t.name} className="testimonial">
+                  <p className="testimonial-quote">{t.quote}</p>
+                  <div className="testimonial-meta">
+                    <div className="testimonial-avatar">{t.initial}</div>
+                    <div>
+                      <div className="testimonial-name">{t.name}</div>
+                      <div className="testimonial-loc">{t.loc}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* BOTTOM CTA */}
+        <section className="bottom-cta">
+          <div className="km-container-narrow">
+            <span className="eyebrow">Ready when you are</span>
+            <h2 style={{ marginTop: 18 }}>
+              Stop buying plans.<br />
+              Start <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>understanding</em>.
             </h2>
-          </FadeIn>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 1 }}>
-            {PHILOSOPHY.map((col, i) => (
-              <FadeIn key={col.num} delay={i * 0.12}>
-                <div style={{
-                  borderLeft: '1px solid rgba(255,255,255,0.07)',
-                  padding: '0 32px 0 32px',
-                }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, color: 'rgba(238,234,228,0.2)', letterSpacing: '0.1em', marginBottom: 20 }}>
-                    {col.num}
-                  </p>
-                  <h3 className="font-display" style={{ fontSize: 28, fontWeight: 600, lineHeight: 1.2, marginBottom: 16 }}>
-                    {col.title}
-                  </h3>
-                  <p style={{ fontSize: 14, color: 'rgba(238,234,228,0.55)', lineHeight: 1.8 }}>
-                    {col.body}
-                  </p>
-                </div>
-              </FadeIn>
-            ))}
+            <p className="lead">One purchase. Eight weeks. A lifetime of understanding.</p>
+            <Link href="#products" className="btn btn-accent">See the plans →</Link>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* ── TESTIMONIALS ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.06)',
-        padding: 'clamp(72px, 10vw, 120px) clamp(24px, 5vw, 72px)',
-        background: '#060606',
-      }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <FadeIn>
-            <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.35)', marginBottom: 16 }}>
-              Results
-            </p>
-            <h2 className="font-display" style={{ fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 600, lineHeight: 1.05, marginBottom: 56, letterSpacing: '-0.02em' }}>
-              What happens after 8 weeks.
-            </h2>
-          </FadeIn>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-            {TESTIMONIALS.map((t, i) => (
-              <FadeIn key={t.name} delay={i * 0.1}>
-                <div style={{
-                  background: '#101010',
-                  border: '1px solid rgba(255,255,255,0.07)',
-                  borderRadius: 14, padding: '28px 24px',
-                  transition: 'border-color 0.2s',
-                }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.14)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)' }}
-                >
-                  {/* Stars */}
-                  <div style={{ marginBottom: 16, color: '#EEEAE4', fontSize: 12, letterSpacing: 2 }}>
-                    ★★★★★
-                  </div>
-                  <p style={{ fontSize: 17, color: 'rgba(238,234,228,0.75)', lineHeight: 1.75, marginBottom: 24, fontStyle: 'italic', fontFamily: "'Cormorant Garamond', serif" }}>
-                    "{t.quote}"
-                  </p>
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 16 }}>
-                    <p style={{ fontSize: 13, fontWeight: 600, color: '#EEEAE4', marginBottom: 2 }}>{t.name}</p>
-                    <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.35)' }}>{t.age} · {t.city}</p>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FINAL CTA ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.06)',
-        padding: 'clamp(80px, 12vw, 140px) clamp(24px, 5vw, 72px)',
-        textAlign: 'center',
-      }}>
-        <FadeIn>
-          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.3)', marginBottom: 24 }}>
-            Ready?
-          </p>
-          <h2 className="font-display" style={{ fontSize: 'clamp(40px, 7vw, 80px)', fontWeight: 600, lineHeight: 1.05, marginBottom: 20, letterSpacing: '-0.025em' }}>
-            One purchase.<br />A lifetime of knowledge.
-          </h2>
-          <p style={{ fontSize: 16, color: 'rgba(238,234,228,0.5)', maxWidth: 440, margin: '0 auto 40px', lineHeight: 1.7 }}>
-            Buy once. Download your blueprints. Never pay for a programme again.
-          </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/bundle" style={{
-              padding: '15px 36px', borderRadius: 99, background: '#EEEAE4',
-              color: '#080808', fontSize: 14, fontWeight: 600, textDecoration: 'none',
-              letterSpacing: '0.03em', transition: 'background 0.15s',
-            }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#fff' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#EEEAE4' }}
-            >
-              Get the Bundle — £79.99 →
-            </Link>
-            <Link href="/#products" style={{
-              padding: '15px 32px', borderRadius: 99,
-              border: '1px solid rgba(255,255,255,0.15)',
-              color: 'rgba(238,234,228,0.7)', fontSize: 14, fontWeight: 500,
-              textDecoration: 'none', transition: 'all 0.15s',
-            }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#EEEAE4'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.3)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(238,234,228,0.7)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.15)' }}
-            >
-              Browse plans
-            </Link>
-          </div>
-        </FadeIn>
-      </section>
-
-      <Footer />
-
-      {showPasswordModal && !showFounderDashboard && (
-        <PasswordModal
-          onSuccess={() => { setShowPasswordModal(false); setShowFounderDashboard(true) }}
-          onClose={() => setShowPasswordModal(false)}
-        />
-      )}
-      {showFounderDashboard && (
-        <FounderDashboard onClose={() => setShowFounderDashboard(false)} />
-      )}
-    </main>
+      <KmFooter />
+    </div>
   )
 }

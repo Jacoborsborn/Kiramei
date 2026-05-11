@@ -82,153 +82,162 @@ function LoginForm() {
     }
   }
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%', padding: '13px 16px',
-    background: 'rgba(255,255,255,0.06)',
-    border: '1px solid rgba(255,255,255,0.12)',
-    borderRadius: 10, fontSize: 14,
-    color: '#EEEAE4', fontFamily: 'DM Sans, sans-serif',
-    outline: 'none',
-  }
-
-  const labelStyle: React.CSSProperties = {
-    fontSize: 12, fontWeight: 500,
-    color: 'rgba(238,234,228,0.45)',
-    letterSpacing: '0.04em',
-  }
-
   return (
-    <div style={{
-      minHeight: '100vh', background: '#080808',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
-    }}>
-      <div style={{ width: '100%', maxWidth: 420 }}>
-        <a href="/" style={{
-          display: 'inline-block', marginBottom: 40, fontSize: 12,
-          color: '#4A7C59', textDecoration: 'none', letterSpacing: '0.06em',
-        }}>
-          ← kiramei.co.uk
-        </a>
+    <div style={{ minHeight: '100vh', background: 'var(--paper)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', position: 'relative', zIndex: 2 }}>
+      <style>{`
+        .login-card {
+          width: 100%; max-width: 420px;
+          background: var(--paper);
+          border: 1.5px solid var(--ink);
+          padding: 40px 36px;
+          box-shadow: 4px 4px 0 var(--ink);
+          position: relative;
+        }
+        .login-card::before {
+          content: '';
+          position: absolute;
+          inset: 6px;
+          border: 1px dashed var(--paper-edge);
+          pointer-events: none;
+        }
+        .login-tabs {
+          display: flex;
+          background: var(--paper-deep);
+          border: 1px solid var(--paper-edge);
+          border-radius: 2px;
+          padding: 3px;
+          gap: 3px;
+          margin-bottom: 28px;
+        }
+        .login-tab {
+          flex: 1; text-align: center;
+          font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+          padding: 9px 8px; border-radius: 2px; cursor: pointer;
+          background: transparent; border: none; color: var(--ink-muted);
+          transition: all 0.15s;
+        }
+        .login-tab.active {
+          background: var(--paper); color: var(--ink);
+          box-shadow: 0 1px 3px rgba(31,27,22,0.1);
+        }
+        .login-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+        .login-field label {
+          font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+          text-transform: uppercase; color: var(--ink-muted);
+        }
+        .login-error {
+          font-size: 13px; color: var(--accent);
+          background: rgba(184,84,58,0.06);
+          border: 1px solid rgba(184,84,58,0.2);
+          padding: 10px 14px; border-radius: 2px;
+          margin-bottom: 14px;
+        }
+        .login-success {
+          background: rgba(122,139,110,0.1);
+          border: 1px solid rgba(122,139,110,0.3);
+          border-radius: 2px; padding: 16px;
+        }
+        .login-foot {
+          text-align: center; margin-top: 20px;
+          font-size: 13px; color: var(--ink-muted);
+        }
+        .login-foot button {
+          background: none; border: none; cursor: pointer;
+          color: var(--accent); font-size: 13px; padding: 0;
+          text-decoration: underline; text-underline-offset: 2px;
+        }
+      `}</style>
 
-        <div style={{
-          background: '#101010',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 20, padding: '48px 40px',
-        }}>
-          <p style={{
-            fontSize: 11, fontWeight: 600, letterSpacing: '0.14em',
-            textTransform: 'uppercase', color: '#4A7C59', marginBottom: 20,
-          }}>
-            {mode === 'signin' ? 'Training Blueprint' : 'Create Account'}
-          </p>
-          <h1 className="font-display" style={{
-            fontSize: 42, fontWeight: 600, color: '#EEEAE4',
-            lineHeight: 1.0, marginBottom: 36, letterSpacing: '-0.02em',
-          }}>
-            {mode === 'signin' ? 'Sign in.' : 'Get started.'}
-          </h1>
+      {/* Back link */}
+      <a href="/" style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent)', textDecoration: 'none', marginBottom: 32, display: 'block' }}>
+        ← kiramei.co.uk
+      </a>
 
-          {successMsg ? (
-            <div style={{
-              background: 'rgba(74,124,89,0.15)',
-              border: '1px solid rgba(74,124,89,0.3)',
-              borderRadius: 10, padding: '16px 18px',
-            }}>
-              <p style={{ fontSize: 14, color: 'rgba(238,234,228,0.8)', lineHeight: 1.6 }}>{successMsg}</p>
-              <button
-                onClick={() => { setSuccessMsg(''); setMode('signin') }}
-                style={{ marginTop: 12, fontSize: 13, color: '#4A7C59', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-              >
-                Back to sign in →
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={mode === 'signin' ? handleSignIn : handleSignUp} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-              {mode === 'signup' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                  <label style={labelStyle}>Full name</label>
-                  <input
-                    style={inputStyle} type="text" value={name}
-                    onChange={e => setName(e.target.value)}
-                    placeholder="Jane Smith" required autoComplete="name"
-                  />
-                </div>
-              )}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                <label style={labelStyle}>Email</label>
-                <input
-                  style={inputStyle} type="email" value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="jane@email.com" required autoComplete="email"
-                />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                <label style={labelStyle}>Password</label>
-                <input
-                  style={inputStyle} type="password" value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-                  minLength={8}
-                />
-              </div>
+      <div className="login-card">
+        <span className="eyebrow" style={{ display: 'block', marginBottom: 12 }}>Training Blueprint</span>
+        <h1 style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(1.8rem, 4vw, 2.4rem)', fontWeight: 500, letterSpacing: '-0.02em', marginBottom: 28, lineHeight: 1.1 }}>
+          {mode === 'signin' ? 'Welcome back.' : 'Get started.'}
+        </h1>
 
-              {error && (
-                <p style={{
-                  fontSize: 13, color: '#F08080',
-                  background: 'rgba(192,57,43,0.15)',
-                  padding: '10px 14px', borderRadius: 8,
-                  border: '1px solid rgba(192,57,43,0.3)',
-                }}>
-                  {error}
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                style={{
-                  marginTop: 4, padding: '14px',
-                  background: loading ? 'rgba(238,234,228,0.1)' : '#EEEAE4',
-                  color: loading ? 'rgba(238,234,228,0.3)' : '#080808',
-                  border: 'none', borderRadius: 99,
-                  fontFamily: 'DM Sans, sans-serif', fontSize: 15, fontWeight: 600,
-                  cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
-                }}
-                onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#fff' }}
-                onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#EEEAE4' }}
-              >
-                {loading
-                  ? (mode === 'signin' ? 'Signing in...' : 'Creating account...')
-                  : (mode === 'signin' ? 'Sign in →' : 'Create account →')}
-              </button>
-            </form>
-          )}
-
-          {!successMsg && (
-            <p style={{ fontSize: 13, color: 'rgba(238,234,228,0.3)', marginTop: 24, textAlign: 'center' }}>
-              {mode === 'signin' ? (
-                <>No account?{' '}
-                  <button
-                    onClick={() => { setMode('signup'); setError('') }}
-                    style={{ color: '#4A7C59', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, padding: 0 }}
-                  >
-                    Create one
-                  </button>
-                </>
-              ) : (
-                <>Already have one?{' '}
-                  <button
-                    onClick={() => { setMode('signin'); setError('') }}
-                    style={{ color: '#4A7C59', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, padding: 0 }}
-                  >
-                    Sign in
-                  </button>
-                </>
-              )}
-            </p>
-          )}
+        {/* Mode tabs */}
+        <div className="login-tabs">
+          <button className={`login-tab${mode === 'signin' ? ' active' : ''}`} onClick={() => { setMode('signin'); setError('') }}>Sign in</button>
+          <button className={`login-tab${mode === 'signup' ? ' active' : ''}`} onClick={() => { setMode('signup'); setError('') }}>Create account</button>
         </div>
+
+        {successMsg ? (
+          <div className="login-success">
+            <p style={{ fontSize: 14, color: 'var(--sage)', lineHeight: 1.6, marginBottom: 12 }}>{successMsg}</p>
+            <button
+              onClick={() => { setSuccessMsg(''); setMode('signin') }}
+              style={{ fontSize: 13, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'var(--mono)', letterSpacing: '0.1em' }}
+            >
+              Back to sign in →
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={mode === 'signin' ? handleSignIn : handleSignUp}>
+            {mode === 'signup' && (
+              <div className="login-field">
+                <label>Full name</label>
+                <input
+                  className="kira-input" type="text" value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Jane Smith" required autoComplete="name"
+                />
+              </div>
+            )}
+            <div className="login-field">
+              <label>Email address</label>
+              <input
+                className="kira-input" type="email" value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="jane@email.com" required autoComplete="email"
+              />
+            </div>
+            <div className="login-field">
+              <label>Password</label>
+              <input
+                className="kira-input" type="password" value={password}
+                onChange={e => setPassword(e.target.value)}
+                required autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                minLength={8}
+                placeholder={mode === 'signup' ? 'Min. 8 characters' : ''}
+              />
+            </div>
+
+            {error && <div className="login-error">{error}</div>}
+
+            <button
+              type="submit" disabled={loading}
+              className="btn btn-accent"
+              style={{ width: '100%', justifyContent: 'center', marginTop: 8, opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+            >
+              {loading
+                ? (mode === 'signin' ? 'Signing in…' : 'Creating account…')
+                : (mode === 'signin' ? 'Sign in →' : 'Create account →')}
+            </button>
+          </form>
+        )}
+
+        {!successMsg && (
+          <div className="login-foot">
+            {mode === 'signin' ? (
+              <>No account?{' '}
+                <button onClick={() => { setMode('signup'); setError('') }}>Create one</button>
+              </>
+            ) : (
+              <>Already have one?{' '}
+                <button onClick={() => { setMode('signin'); setError('') }}>Sign in</button>
+              </>
+            )}
+          </div>
+        )}
       </div>
+
+      <p style={{ marginTop: 24, fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', textAlign: 'center' }}>
+        Secure login · No subscription
+      </p>
     </div>
   )
 }

@@ -1,157 +1,89 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
-import Navbar from '@/app/components/Navbar'
-import Footer from '@/app/components/Footer'
-import FadeIn from '@/app/components/FadeIn'
+import KmNavbar from '@/app/components/KmNavbar'
+import KmFooter from '@/app/components/KmFooter'
 
 export default function AboutPage() {
   return (
-    <main style={{ background: '#080808', minHeight: '100vh', color: '#EEEAE4' }}>
-      <Navbar />
-
-      {/* ── HERO ── */}
-      <section style={{ padding: 'clamp(120px, 14vw, 160px) clamp(24px, 5vw, 72px) clamp(72px, 8vw, 100px)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 64,
-            alignItems: 'center',
-          }}>
-            {/* Text */}
-            <div>
-              <FadeIn>
-                <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#4A7C59', marginBottom: 20 }}>
-                  About Kira
-                </p>
-              </FadeIn>
-              <FadeIn delay={0.1}>
-                <h1 className="font-display" style={{
-                  fontSize: 'clamp(44px, 7vw, 80px)',
-                  lineHeight: 0.97, fontWeight: 600, letterSpacing: '-0.025em', marginBottom: 32,
-                }}>
-                  Teaching people to fish,<br />not handing them a fish.
-                </h1>
-              </FadeIn>
-              <FadeIn delay={0.2}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <p style={{ fontSize: 16, color: 'rgba(238,234,228,0.65)', lineHeight: 1.8 }}>
-                    Kira is a 20-year-old personal trainer and university student based in London. Kazakh-Asian. Currently studying, training, and building this.
-                  </p>
-                  <p style={{ fontSize: 16, color: 'rgba(238,234,228,0.65)', lineHeight: 1.8 }}>
-                    She got frustrated watching people buy programme after programme and never actually learn anything. Follow a plan for 8 weeks, finish it, have no idea what to do next, buy another one. The cycle was endless — and profitable for everyone except the person actually trying to get fit.
-                  </p>
-                  <p style={{ fontSize: 16, color: 'rgba(238,234,228,0.65)', lineHeight: 1.8 }}>
-                    So she built the programme she wished existed when she started. One that doesn't just tell you what to do — it explains why. One that ends with you having enough knowledge to never need to buy a plan again.
-                  </p>
-                  <p style={{ fontSize: 16, color: 'rgba(238,234,228,0.65)', lineHeight: 1.8 }}>
-                    The brand philosophy is anti-dependency. You should not need Kira Mei after week 8. That's the whole point.
-                  </p>
+    <div className="km-page">
+      <KmNavbar activePage="about" />
+      <main>
+        {/* ── HERO ── */}
+        <section style={{ padding: '60px 0' }}>
+          <div className="km-container">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 80, alignItems: 'start' }}>
+              {/* Photo column */}
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                  {/* tape */}
+                  <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%) rotate(2deg)', width: 110, height: 22, background: 'rgba(184,146,58,0.25)', border: '1px solid rgba(184,146,58,0.3)', zIndex: 2 }} />
+                  <div style={{ background: '#FBF7EE', padding: '14px 14px 50px', boxShadow: '0 1px 0 rgba(31,27,22,0.06), 0 18px 32px -16px rgba(31,27,22,0.28)', transform: 'rotate(-2deg)', display: 'inline-block' }}>
+                    <div className="km-ph" style={{ aspectRatio: '3/4', width: 360 }}>PHOTO · KIRA, LONDON</div>
+                    <p style={{ textAlign: 'center', marginTop: 14, fontFamily: 'var(--hand)', fontSize: 22, color: 'var(--ink-soft)' }}>— "still figuring it out"</p>
+                  </div>
+                  <span className="km-stamp" style={{ position: 'absolute', bottom: 30, right: -30, transform: 'rotate(8deg)' }}>PT · LDN · 2026</span>
                 </div>
-              </FadeIn>
-            </div>
-
-            {/* Photo */}
-            <FadeIn delay={0.15}>
-              <div style={{
-                position: 'relative',
-                borderRadius: 16,
-                overflow: 'hidden',
-                aspectRatio: '3 / 4',
-                background: '#111',
-              }}>
-                <Image
-                  src="/kira.jpg"
-                  alt="Kira Mei"
-                  fill
-                  quality={95}
-                  style={{ objectFit: 'cover', objectPosition: 'top center' }}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
               </div>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
 
-      {/* ── PHILOSOPHY CALLOUT ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.07)',
-        padding: 'clamp(72px, 8vw, 100px) clamp(24px, 5vw, 72px)',
-        background: '#060606',
-      }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <FadeIn>
-            <p className="font-display" style={{
-              fontSize: 'clamp(24px, 4.5vw, 44px)',
-              fontWeight: 500, fontStyle: 'italic',
-              color: 'rgba(238,234,228,0.75)', lineHeight: 1.5,
-              marginBottom: 48,
-            }}>
-              "I got tired of watching people spend hundreds of pounds on plans they'd never understand. Buy this once. Learn everything. Never need another one."
-            </p>
-          </FadeIn>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 32 }}>
-            {[
-              { label: 'Age', value: '20' },
-              { label: 'Based in', value: 'London' },
-              { label: 'Background', value: 'Kazakh-Asian' },
-              { label: 'Status', value: 'PT & university student' },
-            ].map(({ label, value }) => (
-              <FadeIn key={label}>
-                <div style={{ borderLeft: '1px solid rgba(255,255,255,0.08)', paddingLeft: 20 }}>
-                  <p style={{ fontSize: 11, color: 'rgba(238,234,228,0.3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>{label}</p>
-                  <p style={{ fontSize: 15, fontWeight: 600, color: '#EEEAE4' }}>{value}</p>
+              {/* Text column */}
+              <div>
+                <span className="km-eyebrow">About Kira</span>
+                <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.08, margin: '18px 0 28px' }}>
+                  Teaching people to <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>never</em> need another programme.
+                </h1>
+                <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--ink-soft)', marginBottom: 20 }}>
+                  Kira Mei is a 20-year-old personal trainer and university student based in London. She started training at 17 and spent her first two years buying programmes, following plans and getting exactly nowhere — not because the plans were bad, but because she never understood what she was doing or why.
+                </p>
+                <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--ink-soft)', marginBottom: 20 }}>
+                  When she finally started studying the principles behind training and nutrition, everything changed. Not because she found the perfect programme — because she stopped needing one.
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '36px 0' }}>
+                  <hr style={{ flex: 1, border: 'none', borderTop: '1px solid var(--paper-edge)' }} />
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.2em', color: 'var(--ink-muted)', textTransform: 'uppercase' }}>The point</span>
+                  <hr style={{ flex: 1, border: 'none', borderTop: '1px solid var(--paper-edge)' }} />
                 </div>
-              </FadeIn>
-            ))}
+                <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--ink-soft)', marginBottom: 20 }}>
+                  She got frustrated watching people around her do the same thing she used to: buy plan after plan, follow it for a few weeks, get overwhelmed or bored, and start over. The problem wasn't consistency. It was dependency. Nobody was teaching the why.
+                </p>
+                <p style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--ink-soft)', marginBottom: 20 }}>
+                  So she built the programme she wished existed when she started. One that teaches you to fish. Eight weeks, every training split, every nutrition concept that actually matters. By the end, you should never need to buy a plan again.
+                </p>
+                <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, color: 'var(--ink)', marginTop: 32, marginBottom: 24 }}>That's the whole point.</p>
+                <Link href="/#products" className="km-btn km-btn-accent">See the plans →</Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── CTA ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.07)',
-        padding: 'clamp(72px, 8vw, 100px) clamp(24px, 5vw, 72px)',
-        textAlign: 'center',
-      }}>
-        <FadeIn>
-          <h2 className="font-display" style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 600, lineHeight: 1.1, marginBottom: 12, letterSpacing: '-0.02em' }}>
-            Ready to learn?
-          </h2>
-          <p style={{ fontSize: 15, color: 'rgba(238,234,228,0.45)', marginBottom: 36 }}>
-            Pick a programme. Learn everything. Never need another one.
-          </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/bundle" style={{
-              padding: '15px 36px', borderRadius: 99, background: '#EEEAE4',
-              color: '#080808', fontSize: 14, fontWeight: 600, textDecoration: 'none',
-              letterSpacing: '0.03em', transition: 'background 0.15s',
-            }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#fff' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#EEEAE4' }}
-            >
-              See the Bundle →
-            </Link>
-            <Link href="/#products" style={{
-              padding: '15px 32px', borderRadius: 99,
-              border: '1px solid rgba(255,255,255,0.15)',
-              color: 'rgba(238,234,228,0.7)', fontSize: 14, fontWeight: 500,
-              textDecoration: 'none', transition: 'all 0.15s',
-            }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#EEEAE4'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.3)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(238,234,228,0.7)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.15)' }}
-            >
-              Browse all plans
-            </Link>
+        {/* ── FACTS ── */}
+        <section style={{ padding: '60px 0', borderTop: '1px solid var(--paper-edge)' }}>
+          <div className="km-container">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
+              {[
+                { num: '3', label: 'Years coaching' },
+                { num: '200+', label: 'Readers so far' },
+                { num: '8', label: 'Weeks · per book' },
+                { num: '£0', label: 'Subscriptions' },
+              ].map(({ num, label }) => (
+                <div key={label} style={{ padding: '24px 0' }}>
+                  <div style={{ fontFamily: 'var(--serif)', fontSize: 44, fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1, color: 'var(--ink)' }}>{num}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.16em', color: 'var(--ink-muted)', textTransform: 'uppercase', marginTop: 8 }}>{label}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </FadeIn>
-      </section>
+        </section>
 
-      <Footer />
-    </main>
+        {/* ── CTA ── */}
+        <section style={{ padding: '60px 0', borderTop: '1px solid var(--paper-edge)', textAlign: 'center' }}>
+          <div className="km-container-narrow">
+            <h2 style={{ fontSize: 'clamp(2rem, 3.4vw, 2.6rem)', marginBottom: 24 }}>Ready to stop buying plans?</h2>
+            <Link href="/#products" className="km-btn km-btn-accent">See the plans →</Link>
+          </div>
+        </section>
+      </main>
+      <KmFooter />
+    </div>
   )
 }

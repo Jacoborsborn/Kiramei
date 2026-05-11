@@ -1,11 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import Navbar from '@/app/components/Navbar'
-import Footer from '@/app/components/Footer'
-import FadeIn from '@/app/components/FadeIn'
+import KmNavbar from '@/app/components/KmNavbar'
+import KmFooter from '@/app/components/KmFooter'
 
-function CheckoutButton({ product, label, style }: { product: string; label: string; style?: React.CSSProperties }) {
+function CheckoutButton({ product, label, ghost }: { product: string; label: string; ghost?: boolean }) {
   const [loading, setLoading] = useState(false)
 
   async function handleClick() {
@@ -28,17 +27,8 @@ function CheckoutButton({ product, label, style }: { product: string; label: str
     <button
       onClick={handleClick}
       disabled={loading}
-      style={{
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        padding: '15px 36px', borderRadius: 99, border: 'none',
-        background: loading ? 'rgba(238,234,228,0.4)' : '#EEEAE4',
-        color: '#080808', fontSize: 15, fontWeight: 600, letterSpacing: '0.03em',
-        cursor: loading ? 'wait' : 'pointer', fontFamily: "'DM Sans', sans-serif",
-        transition: 'background 0.15s', opacity: loading ? 0.7 : 1,
-        ...style,
-      }}
-      onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#fff' }}
-      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = loading ? 'rgba(238,234,228,0.4)' : '#EEEAE4' }}
+      className={ghost ? 'km-btn km-btn-ghost' : 'km-btn km-btn-accent'}
+      style={{ width: '100%', justifyContent: 'center', opacity: loading ? 0.6 : 1, cursor: loading ? 'wait' : 'pointer' }}
     >
       {loading ? 'Redirecting…' : label}
     </button>
@@ -58,99 +48,68 @@ const INCLUDES = [
 
 export default function PricingPage() {
   return (
-    <main style={{ background: '#080808', minHeight: '100vh', color: '#EEEAE4' }}>
-      <Navbar />
-
-      <section style={{ padding: 'clamp(120px, 14vw, 160px) clamp(24px, 5vw, 72px) clamp(72px, 8vw, 100px)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{ maxWidth: 720 }}>
-            <FadeIn>
-              <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#4A7C59', marginBottom: 20 }}>
-                Training Blueprint — Interactive Programme
-              </p>
-            </FadeIn>
-            <FadeIn delay={0.1}>
-              <h1 className="font-display" style={{ fontSize: 'clamp(44px, 8vw, 88px)', lineHeight: 0.95, fontWeight: 600, letterSpacing: '-0.025em', marginBottom: 28 }}>
-                8 weeks.<br />Learn to train.
+    <div className="km-page">
+      <KmNavbar />
+      <main>
+        <section style={{ padding: '60px 0 80px' }}>
+          <div className="km-container">
+            <div style={{ maxWidth: 720 }}>
+              <span className="km-eyebrow">Training Blueprint — Interactive Programme</span>
+              <h1 style={{ fontSize: 'clamp(2.4rem, 5vw, 3.6rem)', fontWeight: 500, letterSpacing: '-0.025em', lineHeight: 1.05, margin: '18px 0 24px' }}>
+                8 weeks.<br /><em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>Learn to train.</em>
               </h1>
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <p style={{ fontSize: 17, color: 'rgba(238,234,228,0.6)', lineHeight: 1.75, marginBottom: 48, maxWidth: 520 }}>
+              <p style={{ fontSize: 17, color: 'var(--ink-soft)', lineHeight: 1.75, marginBottom: 48, maxWidth: 520 }}>
                 Not a PDF. A live, interactive programme that unlocks week by week — with lessons, sessions, quizzes, and logs built in.
               </p>
-            </FadeIn>
 
-            <FadeIn delay={0.3}>
-              <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: 52 }}>
-                {/* Programme */}
-                <div style={{
-                  background: '#101010', border: '1px solid rgba(255,255,255,0.12)',
-                  borderRadius: 20, padding: '40px 36px', flex: '1 1 300px', maxWidth: 420,
-                }}>
-                  <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#4A7C59', marginBottom: 16 }}>
-                    Training Blueprint
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
-                    <span className="font-display" style={{ fontSize: 56, fontWeight: 600, letterSpacing: '-0.02em' }}>£49</span>
-                    <span style={{ fontSize: 22, color: 'rgba(238,234,228,0.4)' }}>.99</span>
+              <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: 52 }}>
+                {/* Main card */}
+                <div style={{ background: 'var(--paper)', border: '1.5px solid var(--ink)', padding: '36px 32px', flex: '1 1 300px', maxWidth: 420, boxShadow: '4px 4px 0 var(--ink)', position: 'relative' }}>
+                  <div style={{ position: 'absolute', inset: 6, border: '1px dashed var(--paper-edge)', pointerEvents: 'none', borderRadius: 1 }} />
+                  <span className="km-eyebrow" style={{ display: 'block', marginBottom: 16 }}>Training Blueprint</span>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4 }}>
+                    <span style={{ fontFamily: 'var(--serif)', fontSize: 52, fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1 }}>£49.99</span>
                   </div>
-                  <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.3)', marginBottom: 32, letterSpacing: '0.06em' }}>one-time · instant access</p>
+                  <p className="km-label" style={{ marginBottom: 32 }}>one-time · instant access</p>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 36 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 36 }}>
                     {INCLUDES.map(item => (
                       <div key={item} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                        <span style={{ color: '#4A7C59', fontSize: 14, marginTop: 1, flexShrink: 0 }}>✓</span>
-                        <span style={{ fontSize: 14, color: 'rgba(238,234,228,0.7)', lineHeight: 1.55 }}>{item}</span>
+                        <span style={{ color: 'var(--accent)', fontSize: 14, marginTop: 1, flexShrink: 0 }}>✓</span>
+                        <span style={{ fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.55 }}>{item}</span>
                       </div>
                     ))}
                   </div>
 
-                  <CheckoutButton product="programme" label="Get instant access — £49.99" style={{ width: '100%' }} />
-                  <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.25)', marginTop: 14, textAlign: 'center' }}>
-                    You'll receive an email with a direct login link after purchase.
+                  <CheckoutButton product="programme" label="Get instant access — £49.99" />
+                  <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.1em', color: 'var(--ink-muted)', marginTop: 14, textAlign: 'center' }}>
+                    Email with login link sent instantly after purchase.
                   </p>
                 </div>
 
-                {/* Template upsell */}
-                <div style={{
-                  background: '#0C0C0C', border: '1px solid rgba(255,255,255,0.07)',
-                  borderRadius: 20, padding: '40px 36px', flex: '1 1 260px', maxWidth: 360,
-                }}>
-                  <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.3)', marginBottom: 16 }}>
-                    Add-on
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
-                    <span className="font-display" style={{ fontSize: 40, fontWeight: 600, letterSpacing: '-0.02em', color: 'rgba(238,234,228,0.6)' }}>£9</span>
-                    <span style={{ fontSize: 17, color: 'rgba(238,234,228,0.25)' }}>.99</span>
+                {/* Template add-on */}
+                <div style={{ background: 'var(--paper-deep)', border: '1px solid var(--paper-edge)', padding: '36px 32px', flex: '1 1 260px', maxWidth: 340, borderRadius: 2 }}>
+                  <span className="km-label" style={{ marginBottom: 16, display: 'block' }}>Add-on</span>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4 }}>
+                    <span style={{ fontFamily: 'var(--serif)', fontSize: 40, fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--ink-soft)', lineHeight: 1 }}>£9.99</span>
                   </div>
-                  <p style={{ fontSize: 14, fontWeight: 600, color: 'rgba(238,234,228,0.6)', marginBottom: 8 }}>Build Your Own Template</p>
-                  <p style={{ fontSize: 13, color: 'rgba(238,234,228,0.4)', lineHeight: 1.65, marginBottom: 32 }}>
+                  <p style={{ fontFamily: 'var(--sans)', fontSize: 15, fontWeight: 600, color: 'var(--ink-soft)', marginBottom: 8 }}>Build Your Own Template</p>
+                  <p style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.65, marginBottom: 32 }}>
                     A blank programme template so you can build your own split using exactly what you've learned.
                   </p>
-                  <CheckoutButton
-                    product="template"
-                    label="Add for £9.99"
-                    style={{
-                      width: '100%', background: 'transparent',
-                      border: '1px solid rgba(255,255,255,0.15)',
-                      color: 'rgba(238,234,228,0.6)',
-                    }}
-                  />
+                  <CheckoutButton product="template" label="Add for £9.99" ghost />
                 </div>
               </div>
-            </FadeIn>
 
-            <FadeIn delay={0.4}>
-              <p style={{ fontSize: 13, color: 'rgba(238,234,228,0.25)' }}>
+              <p style={{ fontSize: 13, color: 'var(--ink-muted)' }}>
                 Already purchased?{' '}
-                <a href="/login" style={{ color: '#4A7C59', textDecoration: 'none' }}>Sign in →</a>
+                <a href="/login" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Sign in →</a>
               </p>
-            </FadeIn>
+            </div>
           </div>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
+        </section>
+      </main>
+      <KmFooter />
+    </div>
   )
 }

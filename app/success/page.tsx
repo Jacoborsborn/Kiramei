@@ -5,10 +5,18 @@ import Stripe from 'stripe'
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ session_id?: string; type?: string }>
+  searchParams: Promise<{ session_id?: string; p?: string; type?: string }>
 }) {
-  const { session_id, type } = await searchParams
-  const isProgramme = type !== 'pdf'
+  const { session_id, p, type } = await searchParams
+
+  // Support both ?p=training|nutrition|bundle (new) and ?type=programme|pdf (legacy)
+  let product: 'training' | 'nutrition' | 'bundle'
+  if (p === 'training' || p === 'nutrition' || p === 'bundle') {
+    product = p
+  } else {
+    // legacy: type=programme → training, anything else → nutrition
+    product = type === 'programme' ? 'training' : 'nutrition'
+  }
 
   let email = ''
 
@@ -28,7 +36,7 @@ export default async function SuccessPage({
     <main style={{ background: '#080808', minHeight: '100vh', color: '#EEEAE4', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px' }}>
-        <ActivateForm email={email} sessionId={session_id ?? ''} isProgramme={isProgramme} />
+        <ActivateForm email={email} sessionId={session_id ?? ''} product={product} />
       </div>
     </main>
   )

@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createSupabaseServiceClient } from '@/lib/supabase-server'
 
+// Maps product slug to the profile boolean fields that should be set true
+const PRODUCT_ACCESS: Record<string, string[]> = {
+  training:  ['programme_access'],
+  nutrition: ['nutrition_access'],
+  bundle:    ['programme_access', 'nutrition_access'],
+  // legacy slugs
+  programme: ['programme_access'],
+  template:  ['template_access'],
+}
+
 export async function POST(req: NextRequest) {
   const { session_id, password } = await req.json() as { session_id: string; password: string }
 
@@ -12,7 +22,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Password must be at least 8 characters.' }, { status: 400 })
   }
 
-  // Verify the Stripe session
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
   let session: Stripe.Checkout.Session
   try {
@@ -32,12 +41,10 @@ export async function POST(req: NextRequest) {
   }
 
   const product = session.metadata?.product ?? ''
-  const isProgramme = product === 'programme' || product === 'template'
-  const accessField = product === 'template' ? 'template_access' : 'programme_access'
+  const accessFields = PRODUCT_ACCESS[product] ?? []
 
   const supabase = createSupabaseServiceClient()
 
-  // Check if user already exists
   const { data: { users } } = await supabase.auth.admin.listUsers()
   const existing = users.find(u => u.email === email)
 
@@ -45,10 +52,8 @@ export async function POST(req: NextRequest) {
 
   if (existing) {
     userId = existing.id
-    // Update their password
     await supabase.auth.admin.updateUserById(userId, { password })
   } else {
-    // Create new user with email + password
     const { data, error } = await supabase.auth.admin.createUser({
       email,
       password,
@@ -61,13 +66,14 @@ export async function POST(req: NextRequest) {
     userId = data.user.id
   }
 
-  // Grant access
   const profileUpdate: Record<string, unknown> = {
     id: userId,
     email,
     full_name: name || undefined,
   }
-  if (isProgramme) profileUpdate[accessField] = true
+  for (const field of accessFields) {
+    profileUpdate[field] = true
+  }
 
   await supabase.from('profiles').upsert(profileUpdate, { onConflict: 'id' })
 

@@ -12,13 +12,12 @@ interface WeekState {
   unlocked: boolean
 }
 
-export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: string; userEmail: string }) {
+export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = false }: { firstName: string; userEmail: string; hasNutrition?: boolean }) {
   const pathname = usePathname()
   const router = useRouter()
   const [signingOut, setSigningOut] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [weekStates, setWeekStates] = useState<WeekState[]>(Array(8).fill({ complete: false, unlocked: false }))
-  const [streak, setStreak] = useState(0)
   const [completedCount, setCompletedCount] = useState(0)
 
   useEffect(() => {
@@ -40,9 +39,7 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
         }
       })
       setWeekStates(states)
-      const done = states.filter(s => s.complete).length
-      setCompletedCount(done)
-      setStreak(done) // simplified streak = completed weeks
+      setCompletedCount(states.filter(s => s.complete).length)
     })
   }, [pathname])
 
@@ -59,36 +56,55 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
     return m ? parseInt(m[1]) : null
   }
   const currentWeek = activeWeek()
+  const progressPct = Math.round((completedCount / 8) * 100)
 
   const sidebarContent = (
     <>
       {/* Header */}
-      <div style={{ padding: '0 20px 24px', borderBottom: '1px solid rgba(255,255,255,0.07)', marginBottom: 8 }}>
-        <a href="/" style={{ fontSize: 10, color: '#4A7C59', textDecoration: 'none', letterSpacing: '0.1em', fontWeight: 700, textTransform: 'uppercase' }}>
+      <div style={{ padding: '0 24px 20px', borderBottom: '1px solid var(--paper-edge)', marginBottom: 8 }}>
+        <a href="/" style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent)', textDecoration: 'none' }}>
           kiramei.co.uk
         </a>
-        <p style={{ fontSize: 12, fontWeight: 600, color: 'rgba(238,234,228,0.4)', letterSpacing: '0.06em', marginTop: 16, marginBottom: 4, textTransform: 'uppercase' }}>
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 16, marginBottom: 6 }}>
           Training Blueprint
         </p>
-        <p className="font-display" style={{ fontSize: 18, fontWeight: 600, color: '#EEEAE4', marginBottom: 2 }}>{firstName}</p>
-        <p style={{ fontSize: 11, color: 'rgba(238,234,228,0.3)' }}>{userEmail}</p>
+        <p style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 500, color: 'var(--ink)', marginBottom: 2 }}>{firstName}</p>
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-muted)', letterSpacing: '0.06em' }}>{userEmail}</p>
       </div>
 
-      {/* Stats */}
-      <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: 24 }}>
-        <div>
-          <p style={{ fontSize: 22, fontWeight: 700, color: '#EEEAE4', fontFamily: 'DM Sans, sans-serif' }}>{streak}</p>
-          <p style={{ fontSize: 10, color: 'rgba(238,234,228,0.35)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Streak</p>
+      {/* Mode switcher — bundle holders only */}
+      {hasNutrition && (
+        <div style={{ padding: '12px 24px', borderBottom: '1px solid var(--paper-edge)' }}>
+          <div style={{ display: 'flex', background: 'var(--paper-deep)', border: '1px solid var(--paper-edge)', borderRadius: 2, padding: 3, gap: 3 }}>
+            <div style={{ flex: 1, textAlign: 'center', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink)', padding: '7px 8px', borderRadius: 2, background: 'var(--paper)', boxShadow: '0 1px 3px rgba(31,27,22,0.08)' }}>
+              Training
+            </div>
+            <Link href="/nutrition-portal" style={{ flex: 1, textAlign: 'center', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', padding: '7px 8px', borderRadius: 2, textDecoration: 'none' }}>
+              Nutrition
+            </Link>
+          </div>
         </div>
-        <div>
-          <p style={{ fontSize: 22, fontWeight: 700, color: '#EEEAE4', fontFamily: 'DM Sans, sans-serif' }}>{completedCount}/8</p>
-          <p style={{ fontSize: 10, color: 'rgba(238,234,228,0.35)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Weeks done</p>
+      )}
+
+      {/* Progress */}
+      <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--paper-edge)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 8 }}>
+          <span>Progress</span>
+          <span>{completedCount}/8 weeks</span>
+        </div>
+        <div style={{ height: 6, background: 'var(--paper)', border: '1px solid var(--paper-edge)', borderRadius: 3, overflow: 'hidden' }}>
+          <div style={{ height: '100%', background: 'var(--accent)', width: `${progressPct}%`, transition: 'width 0.4s ease', borderRadius: 3 }} />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--ink-muted)', marginTop: 6 }}>
+          <span>Wk 01</span>
+          <span>{progressPct}%</span>
+          <span>Wk 08</span>
         </div>
       </div>
 
-      {/* Week rail */}
-      <div style={{ flex: 1, padding: '12px 12px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.25)', padding: '8px 8px 4px' }}>
+      {/* Week list */}
+      <div style={{ flex: 1, padding: '12px', overflowY: 'auto' }}>
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)', padding: '6px 12px 10px' }}>
           Programme
         </p>
         {weekStates.map((ws, i) => {
@@ -99,14 +115,14 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
           if (isLocked) {
             return (
               <div key={weekNum} title={`Complete week ${weekNum - 1} first`} style={{
-                display: 'flex', alignItems: 'center', gap: 10,
-                padding: '10px 8px', borderRadius: 8,
+                display: 'grid', gridTemplateColumns: '28px 1fr', gap: 10,
+                padding: '10px 12px', borderRadius: 2,
                 cursor: 'not-allowed', opacity: 0.35,
               }}>
-                <span style={{ fontSize: 13, width: 20, textAlign: 'center' }}>🔒</span>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-muted)', marginTop: 1 }}>🔒</span>
                 <div>
-                  <p style={{ fontSize: 13, color: 'rgba(238,234,228,0.6)', lineHeight: 1.2 }}>Week {weekNum}</p>
-                  <p style={{ fontSize: 10, color: 'rgba(238,234,228,0.3)' }}>{WEEK_SPLITS[i]}</p>
+                  <p style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.2 }}>Week {String(weekNum).padStart(2, '0')}</p>
+                  <p style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--ink-muted)', marginTop: 2 }}>{WEEK_SPLITS[i]}</p>
                 </div>
               </div>
             )
@@ -118,20 +134,21 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
               href={`/programme/week/${weekNum}`}
               onClick={() => setMenuOpen(false)}
               style={{
-                display: 'flex', alignItems: 'center', gap: 10,
-                padding: '10px 8px', borderRadius: 8, textDecoration: 'none',
-                background: isActive ? 'rgba(74,124,89,0.18)' : 'transparent',
+                display: 'grid', gridTemplateColumns: '28px 1fr', gap: 10,
+                padding: '10px 12px', borderRadius: 2, textDecoration: 'none',
+                background: isActive ? 'rgba(184,84,58,0.07)' : 'transparent',
+                borderLeft: isActive ? '2px solid var(--accent)' : '2px solid transparent',
                 transition: 'background 0.15s',
               }}
             >
-              <span style={{ fontSize: 13, width: 20, textAlign: 'center', color: ws.complete ? '#4A7C59' : isActive ? '#4A7C59' : 'rgba(238,234,228,0.4)' }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: ws.complete ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--paper-edge)', marginTop: 1, fontWeight: 600 }}>
                 {ws.complete ? '✓' : isActive ? '◆' : '◇'}
               </span>
               <div>
-                <p style={{ fontSize: 13, fontWeight: isActive ? 600 : 400, color: isActive ? '#EEEAE4' : 'rgba(238,234,228,0.65)', lineHeight: 1.2 }}>
-                  Week {weekNum}
+                <p style={{ fontSize: 13, fontWeight: isActive ? 600 : 400, color: isActive ? 'var(--ink)' : 'var(--ink-soft)', lineHeight: 1.2 }}>
+                  Week {String(weekNum).padStart(2, '0')}
                 </p>
-                <p style={{ fontSize: 10, color: 'rgba(238,234,228,0.3)' }}>{WEEK_SPLITS[i]}</p>
+                <p style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--ink-muted)', marginTop: 2 }}>{WEEK_SPLITS[i]}</p>
               </div>
             </Link>
           )
@@ -139,19 +156,20 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
       </div>
 
       {/* Footer */}
-      <div style={{ padding: '12px', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+      <div style={{ padding: '12px', borderTop: '1px solid var(--paper-edge)' }}>
         <button
           onClick={handleSignOut}
           disabled={signingOut}
           style={{
-            width: '100%', padding: '10px 8px', background: 'transparent',
-            border: 'none', borderRadius: 8, cursor: 'pointer',
-            fontSize: 13, color: 'rgba(238,234,228,0.4)', textAlign: 'left',
+            width: '100%', padding: '10px 12px', background: 'transparent',
+            border: 'none', borderRadius: 2, cursor: 'pointer',
+            fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+            color: 'var(--ink-muted)', textAlign: 'left',
             display: 'flex', alignItems: 'center', gap: 10,
           }}
         >
           <span>↩</span>
-          {signingOut ? 'Signing out...' : 'Sign out'}
+          {signingOut ? 'Signing out…' : 'Sign out'}
         </button>
       </div>
     </>
@@ -161,8 +179,8 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
     <>
       {/* Desktop sidebar */}
       <nav style={{
-        display: 'none', position: 'fixed', top: 0, left: 0, bottom: 0, width: 232,
-        background: '#0C0C0C', borderRight: '1px solid rgba(255,255,255,0.06)',
+        display: 'none', position: 'fixed', top: 0, left: 0, bottom: 0, width: 240,
+        background: 'var(--paper-deep)', borderRight: '1px solid var(--paper-edge)',
         flexDirection: 'column', padding: '28px 0',
         zIndex: 50, overflowY: 'auto',
       }} className="programme-sidebar">
@@ -172,15 +190,16 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
       {/* Mobile top bar */}
       <header style={{
         position: 'sticky', top: 0, zIndex: 50,
-        background: '#0C0C0C', borderBottom: '1px solid rgba(255,255,255,0.06)',
+        background: 'rgba(242,237,226,0.92)', backdropFilter: 'blur(8px)',
+        borderBottom: '1px solid var(--paper-edge)',
         padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }} className="programme-mobile-header">
-        <a href="/" style={{ fontSize: 13, fontWeight: 700, color: '#EEEAE4', textDecoration: 'none', letterSpacing: '0.04em' }}>
+        <a href="/" style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', textDecoration: 'none', letterSpacing: '-0.01em' }}>
           kira mei
         </a>
         <button
           onClick={() => setMenuOpen(o => !o)}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#EEEAE4', fontSize: 18 }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--ink)', fontSize: 18 }}
           aria-label="Menu"
         >
           {menuOpen ? '✕' : '☰'}
@@ -190,14 +209,15 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
       {/* Mobile drawer */}
       {menuOpen && (
         <div
-          style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(0,0,0,0.6)' }}
+          style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(31,27,22,0.5)' }}
           onClick={() => setMenuOpen(false)}
         >
           <div
             style={{
-              position: 'absolute', top: 0, left: 0, bottom: 0, width: 260,
-              background: '#0C0C0C', padding: '28px 0',
+              position: 'absolute', top: 0, left: 0, bottom: 0, width: 280,
+              background: 'var(--paper-deep)', padding: '28px 0',
               display: 'flex', flexDirection: 'column', overflowY: 'auto',
+              borderRight: '1px solid var(--paper-edge)',
             }}
             onClick={e => e.stopPropagation()}
           >
@@ -210,7 +230,7 @@ export default function ProgrammeSidebar({ firstName, userEmail }: { firstName: 
         @media (min-width: 768px) {
           .programme-sidebar { display: flex !important; }
           .programme-mobile-header { display: none !important; }
-          .programme-main { margin-left: 232px !important; }
+          .programme-main { margin-left: 240px !important; }
         }
       `}</style>
     </>

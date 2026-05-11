@@ -7,15 +7,23 @@ import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 type Props = {
   email: string
   sessionId: string
-  isProgramme: boolean
+  product: 'training' | 'nutrition' | 'bundle'
 }
 
-export default function ActivateForm({ email, sessionId, isProgramme }: Props) {
+const REDIRECT: Record<Props['product'], string> = {
+  training:  '/programme',
+  nutrition: '/nutrition-portal',
+  bundle:    '/programme',
+}
+
+export default function ActivateForm({ email, sessionId, product }: Props) {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+
+  const productLabel = product === 'nutrition' ? 'nutrition portal' : 'programme'
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -38,7 +46,6 @@ export default function ActivateForm({ email, sessionId, isProgramme }: Props) {
       return
     }
 
-    // Sign in with the newly created account
     const supabase = createSupabaseBrowserClient()
     const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password })
     if (signInErr) {
@@ -48,7 +55,7 @@ export default function ActivateForm({ email, sessionId, isProgramme }: Props) {
       return
     }
 
-    router.push(isProgramme ? '/programme' : '/')
+    router.push(REDIRECT[product])
     router.refresh()
   }
 
@@ -61,7 +68,6 @@ export default function ActivateForm({ email, sessionId, isProgramme }: Props) {
   return (
     <div style={{ textAlign: 'center', maxWidth: 460, width: '100%' }}>
 
-      {/* tick */}
       <div style={{
         width: 56, height: 56, borderRadius: '50%',
         background: 'rgba(74,124,89,0.12)', border: '1.5px solid rgba(74,124,89,0.4)',
@@ -78,13 +84,11 @@ export default function ActivateForm({ email, sessionId, isProgramme }: Props) {
       </h1>
 
       <p style={{ fontSize: 15, color: 'rgba(238,234,228,0.5)', lineHeight: 1.7, marginBottom: 36 }}>
-        Set a password to create your account and{' '}
-        {isProgramme ? 'jump straight into your programme.' : 'access your downloads.'}
+        Set a password to create your account and jump straight into your {productLabel}.
       </p>
 
       <form onSubmit={handleSubmit} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-        {/* email — read-only */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={{ fontSize: 12, color: 'rgba(238,234,228,0.35)', letterSpacing: '0.04em' }}>Email</label>
           <input
@@ -127,7 +131,7 @@ export default function ActivateForm({ email, sessionId, isProgramme }: Props) {
             fontSize: 15, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer',
           }}
         >
-          {loading ? 'Creating account…' : isProgramme ? 'Create account & start →' : 'Create account →'}
+          {loading ? 'Creating account…' : `Create account & start →`}
         </button>
       </form>
 

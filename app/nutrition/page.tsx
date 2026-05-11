@@ -1,209 +1,198 @@
 'use client'
 
-import Link from 'next/link'
-import Navbar from '@/app/components/Navbar'
-import Footer from '@/app/components/Footer'
-import FadeIn from '@/app/components/FadeIn'
-import BuyButton from '@/app/components/BuyButton'
+import KmNavbar from '@/app/components/KmNavbar'
+import KmFooter from '@/app/components/KmFooter'
 
 const WEEKS = [
   {
-    week: 'Week 1',
-    topic: 'Calories',
-    desc: 'What a calorie actually is, why the in/out model works, and how to find your maintenance without obsessing over numbers.',
+    num: '01',
+    topic: 'Calories & TDEE',
+    desc: 'What a calorie actually is, why energy balance is the foundation, and how to find your TDEE without obsessing over numbers.',
   },
   {
-    week: 'Week 2',
-    topic: 'Protein',
-    desc: 'Why protein is the most important macro, how much you actually need, and how to hit it consistently without spending a fortune.',
+    num: '02',
+    topic: 'Macros',
+    desc: 'Protein non-negotiable, carbs and fats flexible. The simple framework for splitting your calories around your goals.',
   },
   {
-    week: 'Week 3',
-    topic: 'Carbohydrates',
-    desc: 'The truth about carbs — when they help, when they don\'t, and why you shouldn\'t fear them.',
+    num: '03',
+    topic: 'Protein sourcing',
+    desc: 'Meat, plant, and budget options side by side. What 30g of protein actually looks like across each source.',
   },
   {
-    week: 'Week 4',
-    topic: 'Fats',
-    desc: 'Dietary fat, hormones, and performance. How to choose the right fats and stop treating all fat the same.',
+    num: '04',
+    topic: 'Meal timing & training nutrition',
+    desc: 'Pre, intra, and post-workout. What actually moves the needle vs what is marketing dressed as science.',
   },
   {
-    week: 'Week 5',
-    topic: 'Eating around training',
-    desc: 'Pre-workout, post-workout, nutrient timing — what actually matters vs what\'s marketing noise.',
+    num: '05',
+    topic: 'Meal prep & budget eating',
+    desc: 'Cheap staples, batch cooking, no faff. The Sunday system that turns "what should I eat" into a non-question.',
   },
   {
-    week: 'Week 6',
-    topic: 'Meal prep & shopping',
-    desc: 'How to build a grocery shop around your goals, batch cook efficiently, and eat well without spending all weekend in the kitchen.',
+    num: '06',
+    topic: 'Fat loss without wrecking training',
+    desc: 'Deficit mechanics. How to lean out without losing the muscle you have spent weeks training to build.',
   },
   {
-    week: 'Week 7',
-    topic: 'Social life & consistency',
-    desc: 'Eating out, alcohol, weekends, holidays — how to stay consistent without becoming someone nobody wants to eat with.',
+    num: '07',
+    topic: 'Building & maintaining muscle',
+    desc: 'Surplus, recomp reality check, and the slow-and-boring truth about building muscle no one wants to sell you.',
   },
   {
-    week: 'Week 8',
-    topic: 'Building your own approach',
-    desc: 'Take everything you\'ve learned and design your own eating framework. The last nutrition education you\'ll ever need to buy.',
+    num: '08',
+    topic: 'Build your own approach',
+    desc: 'Take everything you\'ve learned and design your own nutrition approach. The last nutrition education you\'ll ever need to buy.',
   },
 ]
 
 export default function NutritionPage() {
   return (
-    <main style={{ background: '#080808', minHeight: '100vh', color: '#EEEAE4' }}>
-      <Navbar />
+    <div className="km-page">
+      <KmNavbar activePage="nutrition" />
 
-      {/* ── HERO ── */}
-      <section style={{ padding: 'clamp(120px, 14vw, 160px) clamp(24px, 5vw, 72px) clamp(72px, 8vw, 100px)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{ maxWidth: 720 }}>
-            <FadeIn>
-              <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#4A7C59', marginBottom: 20 }}>
-                Nutrition Blueprint
-              </p>
-            </FadeIn>
-            <FadeIn delay={0.1}>
-              <h1 className="font-display" style={{
-                fontSize: 'clamp(44px, 8vw, 96px)',
-                lineHeight: 0.95, fontWeight: 600, letterSpacing: '-0.025em', marginBottom: 28,
-              }}>
-                Understand food. Stop guessing forever.
-              </h1>
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <p style={{ fontSize: 17, color: 'rgba(238,234,228,0.6)', lineHeight: 1.75, marginBottom: 40, maxWidth: 520 }}>
-                Not a meal plan. A complete nutrition education — 8 weeks of learning how food actually works, so you never need to google "what should I eat" again.
-              </p>
-            </FadeIn>
-            <FadeIn delay={0.3}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-                <div>
-                  <span className="font-display" style={{ fontSize: 52, fontWeight: 600, letterSpacing: '-0.02em' }}>£39</span>
-                  <span style={{ fontSize: 20, color: 'rgba(238,234,228,0.4)' }}>.99</span>
-                  <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.3)', marginTop: 2, letterSpacing: '0.06em' }}>one-time · instant download</p>
+      <style>{`
+        .n-hero { padding: 60px 0 50px; position: relative; }
+        .n-hero-bg {
+          position: absolute; inset: 0;
+          background-image:
+            linear-gradient(to right, rgba(201,214,226,0.28) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(201,214,226,0.28) 1px, transparent 1px);
+          background-size: 32px 32px;
+          pointer-events: none;
+          mask-image: linear-gradient(to bottom, black 60%, transparent);
+          -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent);
+        }
+        .n-hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 60px; align-items: center; position: relative; }
+        .n-hero h1 { font-size: clamp(2.4rem, 4.8vw, 4rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.05; margin: 20px 0 20px; }
+        .n-hero h1 em { font-style: italic; color: var(--accent); }
+        .n-coming-soon {
+          display: inline-flex; align-items: center; gap: 12px;
+          padding: 16px 24px; background: var(--paper-deep);
+          border: 1.5px solid var(--paper-edge); border-radius: 3px;
+        }
+        .n-curriculum { padding: 80px 0; border-top: 1px solid var(--paper-edge); }
+        .n-week-row {
+          display: grid; grid-template-columns: 56px 200px 1fr; gap: 24px;
+          padding: 22px 0; border-bottom: 1px solid var(--paper-edge); align-items: start;
+        }
+        .n-week-num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; color: var(--accent); border: 1.5px solid var(--accent); padding: 4px 8px; border-radius: 2px; background: rgba(184,84,58,0.04); display: inline-block; }
+        .n-week-topic { font-family: var(--serif); font-size: 18px; font-weight: 500; }
+        .n-week-desc { font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
+
+        .n-quote { padding: 80px 0; border-top: 1px solid var(--paper-edge); text-align: center; background: var(--paper-deep); }
+        .n-cta { padding: 80px 0; border-top: 1px solid var(--paper-edge); text-align: center; }
+
+        @media (max-width: 860px) {
+          .n-hero-grid { grid-template-columns: 1fr; }
+          .n-week-row { grid-template-columns: 56px 1fr; }
+          .n-week-desc { grid-column: 1 / -1; padding-top: 0; }
+        }
+        @media (max-width: 600px) {
+          .n-week-row { grid-template-columns: 1fr; gap: 8px; }
+        }
+      `}</style>
+
+      <main>
+        {/* HERO */}
+        <section className="n-hero">
+          <div className="n-hero-bg" />
+          <div className="km-container">
+            <div className="n-hero-grid">
+              <div style={{ position: 'relative' }}>
+                <span className="eyebrow">Nutrition Blueprint</span>
+                <h1 className="n-hero" style={{ fontFamily: 'var(--serif)' }}>
+                  Understand food.<br />
+                  <em>Stop guessing</em> forever.
+                </h1>
+                <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--ink-soft)', maxWidth: 480, marginBottom: 28 }}>
+                  Not a meal plan. A complete nutrition education — 8 weeks of learning how food actually works, so you never need to google &ldquo;what should I eat&rdquo; again.
+                </p>
+
+                {/* Coming Soon lock */}
+                <div className="n-coming-soon">
+                  <div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 36, fontWeight: 500, lineHeight: 1 }}>£39</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 4 }}>one-time · instant access</div>
+                  </div>
+                  <div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 20px', background: 'var(--paper-edge)', borderRadius: 2, fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)', cursor: 'default' }}>
+                      <span>⏳</span> Coming Soon
+                    </div>
+                    <p className="hand" style={{ color: 'var(--margin-red)', fontSize: 18, marginTop: 8 }}>dropping soon ↘</p>
+                  </div>
                 </div>
-                <BuyButton product="nutrition" label="Buy Now →" />
               </div>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
 
-      {/* ── WEEK BREAKDOWN ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.07)',
-        padding: 'clamp(72px, 8vw, 100px) clamp(24px, 5vw, 72px)',
-      }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <FadeIn>
-            <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(238,234,228,0.35)', marginBottom: 16 }}>
-              The curriculum
-            </p>
-            <h2 className="font-display" style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 600, lineHeight: 1.05, marginBottom: 52, letterSpacing: '-0.02em' }}>
-              8 weeks of nutrition education.
-            </h2>
-          </FadeIn>
-
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {WEEKS.map((w, i) => (
-              <FadeIn key={w.week} delay={i * 0.06}>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '120px 160px 1fr',
-                  gap: 24,
-                  padding: '28px 0',
-                  borderBottom: '1px solid rgba(255,255,255,0.06)',
-                  alignItems: 'start',
-                }}>
-                  <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.3)', letterSpacing: '0.06em', paddingTop: 2 }}>{w.week}</p>
-                  <p style={{ fontSize: 15, fontWeight: 600, color: '#EEEAE4' }}>{w.topic}</p>
-                  <p style={{ fontSize: 14, color: 'rgba(238,234,228,0.55)', lineHeight: 1.7 }}>{w.desc}</p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PULL QUOTE ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.07)',
-        padding: 'clamp(72px, 8vw, 100px) clamp(24px, 5vw, 72px)',
-        background: '#060606',
-      }}>
-        <FadeIn>
-          <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
-            <p className="font-display" style={{
-              fontSize: 'clamp(22px, 4vw, 36px)',
-              fontWeight: 500, fontStyle: 'italic', lineHeight: 1.5,
-              color: 'rgba(238,234,228,0.8)',
-            }}>
-              "This isn't a meal plan. It's the last nutrition education you'll ever need to buy."
-            </p>
-            <p style={{ fontSize: 12, color: 'rgba(238,234,228,0.25)', marginTop: 20, letterSpacing: '0.08em' }}>
-              — Kira Mei
-            </p>
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* ── UPSELL ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.07)',
-        padding: 'clamp(56px, 6vw, 80px) clamp(24px, 5vw, 72px)',
-      }}>
-        <FadeIn>
-          <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-            <div style={{
-              background: '#101010', border: '1px solid rgba(255,255,255,0.12)',
-              borderRadius: 16, padding: '32px 36px',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              gap: 24, flexWrap: 'wrap',
-            }}>
               <div>
-                <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#4A7C59', marginBottom: 8 }}>
-                  Save £10
-                </p>
-                <p className="font-display" style={{ fontSize: 24, fontWeight: 600, marginBottom: 6 }}>
-                  Pair it with the training blueprint.
-                </p>
-                <p style={{ fontSize: 14, color: 'rgba(238,234,228,0.5)' }}>
-                  Get Training + Nutrition together for £79.99. That's £10 off and the complete system.
-                </p>
+                <div style={{ background: 'var(--paper)', border: '1px solid var(--ink)', padding: 28, position: 'relative', boxShadow: '4px 4px 0 var(--ink)', transform: 'rotate(-1.2deg)' }}>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 16 }}>Kira Mei · Coming Soon</div>
+                  <h3 style={{ fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 500, marginBottom: 14 }}>Nutrition Blueprint</h3>
+                  <div style={{ width: 50, height: 2, background: 'var(--ink)', margin: '12px 0' }} />
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {['Calories & TDEE', 'Macros demystified', 'Meal prep system', 'Build your own approach'].map(item => (
+                      <li key={item} style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.1em', color: 'var(--ink-soft)', padding: '5px 0', borderBottom: '1px solid var(--paper-edge)' }}>
+                        <span style={{ color: 'var(--accent)', marginRight: 8 }}>—</span>{item}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="stamp" style={{ position: 'absolute', bottom: 16, right: -8, transform: 'rotate(4deg)', fontSize: 10 }}>Coming Soon</span>
+                </div>
               </div>
-              <Link href="/bundle" style={{
-                flexShrink: 0, padding: '13px 28px', borderRadius: 99,
-                background: '#EEEAE4', color: '#080808',
-                fontSize: 14, fontWeight: 600, textDecoration: 'none',
-                whiteSpace: 'nowrap', transition: 'background 0.15s',
-              }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#fff' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#EEEAE4' }}
-              >
-                See the Bundle →
-              </Link>
             </div>
           </div>
-        </FadeIn>
-      </section>
+        </section>
 
-      {/* ── BOTTOM CTA ── */}
-      <section style={{
-        borderTop: '1px solid rgba(255,255,255,0.07)',
-        padding: 'clamp(72px, 8vw, 100px) clamp(24px, 5vw, 72px)',
-        textAlign: 'center',
-      }}>
-        <FadeIn>
-          <h2 className="font-display" style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 600, lineHeight: 1.1, marginBottom: 12, letterSpacing: '-0.02em' }}>
-            Stop guessing.<br />Start knowing.
-          </h2>
-          <p style={{ fontSize: 15, color: 'rgba(238,234,228,0.45)', marginBottom: 36 }}>One-time purchase. No subscription. Instant delivery.</p>
-          <BuyButton product="nutrition" label="Get the Nutrition Blueprint — £39.99" />
-        </FadeIn>
-      </section>
+        {/* CURRICULUM */}
+        <section className="n-curriculum">
+          <div className="km-container">
+            <div style={{ marginBottom: 48 }}>
+              <span className="eyebrow">The curriculum</span>
+              <h2 style={{ marginTop: 14, fontSize: 'clamp(1.8rem, 3vw, 2.4rem)' }}>8 weeks of nutrition education.</h2>
+              <p style={{ marginTop: 12, fontSize: 16, color: 'var(--ink-soft)', maxWidth: 560, lineHeight: 1.7 }}>
+                No meal plan. No macros spreadsheet. Every week teaches you a principle you can use for life — starting from the basics and building to a system you build yourself.
+              </p>
+            </div>
+            <div>
+              {WEEKS.map(w => (
+                <div key={w.num} className="n-week-row">
+                  <div><span className="n-week-num">Wk {w.num}</span></div>
+                  <div className="n-week-topic">{w.topic}</div>
+                  <div className="n-week-desc">{w.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-      <Footer />
-    </main>
+        {/* QUOTE */}
+        <section className="n-quote">
+          <div className="km-container-narrow">
+            <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 'clamp(1.4rem, 2.8vw, 2rem)', lineHeight: 1.55, color: 'var(--ink)', position: 'relative' }}>
+              <span style={{ fontFamily: 'var(--serif)', fontSize: 72, color: 'var(--accent)', lineHeight: 0, verticalAlign: '-24px', marginRight: 4 }}>&ldquo;</span>
+              This isn&apos;t a meal plan. It&apos;s the last nutrition education you&apos;ll ever need to buy.
+              <span style={{ fontFamily: 'var(--serif)', fontSize: 72, color: 'var(--accent)', lineHeight: 0, verticalAlign: '-24px', marginLeft: 4 }}>&rdquo;</span>
+            </p>
+            <p className="hand" style={{ color: 'var(--ink-muted)', fontSize: 22, marginTop: 20 }}>— Kira Mei</p>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="n-cta">
+          <div className="km-container-narrow">
+            <span className="eyebrow">Launching soon</span>
+            <h2 style={{ marginTop: 18, fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', marginBottom: 16 }}>
+              Interested? Training Blueprint is live now.
+            </h2>
+            <p style={{ fontSize: 16, color: 'var(--ink-soft)', marginBottom: 32, lineHeight: 1.7 }}>
+              The Nutrition Blueprint is coming soon. In the meantime, the Training Blueprint is available today — and it covers the nutrition principles that matter most for training.
+            </p>
+            <a href="/training" className="btn btn-accent">See the Training Blueprint →</a>
+          </div>
+        </section>
+      </main>
+
+      <KmFooter />
+    </div>
   )
 }
