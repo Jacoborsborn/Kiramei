@@ -1,7 +1,82 @@
 'use client'
 
+import { useState } from 'react'
 import KmNavbar from '@/app/components/KmNavbar'
 import KmFooter from '@/app/components/KmFooter'
+
+function WaitlistForm({ product }: { product: 'nutrition' | 'bundle' }) {
+  const [email, setEmail] = useState('')
+  const [state, setState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setState('loading')
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, product }),
+      })
+      if (!res.ok) throw new Error()
+      setState('done')
+    } catch {
+      setState('error')
+    }
+  }
+
+  if (state === 'done') {
+    return (
+      <div style={{ padding: '16px 20px', background: 'rgba(184,84,58,0.06)', border: '1.5px solid rgba(184,84,58,0.25)', borderRadius: 3 }}>
+        <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 500, marginBottom: 4 }}>You&apos;re on the list.</p>
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)', textTransform: 'uppercase' }}>
+          20% early access code sent to your inbox when we launch.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 4 }}>
+        Join the waiting list — get 20% off at launch
+      </p>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="your@email.com"
+          style={{
+            flex: '1 1 220px', padding: '11px 14px',
+            background: 'var(--paper)', border: '1.5px solid var(--ink)',
+            borderRadius: 3, fontFamily: 'var(--sans)', fontSize: 14,
+            color: 'var(--ink)', outline: 'none',
+          }}
+        />
+        <button
+          type="submit"
+          disabled={state === 'loading'}
+          style={{
+            padding: '11px 20px', background: 'var(--ink)', color: 'var(--paper)',
+            border: 'none', borderRadius: 3, fontFamily: 'var(--mono)',
+            fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+            cursor: state === 'loading' ? 'wait' : 'pointer',
+            opacity: state === 'loading' ? 0.6 : 1,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {state === 'loading' ? 'Joining…' : 'Notify me'}
+        </button>
+      </div>
+      {state === 'error' && (
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--margin-red)' }}>
+          Something went wrong — try again.
+        </p>
+      )}
+    </form>
+  )
+}
 
 const WEEKS = [
   {
@@ -109,18 +184,14 @@ export default function NutritionPage() {
                   Not a meal plan. A complete nutrition education — 8 weeks of learning how food actually works, so you never need to google &ldquo;what should I eat&rdquo; again.
                 </p>
 
-                {/* Coming Soon lock */}
-                <div className="n-coming-soon">
-                  <div>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 36, fontWeight: 500, lineHeight: 1 }}>£39</div>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 4 }}>one-time · instant access</div>
+                {/* Waitlist */}
+                <div style={{ marginTop: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 16 }}>
+                    <span style={{ fontFamily: 'var(--serif)', fontSize: 36, fontWeight: 500, lineHeight: 1 }}>£49.99</span>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>one-time · launching soon</span>
                   </div>
-                  <div>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 20px', background: 'var(--paper-edge)', borderRadius: 2, fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)', cursor: 'default' }}>
-                      <span>⏳</span> Coming Soon
-                    </div>
-                    <p className="hand" style={{ color: 'var(--margin-red)', fontSize: 18, marginTop: 8 }}>dropping soon ↘</p>
-                  </div>
+                  <WaitlistForm product="nutrition" />
+                  <p className="hand" style={{ color: 'var(--margin-red)', fontSize: 17, marginTop: 10 }}>dropping soon ↘</p>
                 </div>
               </div>
 
@@ -182,12 +253,18 @@ export default function NutritionPage() {
           <div className="km-container-narrow">
             <span className="eyebrow">Launching soon</span>
             <h2 style={{ marginTop: 18, fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', marginBottom: 16 }}>
-              Interested? Training Blueprint is live now.
+              Be first. Get 20% off.
             </h2>
             <p style={{ fontSize: 16, color: 'var(--ink-soft)', marginBottom: 32, lineHeight: 1.7 }}>
-              The Nutrition Blueprint is coming soon. In the meantime, the Training Blueprint is available today — and it covers the nutrition principles that matter most for training.
+              The Nutrition Blueprint is launching soon. Join the list and we&apos;ll send you a 20% early access code the day it drops.
             </p>
-            <a href="/training" className="btn btn-accent">See the Training Blueprint →</a>
+            <div style={{ maxWidth: 460, margin: '0 auto' }}>
+              <WaitlistForm product="nutrition" />
+            </div>
+            <p style={{ marginTop: 28, fontSize: 14, color: 'var(--ink-muted)' }}>
+              Already have the Training Blueprint?{' '}
+              <a href="/login" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Sign in →</a>
+            </p>
           </div>
         </section>
       </main>

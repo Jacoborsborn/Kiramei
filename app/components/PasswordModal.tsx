@@ -2,8 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react'
 
-const FOUNDER_PASSWORD = 'WorthingHigh1!'
-
 type Props = {
   onSuccess: () => void
   onClose: () => void
@@ -24,9 +22,14 @@ export default function PasswordModal({ onSuccess, onClose }: Props) {
     if (visible) inputRef.current?.focus()
   }, [visible])
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (value === FOUNDER_PASSWORD) {
+    const res = await fetch('/api/kira/auth-founder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: value }),
+    })
+    if (res.ok) {
       onSuccess()
     } else {
       setValue('')

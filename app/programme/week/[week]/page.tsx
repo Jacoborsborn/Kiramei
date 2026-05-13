@@ -70,15 +70,112 @@ import CompleteWeek8 from './_components/week8/CompleteWeek'
 // Shared CompleteWeek for weeks 2-7
 import CompleteWeek from './_components/week1/CompleteWeek'
 
-const WEEK_META: Record<number, { split: string; theme: string }> = {
-  1: { split: 'Full Body', theme: 'Building the baseline' },
-  2: { split: 'Full Body', theme: 'Do not quit here' },
-  3: { split: 'Upper / Lower', theme: 'You earned this' },
-  4: { split: 'Upper / Lower', theme: 'Stop guessing' },
-  5: { split: 'Push / Pull / Legs', theme: 'You are ready for this now' },
-  6: { split: 'Push / Pull / Legs', theme: 'Learn to coach yourself' },
-  7: { split: 'Full Body · Deload', theme: 'Pull back to come forward' },
-  8: { split: 'Push / Pull / Legs', theme: 'Your strongest week yet' },
+interface WeekStat { label: string; val: string }
+interface WeekMeta {
+  split: string
+  theme: string
+  italic: string
+  lede: string
+  stats: WeekStat[]
+}
+
+const WEEK_META: Record<number, WeekMeta> = {
+  1: {
+    split: 'Full Body',
+    theme: 'Where it begins.',
+    italic: 'Foundations.',
+    lede: "Three sessions. Whole body. The goal this week isn't to work hard — it's to feel the movements, find your weights, and show up three times.",
+    stats: [
+      { label: 'Sessions', val: '3 / wk' },
+      { label: 'Duration', val: '~ 50 min' },
+      { label: 'Exercises', val: '5 / session' },
+      { label: 'RPE target', val: '7 – 8' },
+    ],
+  },
+  2: {
+    split: 'Full Body',
+    theme: 'Do not quit here.',
+    italic: 'Full Body II.',
+    lede: "Week two is when most people stop. The novelty has worn off and the soreness hasn't gone away yet. Stay the course — this is exactly where the adaptation begins.",
+    stats: [
+      { label: 'Sessions', val: '3 / wk' },
+      { label: 'Duration', val: '~ 50 min' },
+      { label: 'Exercises', val: '5 / session' },
+      { label: 'RPE target', val: '7 – 8' },
+    ],
+  },
+  3: {
+    split: 'Upper / Lower',
+    theme: 'You earned this.',
+    italic: 'Upper / Lower.',
+    lede: "You've trained full body twice. Now you split it — upper days and lower days. More volume per muscle, more time to learn each movement.",
+    stats: [
+      { label: 'Sessions', val: '4 / wk' },
+      { label: 'Duration', val: '~ 55 min' },
+      { label: 'Exercises', val: '5–6 / session' },
+      { label: 'RPE target', val: '7 – 8' },
+    ],
+  },
+  4: {
+    split: 'Upper / Lower',
+    theme: 'Stop guessing.',
+    italic: 'Upper / Lower II.',
+    lede: "You have two weeks of data now. Use it. This week is about turning your logs into better decisions — not heavier weights, smarter weights.",
+    stats: [
+      { label: 'Sessions', val: '4 / wk' },
+      { label: 'Duration', val: '~ 55 min' },
+      { label: 'Exercises', val: '5–6 / session' },
+      { label: 'RPE target', val: '7 – 9' },
+    ],
+  },
+  5: {
+    split: 'Push / Pull / Legs',
+    theme: 'You are ready.',
+    italic: 'Push Pull Legs.',
+    lede: "Push Pull Legs is how serious lifters train. You've earned it. Each muscle hits twice a week — this is where progress compounds.",
+    stats: [
+      { label: 'Sessions', val: '3 / wk' },
+      { label: 'Duration', val: '~ 60 min' },
+      { label: 'Exercises', val: '6 / session' },
+      { label: 'RPE target', val: '7 – 9' },
+    ],
+  },
+  6: {
+    split: 'Push / Pull / Legs',
+    theme: 'Coach yourself.',
+    italic: 'Push Pull Legs II.',
+    lede: "Repeat the split, raise the bar. This week you're not just following a programme — you're learning to feel when to push and when to hold back.",
+    stats: [
+      { label: 'Sessions', val: '3 / wk' },
+      { label: 'Duration', val: '~ 60 min' },
+      { label: 'Exercises', val: '6 / session' },
+      { label: 'RPE target', val: '8 – 9' },
+    ],
+  },
+  7: {
+    split: 'Full Body · Deload',
+    theme: 'Pull back to move forward.',
+    italic: 'Deload week.',
+    lede: "A deload isn't a rest week — it's a training week at reduced intensity so your body can absorb what you've built. Do the sessions. Do not skip this.",
+    stats: [
+      { label: 'Sessions', val: '3 / wk' },
+      { label: 'Duration', val: '~ 40 min' },
+      { label: 'Exercises', val: '5 / session' },
+      { label: 'RPE target', val: '5 – 6' },
+    ],
+  },
+  8: {
+    split: 'Push / Pull / Legs',
+    theme: 'Your strongest week.',
+    italic: 'Yet.',
+    lede: "Eight weeks in. You're not the same person who started this. Build this week's sessions around what you've learned — this is your programme now.",
+    stats: [
+      { label: 'Sessions', val: '3 / wk' },
+      { label: 'Duration', val: '~ 60 min' },
+      { label: 'Exercises', val: '6 / session' },
+      { label: 'RPE target', val: '8 – 9' },
+    ],
+  },
 }
 
 export default async function WeekPage({ params }: { params: Promise<{ week: string }> }) {
@@ -275,21 +372,81 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
 
   return (
     <div style={{ maxWidth: 760, margin: '0 auto' }}>
-      {/* Page header */}
-      <div style={{ marginBottom: 48 }}>
-        <p style={{
-          fontSize: 11, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
-          color: 'var(--accent)', marginBottom: 10,
-        }}>
-          Week {weekNum} · {meta.split}
+      {/* Best-on-desktop notice */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '10px 16px', marginBottom: 28,
+        background: 'var(--paper-deep)', border: '1px solid var(--paper-edge)',
+        borderRadius: 3,
+      }}>
+        <span style={{ fontSize: 15 }}>💻</span>
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)', textTransform: 'uppercase', margin: 0 }}>
+          This programme is best experienced on a laptop or desktop
         </p>
-        <h1 className="font-display" style={{
-          fontSize: 'clamp(36px, 6vw, 60px)', fontWeight: 600, letterSpacing: '-0.02em',
-          lineHeight: 1.05, marginBottom: 12,
+      </div>
+
+      {/* Page header */}
+      <header style={{ marginBottom: 48 }}>
+        {/* Breadcrumb */}
+        <div style={{
+          display: 'flex', gap: 10, alignItems: 'center',
+          fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em',
+          color: 'var(--ink-muted)', textTransform: 'uppercase', marginBottom: 20,
         }}>
-          {meta.theme}
+          <a href="/programme" style={{ color: 'var(--ink-muted)', textDecoration: 'none' }}>Programme</a>
+          <span>/</span>
+          <span>Week {String(weekNum).padStart(2, '0')}</span>
+        </div>
+
+        {/* Tag chip */}
+        <span style={{
+          display: 'inline-block',
+          background: 'var(--accent)', color: 'var(--paper)',
+          padding: '5px 10px',
+          fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+          marginBottom: 16,
+        }}>
+          Week {String(weekNum).padStart(2, '0')} · {meta.split}
+        </span>
+
+        {/* H1 */}
+        <h1 style={{
+          fontFamily: 'var(--serif)', fontSize: 'clamp(2.2rem, 4vw, 3.4rem)',
+          fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.05, marginBottom: 14,
+        }}>
+          {meta.theme}<br />
+          <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>{meta.italic}</em>
         </h1>
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+
+        {/* Lede */}
+        <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--ink-soft)', maxWidth: 640, marginBottom: 28 }}>
+          {meta.lede}
+        </p>
+
+        {/* Stats bar */}
+        <div style={{
+          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+          borderTop: '1px solid var(--paper-edge)', borderBottom: '1px solid var(--paper-edge)',
+          marginBottom: 24,
+        }} className="week-stats-bar">
+          {meta.stats.map((stat, i) => (
+            <div key={i} style={{
+              padding: '16px 16px 16px 0',
+              borderRight: i < 3 ? '1px solid var(--paper-edge)' : 'none',
+              paddingLeft: i > 0 ? 16 : 0,
+            }}>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', color: 'var(--ink-muted)', textTransform: 'uppercase', marginBottom: 4 }}>
+                {stat.label}
+              </div>
+              <div style={{ fontFamily: 'var(--serif)', fontSize: 22, fontWeight: 500 }}>
+                {stat.val}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Progress pills */}
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           <Pill done={progress?.session_a_done} label="Session A" />
           <Pill done={progress?.session_b_done} label="Session B" />
           {weekNum >= 3 && weekNum <= 4 && <Pill done={progress?.session_c_done} label="Session C" />}
@@ -298,7 +455,17 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
           <Pill done={progress?.quiz_passed} label="Quiz" />
           <Pill done={progress?.week_complete} label={weekNum === 8 ? 'Programme Complete' : 'Complete'} accent />
         </div>
-      </div>
+      </header>
+
+      <style>{`
+        @media (max-width: 600px) {
+          .week-stats-bar { grid-template-columns: 1fr 1fr !important; }
+          .week-stats-bar > div:nth-child(2) { border-right: none !important; }
+          .week-stats-bar > div:nth-child(3),
+          .week-stats-bar > div:nth-child(4) { padding-left: 0 !important; }
+          .week-stats-bar > div:nth-child(4) { padding-left: 16px !important; }
+        }
+      `}</style>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         {renderWeekSections()}
@@ -310,17 +477,12 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
 function Section({ num, title, children }: { num: number; title: string; children?: React.ReactNode }) {
   return (
     <section style={{ borderBottom: '1px solid var(--paper-edge)', padding: '40px 0' }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginBottom: 24 }}>
-        <span style={{
-          fontSize: 11, fontWeight: 700, color: 'var(--ink-muted)',
-          letterSpacing: '0.08em', minWidth: 20, fontFamily: 'var(--mono)',
-        }}>
-          {String(num).padStart(2, '0')}
-        </span>
-        <h2 style={{ fontSize: 20, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-0.01em', fontFamily: 'var(--serif)' }}>
-          {title}
-        </h2>
-      </div>
+      <p style={{
+        fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em',
+        color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 24,
+      }}>
+        § {num}.0 · {title}
+      </p>
       {children}
     </section>
   )
@@ -330,11 +492,11 @@ function Pill({ done, label, accent }: { done?: boolean | null; label: string; a
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 6,
-      padding: '4px 12px', borderRadius: 2, fontSize: 11, fontWeight: 500,
-      fontFamily: 'var(--mono)', letterSpacing: '0.08em',
-      background: done ? (accent ? 'var(--accent)' : 'rgba(184,84,58,0.08)') : 'var(--paper-deep)',
+      padding: '5px 10px', borderRadius: 2, fontSize: 10, fontWeight: 500,
+      fontFamily: 'var(--mono)', letterSpacing: '0.14em', textTransform: 'uppercase',
+      background: done ? (accent ? 'var(--accent)' : 'rgba(184,84,58,0.07)') : 'var(--paper-deep)',
       color: done ? (accent ? 'var(--paper)' : 'var(--accent)') : 'var(--ink-muted)',
-      border: `1px solid ${done ? (accent ? 'var(--accent)' : 'rgba(184,84,58,0.25)') : 'var(--paper-edge)'}`,
+      border: `1px solid ${done ? (accent ? 'var(--accent)' : 'rgba(184,84,58,0.20)') : 'var(--paper-edge)'}`,
     }}>
       {done ? '✓' : '·'} {label}
     </span>

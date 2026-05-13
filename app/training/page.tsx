@@ -171,7 +171,7 @@ export default function TrainingPage() {
                 </p>
                 <div className="t-buy-box">
                   <div>
-                    <div className="t-buy-price">£49</div>
+                    <div className="t-buy-price">£49.99</div>
                     <div className="t-buy-sub">one-time · instant access</div>
                   </div>
                   <BuyButton product="training" label="Get the Programme →" />
@@ -361,7 +361,7 @@ export default function TrainingPage() {
               One-time purchase. Eight weeks. A lifetime of understanding.
             </p>
             <div style={{ display: 'inline-flex', gap: 20, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <BuyButton product="training" label="Get the Training Blueprint — £49" />
+              <BuyButton product="training" label="Get the Training Blueprint — £49.99" />
               <span style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', color: 'var(--ink-muted)', textTransform: 'uppercase' }}>No subscription · Instant access</span>
             </div>
           </div>

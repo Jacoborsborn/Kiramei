@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import KmNavbar from './components/KmNavbar'
 import KmFooter from './components/KmFooter'
@@ -8,7 +9,7 @@ const PRODUCTS = [
     href: '/training',
     label: 'Training Blueprint',
     headline: 'Build your training brain.',
-    price: '£49',
+    price: '£49.99',
     priceSub: 'one-time',
     featured: false,
     tag: null,
@@ -24,7 +25,7 @@ const PRODUCTS = [
     href: '/nutrition',
     label: 'Nutrition Blueprint',
     headline: 'Stop guessing food.',
-    price: '£39',
+    price: '£49.99',
     priceSub: 'one-time',
     featured: false,
     tag: null,
@@ -40,10 +41,10 @@ const PRODUCTS = [
     href: '/bundle',
     label: 'Full Stack Bundle',
     headline: 'The whole education.',
-    price: '£69',
-    priceSub: 'one-time · save £19',
+    price: '£78.99',
+    priceSub: 'one-time · save £20',
     featured: true,
-    tag: 'Best value · save £19',
+    tag: 'Best value · save £20',
     features: [
       'Training Blueprint (full)',
       'Nutrition Blueprint (full)',
@@ -105,10 +106,10 @@ export default function Home() {
         .hero-meta div { font-size: 13px; }
         .hero-meta .label { display: block; margin-bottom: 4px; }
         .hero-meta strong { font-family: var(--serif); font-weight: 500; font-size: 18px; }
-        .hero-image-stack { position: relative; height: 520px; }
+        .hero-image-stack { position: relative; height: 780px; }
         .hero-poly { position: absolute; }
-        .hero-poly-1 { top: 0; left: 30px; transform: rotate(-3.5deg); width: 280px; }
-        .hero-poly-2 { bottom: 20px; right: 0; transform: rotate(2.8deg); width: 240px; }
+        .hero-poly-1 { top: 0; left: 30px; transform: rotate(-3.5deg); width: 420px; }
+        .hero-poly-2 { bottom: 20px; right: 0; transform: rotate(2.8deg); width: 360px; }
         .hero-poly-note {
           position: absolute; top: 200px; left: -10px;
           background: #FBE9A8; padding: 14px 16px;
@@ -212,20 +213,23 @@ export default function Home() {
                   <Link href="/about" className="btn btn-ghost">About Kira</Link>
                 </div>
                 <div className="hero-meta">
-                  <div><span className="label">Format</span><strong>PDF + visuals</strong></div>
+                  <div><span className="label">Format</span><strong>In-site · weeks 1–8</strong></div>
                   <div><span className="label">Length</span><strong>8 weeks</strong></div>
                   <div><span className="label">Access</span><strong>Yours forever</strong></div>
                 </div>
+                <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)', textTransform: 'uppercase', marginTop: 14 }}>
+                  💻 Best experienced on a laptop or desktop
+                </p>
               </div>
 
               <div className="hero-image-stack">
                 <div className="polaroid hero-poly hero-poly-1">
-                  <div className="ph" style={{ aspectRatio: '4/5' }}>PHOTO · KIRA TRAINING</div>
-                  <p className="hand" style={{ textAlign: 'center', marginTop: 8, color: 'var(--ink-soft)', fontSize: 18 }}>— Kira, Mar 2026</p>
+                  <Image src="/screenshot-01.png" alt="Inside the programme — week overview" width={280} height={350} style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'cover' }} />
+                  <p className="hand" style={{ textAlign: 'center', marginTop: 8, color: 'var(--ink-soft)', fontSize: 18 }}>inside the programme</p>
                 </div>
                 <div className="polaroid hero-poly hero-poly-2">
-                  <div className="ph" style={{ aspectRatio: '1/1' }}>PROGRAMME PAGES</div>
-                  <p className="hand" style={{ textAlign: 'center', marginTop: 8, color: 'var(--ink-soft)', fontSize: 18 }}>inside the book</p>
+                  <Image src="/screenshot-02.png" alt="Inside the programme — food library" width={240} height={240} style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'cover' }} />
+                  <p className="hand" style={{ textAlign: 'center', marginTop: 8, color: 'var(--ink-soft)', fontSize: 18 }}>the food library</p>
                 </div>
                 <div className="hero-poly-note">
                   &ldquo;the only programme<br />you&apos;ll ever need to buy.&rdquo;
@@ -288,35 +292,21 @@ export default function Home() {
               <p className="muted" style={{ fontSize: 15, marginTop: 6 }}>No subscription. No upsells after.</p>
             </div>
             <div className="products-grid">
-              {PRODUCTS.map(p => {
-                const isLocked = p.id === 'nutrition' || p.id === 'bundle'
-                return (
-                  <div key={p.id} className={`product-card lift${p.featured ? ' featured' : ''}`}>
-                    {p.tag && <span className="product-tag">{p.tag}</span>}
-                    {isLocked && (
-                      <span style={{ position: 'absolute', top: p.tag ? 28 : -12, left: 24, fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', background: 'var(--paper-deep)', color: 'var(--ink-muted)', border: '1px solid var(--paper-edge)', padding: '4px 8px', borderRadius: 2 }}>
-                        Coming Soon
-                      </span>
-                    )}
-                    <span className="label">{p.label}</span>
-                    <h3>{p.headline}</h3>
-                    <p className="product-price">{p.price}</p>
-                    <p className={`product-price-sub${p.featured ? '' : ' muted'}`} style={p.featured ? { color: 'var(--accent-soft)' } : {}}>{p.priceSub}</p>
-                    <ul className="product-feats">
-                      {p.features.map(f => <li key={f}>{f}</li>)}
-                    </ul>
-                    {isLocked ? (
-                      <div className="btn" style={{ marginTop: 'auto', justifyContent: 'center', opacity: 0.45, cursor: 'default', background: p.featured ? 'rgba(245,239,227,0.15)' : 'var(--paper-deep)', borderColor: 'var(--paper-edge)', color: p.featured ? 'rgba(245,239,227,0.6)' : 'var(--ink-muted)' }}>
-                        ⏳ Coming Soon
-                      </div>
-                    ) : (
-                      <Link href={p.href} className="btn">
-                        Open the programme →
-                      </Link>
-                    )}
-                  </div>
-                )
-              })}
+              {PRODUCTS.map(p => (
+                <div key={p.id} className={`product-card lift${p.featured ? ' featured' : ''}`}>
+                  {p.tag && <span className="product-tag">{p.tag}</span>}
+                  <span className="label">{p.label}</span>
+                  <h3>{p.headline}</h3>
+                  <p className="product-price">{p.price}</p>
+                  <p className={`product-price-sub${p.featured ? '' : ' muted'}`} style={p.featured ? { color: 'var(--accent-soft)' } : {}}>{p.priceSub}</p>
+                  <ul className="product-feats">
+                    {p.features.map(f => <li key={f}>{f}</li>)}
+                  </ul>
+                  <Link href={p.href} className="btn">
+                    Open the programme →
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
         </section>

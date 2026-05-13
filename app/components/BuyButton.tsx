@@ -30,7 +30,7 @@ export default function BuyButton({ product, label = 'Buy Now →', style }: Buy
   const baseStyle: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
     padding: '15px 36px', borderRadius: 99, border: 'none',
-    background: '#EEEAE4', color: '#080808',
+    background: 'var(--accent)', color: '#FBF7EE',
     fontSize: 15, fontWeight: 600, letterSpacing: '0.03em',
     cursor: loading ? 'wait' : 'pointer',
     fontFamily: "'DM Sans', sans-serif",
@@ -44,8 +44,8 @@ export default function BuyButton({ product, label = 'Buy Now →', style }: Buy
       onClick={handleClick}
       disabled={loading}
       style={baseStyle}
-      onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#fff' }}
-      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#EEEAE4' }}
+      onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#C0583A' }}
+      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--accent)' }}
     >
       {loading ? 'Redirecting…' : label}
     </button>

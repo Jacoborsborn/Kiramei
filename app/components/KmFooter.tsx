@@ -39,6 +39,21 @@ export default function KmFooter() {
               <li><Link href="/portal">My programmes</Link></li>
             </ul>
           </div>
+          <div>
+            <p className="km-label" style={{ marginBottom: 14 }}>Stay close</p>
+            <ul className="km-footer-list">
+              <li><a href="https://www.instagram.com/kiramei.pt" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+              <li><a href="https://www.tiktok.com/@kira.plans" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+            </ul>
+          </div>
+        </div>
+        <div style={{ borderTop: '1px solid var(--paper-edge)', paddingTop: 28, marginBottom: 24 }}>
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--ink-muted)', lineHeight: 1.8, maxWidth: 780, textTransform: 'uppercase' }}>
+            Programme structure notice — This programme was developed with the assistance of AI tools to help organise, structure and present the content in the most clear and effective way for you. All training principles, methods and expertise remain Kira&apos;s own. AI was used as a structural and editorial aid, not as a source of advice.
+          </p>
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--ink-muted)', lineHeight: 1.8, maxWidth: 780, textTransform: 'uppercase', marginTop: 12 }}>
+            Liability disclaimer — This programme is provided for educational and informational purposes only and is not a substitute for professional medical or fitness advice. By participating, you confirm that you are doing so voluntarily and at your own risk. Kira Mei accepts no responsibility for any injury, illness or adverse outcome arising from following this programme. Always consult a qualified professional before beginning any new exercise or nutrition plan.
+          </p>
         </div>
         <div className="km-footer-bottom">
           <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)' }}>© KIRA MEI · MMXXVI</p>
