@@ -5,7 +5,26 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
-const WEEK_SPLITS = ['Full Body', 'Full Body', 'Upper / Lower', 'Upper / Lower', 'PPL', 'PPL', 'PPL Advanced', 'PPL Advanced']
+const WEEK_NAMES = [
+  'Full Body',
+  'Full Body II',
+  'Upper / Lower',
+  'Upper / Lower II',
+  'Push Pull Legs',
+  'Push Pull Legs II',
+  'PPL Advanced',
+  'Build your own',
+]
+const WEEK_PHASES = [
+  'Foundations',
+  'Foundations',
+  'Specialisation',
+  'Specialisation',
+  'Refinement',
+  'Refinement',
+  'Independence',
+  'Final week',
+]
 
 interface WeekState {
   complete: boolean
@@ -61,20 +80,21 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
   const sidebarContent = (
     <>
       {/* Header */}
-      <div style={{ padding: '0 24px 20px', borderBottom: '1px solid var(--paper-edge)', marginBottom: 8 }}>
-        <a href="/" style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent)', textDecoration: 'none' }}>
-          kiramei.co.uk
-        </a>
-        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginTop: 16, marginBottom: 6 }}>
+      <div style={{ padding: '0 28px 20px', borderBottom: '1px solid var(--paper-edge)', marginBottom: 8 }}>
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 8 }}>
           Training Blueprint
         </p>
-        <p style={{ fontFamily: 'var(--serif)', fontSize: 20, fontWeight: 500, color: 'var(--ink)', marginBottom: 2 }}>{firstName}</p>
-        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-muted)', letterSpacing: '0.06em' }}>{userEmail}</p>
+        <h2 style={{ fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 500, letterSpacing: '-0.01em', marginBottom: 6, lineHeight: 1.1, color: 'var(--ink)' }}>
+          Your eight weeks.
+        </h2>
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)', textTransform: 'uppercase' }}>
+          {firstName} · Programme
+        </p>
       </div>
 
       {/* Mode switcher — bundle holders only */}
       {hasNutrition && (
-        <div style={{ padding: '12px 24px', borderBottom: '1px solid var(--paper-edge)' }}>
+        <div style={{ padding: '12px 28px', borderBottom: '1px solid var(--paper-edge)' }}>
           <div style={{ display: 'flex', background: 'var(--paper-deep)', border: '1px solid var(--paper-edge)', borderRadius: 2, padding: 3, gap: 3 }}>
             <div style={{ flex: 1, textAlign: 'center', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink)', padding: '7px 8px', borderRadius: 2, background: 'var(--paper)', boxShadow: '0 1px 3px rgba(31,27,22,0.08)' }}>
               Training
@@ -87,89 +107,133 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
       )}
 
       {/* Progress */}
-      <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--paper-edge)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 8 }}>
-          <span>Progress</span>
-          <span>{completedCount}/8 weeks</span>
-        </div>
+      <div style={{ padding: '16px 28px', borderBottom: '1px solid var(--paper-edge)' }}>
         <div style={{ height: 6, background: 'var(--paper)', border: '1px solid var(--paper-edge)', borderRadius: 3, overflow: 'hidden' }}>
-          <div style={{ height: '100%', background: 'var(--accent)', width: `${progressPct}%`, transition: 'width 0.4s ease', borderRadius: 3 }} />
+          <div style={{ height: '100%', background: 'var(--accent)', width: `${progressPct}%`, transition: 'width 0.4s ease' }} />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--ink-muted)', marginTop: 6 }}>
-          <span>Wk 01</span>
-          <span>{progressPct}%</span>
-          <span>Wk 08</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--ink-muted)', marginTop: 8, textTransform: 'uppercase' }}>
+          <span>Week {String(Math.max(completedCount, 1)).padStart(2, '0')} of 08</span>
+          <span>{progressPct}% complete</span>
         </div>
       </div>
 
       {/* Week list */}
-      <div style={{ flex: 1, padding: '12px', overflowY: 'auto' }}>
-        <p style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)', padding: '6px 12px 10px' }}>
-          Programme
+      <div style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
+        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', color: 'var(--ink-muted)', textTransform: 'uppercase', marginBottom: 12, padding: '0 12px' }}>
+          Curriculum
         </p>
-        {weekStates.map((ws, i) => {
-          const weekNum = i + 1
-          const isActive = currentWeek === weekNum
-          const isLocked = !ws.unlocked
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {weekStates.map((ws, i) => {
+            const weekNum = i + 1
+            const isActive = currentWeek === weekNum
+            const isLocked = !ws.unlocked
 
-          if (isLocked) {
+            if (isLocked) {
+              return (
+                <li key={weekNum}>
+                  <div
+                    title={`Complete week ${weekNum - 1} first`}
+                    style={{
+                      display: 'grid', gridTemplateColumns: '36px 1fr auto',
+                      gap: 12, alignItems: 'center',
+                      padding: '11px 12px', borderRadius: 4,
+                      opacity: 0.45, cursor: 'not-allowed',
+                    }}
+                  >
+                    <span style={{
+                      width: 32, height: 32, flexShrink: 0,
+                      border: '1.5px dashed var(--paper-edge)',
+                      borderRadius: '50%',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: 'var(--paper)',
+                    }}>
+                      <svg width="11" height="13" viewBox="0 0 11 13" fill="none" stroke="currentColor" strokeWidth="1.4" style={{ color: 'var(--ink-muted)' }}>
+                        <rect x="1.5" y="6" width="8" height="6" rx="0.5" />
+                        <path d="M3 6 V 4 a 2.5 2.5 0 0 1 5 0 V 6" />
+                      </svg>
+                    </span>
+                    <div>
+                      <div style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 500, lineHeight: 1.15, color: 'var(--ink)' }}>{WEEK_NAMES[i]}</div>
+                      <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--ink-muted)', marginTop: 2, textTransform: 'uppercase' }}>
+                        Wk {String(weekNum).padStart(2, '0')} · {WEEK_PHASES[i]}
+                      </div>
+                    </div>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+                      Locked
+                    </span>
+                  </div>
+                </li>
+              )
+            }
+
             return (
-              <div key={weekNum} title={`Complete week ${weekNum - 1} first`} style={{
-                display: 'grid', gridTemplateColumns: '28px 1fr', gap: 10,
-                padding: '10px 12px', borderRadius: 2,
-                cursor: 'not-allowed', opacity: 0.35,
-              }}>
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-muted)', marginTop: 1 }}>🔒</span>
-                <div>
-                  <p style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.2 }}>Week {String(weekNum).padStart(2, '0')}</p>
-                  <p style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--ink-muted)', marginTop: 2 }}>{WEEK_SPLITS[i]}</p>
-                </div>
-              </div>
+              <li key={weekNum}>
+                <Link
+                  href={`/programme/week/${weekNum}`}
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    display: 'grid', gridTemplateColumns: '36px 1fr auto',
+                    gap: 12, alignItems: 'center',
+                    padding: '11px 12px', borderRadius: 4,
+                    textDecoration: 'none', color: 'var(--ink)',
+                    border: `1px solid ${isActive ? 'var(--ink)' : 'transparent'}`,
+                    background: isActive ? 'var(--paper)' : 'transparent',
+                    position: 'relative',
+                    transition: 'background 0.15s, border-color 0.15s',
+                  }}
+                >
+                  {isActive && (
+                    <span style={{
+                      position: 'absolute', left: 0, top: 0, bottom: 0, width: 3,
+                      background: 'var(--accent)', borderRadius: '4px 0 0 4px',
+                    }} />
+                  )}
+                  <span style={{
+                    width: 32, height: 32, flexShrink: 0,
+                    borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.04em', fontWeight: 600,
+                    border: `1.5px solid ${ws.complete ? 'var(--ink)' : isActive ? 'var(--accent)' : 'var(--ink)'}`,
+                    background: ws.complete ? 'var(--ink)' : isActive ? 'var(--accent)' : 'var(--paper)',
+                    color: (ws.complete || isActive) ? 'var(--paper)' : 'var(--ink)',
+                  }}>
+                    {ws.complete ? '✓' : String(weekNum).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 500, lineHeight: 1.15 }}>{WEEK_NAMES[i]}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--ink-muted)', marginTop: 2, textTransform: 'uppercase' }}>
+                      Wk {String(weekNum).padStart(2, '0')} · {WEEK_PHASES[i]}
+                    </div>
+                  </div>
+                  <span style={{
+                    fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase',
+                    color: isActive ? 'var(--accent)' : ws.complete ? 'var(--ink-muted)' : 'transparent',
+                    fontWeight: isActive ? 600 : 400,
+                  }}>
+                    {isActive ? 'Now' : ws.complete ? 'Done' : '·'}
+                  </span>
+                </Link>
+              </li>
             )
-          }
-
-          return (
-            <Link
-              key={weekNum}
-              href={`/programme/week/${weekNum}`}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                display: 'grid', gridTemplateColumns: '28px 1fr', gap: 10,
-                padding: '10px 12px', borderRadius: 2, textDecoration: 'none',
-                background: isActive ? 'rgba(184,84,58,0.07)' : 'transparent',
-                borderLeft: isActive ? '2px solid var(--accent)' : '2px solid transparent',
-                transition: 'background 0.15s',
-              }}
-            >
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: ws.complete ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--paper-edge)', marginTop: 1, fontWeight: 600 }}>
-                {ws.complete ? '✓' : isActive ? '◆' : '◇'}
-              </span>
-              <div>
-                <p style={{ fontSize: 13, fontWeight: isActive ? 600 : 400, color: isActive ? 'var(--ink)' : 'var(--ink-soft)', lineHeight: 1.2 }}>
-                  Week {String(weekNum).padStart(2, '0')}
-                </p>
-                <p style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--ink-muted)', marginTop: 2 }}>{WEEK_SPLITS[i]}</p>
-              </div>
-            </Link>
-          )
-        })}
+          })}
+        </ul>
       </div>
 
       {/* Footer */}
-      <div style={{ padding: '12px', borderTop: '1px solid var(--paper-edge)' }}>
+      <div style={{ padding: '16px 28px', borderTop: '1px solid var(--paper-edge)' }}>
+        <p style={{ fontSize: 12.5, lineHeight: 1.55, color: 'var(--ink-soft)', marginBottom: 12 }}>
+          Weeks unlock as you complete the previous one. Take your time — this isn&apos;t a race.
+        </p>
         <button
           onClick={handleSignOut}
           disabled={signingOut}
           style={{
-            width: '100%', padding: '10px 12px', background: 'transparent',
-            border: 'none', borderRadius: 2, cursor: 'pointer',
-            fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
-            color: 'var(--ink-muted)', textAlign: 'left',
-            display: 'flex', alignItems: 'center', gap: 10,
+            background: 'transparent', border: 'none', cursor: 'pointer', padding: 0,
+            fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em',
+            color: 'var(--accent)', textTransform: 'uppercase',
           }}
         >
-          <span>↩</span>
-          {signingOut ? 'Signing out…' : 'Sign out'}
+          {signingOut ? 'Signing out…' : '↩ Sign out'}
         </button>
       </div>
     </>
@@ -178,22 +242,28 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
   return (
     <>
       {/* Desktop sidebar */}
-      <nav style={{
-        display: 'none', position: 'fixed', top: 0, left: 0, bottom: 0, width: 240,
-        background: 'var(--paper-deep)', borderRight: '1px solid var(--paper-edge)',
-        flexDirection: 'column', padding: '28px 0',
-        zIndex: 50, overflowY: 'auto',
-      }} className="programme-sidebar">
+      <nav
+        style={{
+          display: 'none', position: 'fixed', top: 0, left: 0, bottom: 0, width: 320,
+          background: 'var(--paper-deep)', borderRight: '1px solid var(--paper-edge)',
+          flexDirection: 'column', padding: '32px 0',
+          zIndex: 50, overflowY: 'auto',
+        }}
+        className="programme-sidebar"
+      >
         {sidebarContent}
       </nav>
 
       {/* Mobile top bar */}
-      <header style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(242,237,226,0.92)', backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid var(--paper-edge)',
-        padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }} className="programme-mobile-header">
+      <header
+        style={{
+          position: 'sticky', top: 0, zIndex: 50,
+          background: 'rgba(242,237,226,0.92)', backdropFilter: 'blur(8px)',
+          borderBottom: '1px solid var(--paper-edge)',
+          padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}
+        className="programme-mobile-header"
+      >
         <a href="/" style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', textDecoration: 'none', letterSpacing: '-0.01em' }}>
           kira mei
         </a>
@@ -214,8 +284,8 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
         >
           <div
             style={{
-              position: 'absolute', top: 0, left: 0, bottom: 0, width: 280,
-              background: 'var(--paper-deep)', padding: '28px 0',
+              position: 'absolute', top: 0, left: 0, bottom: 0, width: 300,
+              background: 'var(--paper-deep)', padding: '32px 0',
               display: 'flex', flexDirection: 'column', overflowY: 'auto',
               borderRight: '1px solid var(--paper-edge)',
             }}
@@ -230,7 +300,7 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
         @media (min-width: 768px) {
           .programme-sidebar { display: flex !important; }
           .programme-mobile-header { display: none !important; }
-          .programme-main { margin-left: 240px !important; }
+          .programme-main { margin-left: 320px !important; }
         }
       `}</style>
     </>

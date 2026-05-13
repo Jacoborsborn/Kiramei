@@ -1,225 +1,9 @@
+import { ExerciseHomeworkPanel } from '../shared/ExerciseHomeworkPanel'
+
 const ACCENT = 'var(--accent)'
-const FIG_STROKE = 'var(--ink-soft)'
-const FIG_JOINT = 'var(--ink)'
-const FIG_THIN = 'var(--ink-muted)'
 const TEXT_MAIN = 'var(--ink)'
 const TEXT_DIM = 'var(--ink-soft)'
 const TEXT_MUTED = 'var(--ink-muted)'
-
-// ─── SVG Figures ─────────────────────────────────────────────────────────────
-
-function ConventionalDeadliftSVG() {
-  return (
-    <svg viewBox="0 0 200 280" style={{ width: '100%', maxWidth: 200 }} aria-hidden>
-      {/* Side view: hinge position, flat back, bar on floor */}
-      {/* Head */}
-      <circle cx={72} cy={44} r={12} fill="none" stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Neck */}
-      <line x1={72} y1={56} x2={76} y2={66} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Torso angled ~45° */}
-      <line x1={76} y1={66} x2={118} y2={148} stroke={FIG_STROKE} strokeWidth={2.4} />
-      {/* Shoulders */}
-      <circle cx={76} cy={66} r={4} fill={FIG_JOINT} />
-      {/* Arms reaching down to bar */}
-      <line x1={76} y1={66} x2={84} y2={108} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={84} y1={108} x2={100} y2={178} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Bar */}
-      <rect x={36} y={178} width={128} height={8} rx={3} fill="none" stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Plates */}
-      <rect x={32} y={172} width={8} height={20} rx={2} fill="none" stroke={FIG_THIN} strokeWidth={1.5} />
-      <rect x={160} y={172} width={8} height={20} rx={2} fill="none" stroke={FIG_THIN} strokeWidth={1.5} />
-      {/* Hip joint */}
-      <circle cx={118} cy={148} r={5} fill={FIG_JOINT} />
-      {/* Legs — PRIMARY hamstrings/glutes in accent */}
-      <line x1={118} y1={148} x2={108} y2={200} stroke={ACCENT} strokeWidth={3} />
-      <circle cx={108} cy={200} r={4} fill={ACCENT} />
-      <line x1={108} y1={200} x2={100} y2={240} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Far leg suggestion */}
-      <line x1={118} y1={148} x2={130} y2={200} stroke={ACCENT} strokeWidth={2.5} />
-      <circle cx={130} cy={200} r={3.5} fill={ACCENT} />
-      <line x1={130} y1={200} x2={138} y2={240} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Feet */}
-      <line x1={88} y1={244} x2={112} y2={242} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={126} y1={242} x2={150} y2={244} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Spine line — lower back primary */}
-      <line x1={76} y1={66} x2={118} y2={148} stroke={ACCENT} strokeWidth={2.5} opacity={0.5} />
-      {/* Label */}
-      <text x={100} y={268} textAnchor="middle" fontSize={9} fill={ACCENT}
-        fontFamily="DM Sans, sans-serif" fontWeight={600} letterSpacing="0.06em">
-        HAMSTRINGS · GLUTES · BACK
-      </text>
-    </svg>
-  )
-}
-
-function AbWheelSVG() {
-  return (
-    <svg viewBox="0 0 200 280" style={{ width: '100%', maxWidth: 200 }} aria-hidden>
-      {/* Kneeling position, body extended forward */}
-      {/* Head forward */}
-      <circle cx={148} cy={88} r={12} fill="none" stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Neck */}
-      <line x1={148} y1={100} x2={140} y2={112} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Torso angled — near horizontal */}
-      <line x1={140} y1={112} x2={76} y2={148} stroke={FIG_STROKE} strokeWidth={2.4} />
-      {/* Arms extended to wheel */}
-      <line x1={140} y1={112} x2={148} y2={142} stroke={FIG_STROKE} strokeWidth={2} />
-      <circle cx={148} cy={142} r={3.5} fill={FIG_JOINT} />
-      <line x1={148} y1={142} x2={152} y2={178} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Ab wheel */}
-      <circle cx={152} cy={190} r={14} fill="none" stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={138} y1={190} x2={166} y2={190} stroke={FIG_THIN} strokeWidth={1.5} />
-      {/* Hip joint */}
-      <circle cx={76} cy={148} r={5} fill={FIG_JOINT} />
-      {/* Thighs — kneeling */}
-      <line x1={76} y1={148} x2={78} y2={200} stroke={FIG_STROKE} strokeWidth={2.2} />
-      <line x1={76} y1={148} x2={94} y2={196} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Knees on ground */}
-      <circle cx={78} cy={200} r={4} fill={FIG_JOINT} />
-      <circle cx={94} cy={196} r={3.5} fill={FIG_JOINT} />
-      <line x1={66} y1={208} x2={90} y2={206} stroke={FIG_STROKE} strokeWidth={1.5} />
-      <line x1={82} y1={204} x2={106} y2={202} stroke={FIG_STROKE} strokeWidth={1.5} />
-      {/* Core highlight */}
-      <line x1={140} y1={112} x2={76} y2={148} stroke={ACCENT} strokeWidth={2.5} opacity={0.6} />
-      {/* Label */}
-      <text x={100} y={268} textAnchor="middle" fontSize={9} fill={ACCENT}
-        fontFamily="DM Sans, sans-serif" fontWeight={600} letterSpacing="0.06em">
-        CORE · ABS · ANTI-EXTENSION
-      </text>
-    </svg>
-  )
-}
-
-function CablePullThroughSVG() {
-  return (
-    <svg viewBox="0 0 200 280" style={{ width: '100%', maxWidth: 200 }} aria-hidden>
-      {/* Side view: hinging at hips, facing away from cable */}
-      {/* Head */}
-      <circle cx={72} cy={52} r={12} fill="none" stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Neck */}
-      <line x1={72} y1={64} x2={76} y2={76} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Torso hinged ~50° */}
-      <line x1={76} y1={76} x2={116} y2={150} stroke={FIG_STROKE} strokeWidth={2.4} />
-      {/* Arms reaching back between legs */}
-      <line x1={76} y1={76} x2={88} y2={100} stroke={FIG_STROKE} strokeWidth={2} />
-      <circle cx={88} cy={100} r={3} fill={FIG_JOINT} />
-      <line x1={88} y1={100} x2={106} y2={152} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Cable attachment */}
-      <circle cx={108} cy={158} r={5} fill="none" stroke={FIG_THIN} strokeWidth={1.5} />
-      <line x1={108} y1={163} x2={108} y2={188} stroke={FIG_THIN} strokeWidth={1.5} strokeDasharray="3 2" />
-      {/* Hip joint */}
-      <circle cx={116} cy={150} r={5} fill={FIG_JOINT} />
-      {/* Glutes/hamstrings — PRIMARY */}
-      <line x1={116} y1={150} x2={108} y2={200} stroke={ACCENT} strokeWidth={3} />
-      <circle cx={108} cy={200} r={4} fill={ACCENT} />
-      <line x1={116} y1={150} x2={130} y2={198} stroke={ACCENT} strokeWidth={2.5} />
-      <circle cx={130} cy={198} r={3.5} fill={ACCENT} />
-      {/* Shins */}
-      <line x1={108} y1={200} x2={100} y2={240} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={130} y1={198} x2={140} y2={238} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Feet */}
-      <line x1={88} y1={244} x2={112} y2={242} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={128} y1={242} x2={152} y2={244} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Label */}
-      <text x={100} y={268} textAnchor="middle" fontSize={9} fill={ACCENT}
-        fontFamily="DM Sans, sans-serif" fontWeight={600} letterSpacing="0.06em">
-        GLUTES · HAMSTRINGS
-      </text>
-    </svg>
-  )
-}
-
-function RearDeltFlySVG() {
-  return (
-    <svg viewBox="0 0 200 280" style={{ width: '100%', maxWidth: 200 }} aria-hidden>
-      {/* Bent over 45°, arms raised to sides */}
-      {/* Head */}
-      <circle cx={80} cy={50} r={12} fill="none" stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Neck */}
-      <line x1={80} y1={62} x2={82} y2={72} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Torso ~45° forward */}
-      <line x1={82} y1={72} x2={118} y2={138} stroke={FIG_STROKE} strokeWidth={2.4} />
-      {/* Shoulder joints */}
-      <circle cx={82} cy={72} r={4} fill={FIG_JOINT} />
-      {/* Arms raised out to sides — rear delt activated */}
-      <line x1={82} y1={72} x2={44} y2={54} stroke={ACCENT} strokeWidth={2.8} />
-      <circle cx={44} cy={54} r={3.5} fill={ACCENT} />
-      <line x1={44} y1={54} x2={34} y2={68} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={82} y1={72} x2={120} y2={54} stroke={ACCENT} strokeWidth={2.8} />
-      <circle cx={120} cy={54} r={3.5} fill={ACCENT} />
-      <line x1={120} y1={54} x2={132} y2={68} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Dumbbells at ends */}
-      <rect x={22} y={64} width={16} height={8} rx={2} fill="none" stroke={FIG_THIN} strokeWidth={1.5} />
-      <rect x={130} y={64} width={16} height={8} rx={2} fill="none" stroke={FIG_THIN} strokeWidth={1.5} />
-      {/* Hip */}
-      <circle cx={118} cy={138} r={5} fill={FIG_JOINT} />
-      {/* Legs */}
-      <line x1={118} y1={138} x2={108} y2={192} stroke={FIG_STROKE} strokeWidth={2.2} />
-      <circle cx={108} cy={192} r={4} fill={FIG_JOINT} />
-      <line x1={108} y1={192} x2={100} y2={238} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={118} y1={138} x2={130} y2={190} stroke={FIG_STROKE} strokeWidth={2} />
-      <circle cx={130} cy={190} r={3.5} fill={FIG_JOINT} />
-      <line x1={130} y1={190} x2={140} y2={236} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Feet */}
-      <line x1={88} y1={242} x2={112} y2={240} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={128} y1={240} x2={152} y2={242} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Label */}
-      <text x={100} y={268} textAnchor="middle" fontSize={9} fill={ACCENT}
-        fontFamily="DM Sans, sans-serif" fontWeight={600} letterSpacing="0.06em">
-        REAR DELTOID
-      </text>
-    </svg>
-  )
-}
-
-function EZBarCurlSVG() {
-  return (
-    <svg viewBox="0 0 200 280" style={{ width: '100%', maxWidth: 200 }} aria-hidden>
-      {/* Standing, bar curled to ~70° */}
-      {/* Head */}
-      <circle cx={100} cy={32} r={12} fill="none" stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Neck */}
-      <line x1={100} y1={44} x2={100} y2={56} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Torso upright */}
-      <line x1={100} y1={56} x2={100} y2={138} stroke={FIG_STROKE} strokeWidth={2.4} />
-      {/* Shoulders */}
-      <circle cx={100} cy={60} r={4} fill={FIG_JOINT} />
-      {/* Upper arms — pinned at sides */}
-      <line x1={100} y1={60} x2={72} y2={100} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={100} y1={60} x2={128} y2={100} stroke={FIG_STROKE} strokeWidth={2} />
-      <circle cx={72} cy={100} r={3.5} fill={FIG_JOINT} />
-      <circle cx={128} cy={100} r={3.5} fill={FIG_JOINT} />
-      {/* Forearms raised — bicep activated */}
-      <line x1={72} y1={100} x2={66} y2={136} stroke={ACCENT} strokeWidth={2.8} />
-      <line x1={128} y1={100} x2={134} y2={136} stroke={ACCENT} strokeWidth={2.8} />
-      <circle cx={66} cy={136} r={3.5} fill={ACCENT} />
-      <circle cx={134} cy={136} r={3.5} fill={ACCENT} />
-      {/* EZ bar */}
-      <path d="M 56,148 Q 70,142 80,148 Q 90,154 100,148 Q 110,142 120,148 Q 130,154 144,148"
-        fill="none" stroke={FIG_STROKE} strokeWidth={2.5} />
-      <rect x={46} y={144} width={10} height={10} rx={2} fill="none" stroke={FIG_THIN} strokeWidth={1.5} />
-      <rect x={144} y={144} width={10} height={10} rx={2} fill="none" stroke={FIG_THIN} strokeWidth={1.5} />
-      {/* Hips and legs */}
-      <circle cx={100} cy={138} r={4.5} fill={FIG_JOINT} />
-      <line x1={100} y1={138} x2={88} y2={190} stroke={FIG_STROKE} strokeWidth={2.2} />
-      <circle cx={88} cy={190} r={3.5} fill={FIG_JOINT} />
-      <line x1={88} y1={190} x2={82} y2={238} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={100} y1={138} x2={112} y2={190} stroke={FIG_STROKE} strokeWidth={2} />
-      <circle cx={112} cy={190} r={3.5} fill={FIG_JOINT} />
-      <line x1={112} y1={190} x2={118} y2={238} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Feet */}
-      <line x1={70} y1={242} x2={94} y2={240} stroke={FIG_STROKE} strokeWidth={2} />
-      <line x1={106} y1={240} x2={130} y2={242} stroke={FIG_STROKE} strokeWidth={2} />
-      {/* Label */}
-      <text x={100} y={268} textAnchor="middle" fontSize={9} fill={ACCENT}
-        fontFamily="DM Sans, sans-serif" fontWeight={600} letterSpacing="0.06em">
-        BICEPS
-      </text>
-    </svg>
-  )
-}
-
-// ─── Info Panel ───────────────────────────────────────────────────────────────
 
 interface ExerciseInfoProps {
   primary: string
@@ -257,15 +41,15 @@ function InfoPanel({ primary, secondary, tempo, cue, why, mistake }: ExerciseInf
   )
 }
 
-// ─── Exercise Card ────────────────────────────────────────────────────────────
-
 interface ExerciseCardProps {
   name: string
-  figure: React.ReactNode
+  index: number
+  searchTerms: string[]
+  formCues: string[]
   info: ExerciseInfoProps
 }
 
-function ExerciseCard({ name, figure, info }: ExerciseCardProps) {
+function ExerciseCard({ name, index, searchTerms, formCues, info }: ExerciseCardProps) {
   return (
     <div style={{
       border: '1px solid var(--paper-edge)', borderRadius: 14,
@@ -280,26 +64,41 @@ function ExerciseCard({ name, figure, info }: ExerciseCardProps) {
         </p>
       </div>
       <div style={{
-        display: 'grid', gridTemplateColumns: '200px 1fr', gap: 32,
-        padding: '28px 24px',
+        display: 'grid', gridTemplateColumns: '220px 1fr', gap: 0,
       }} className="exercise-card-grid">
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {figure}
+        <div style={{
+          background: 'rgba(31,27,22,0.06)',
+          borderRight: '1px solid var(--paper-edge)',
+        }}>
+          <ExerciseHomeworkPanel index={index} searchTerms={searchTerms} formCues={formCues} />
         </div>
-        <InfoPanel {...info} />
+        <div style={{ padding: '28px 24px' }}>
+          <InfoPanel {...info} />
+        </div>
       </div>
     </div>
   )
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export default function ExerciseBreakdowns() {
   return (
     <div>
+      <div style={{ marginBottom: 28 }}>
+        <p style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
+          This week&rsquo;s task
+        </p>
+        <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.6, marginBottom: 6 }}>
+          Before you train this week, look into each of these exercises. See how they&rsquo;re done, what muscles they work, and what good form looks like.
+        </p>
+        <p style={{ fontSize: 12, color: 'var(--ink-muted)', fontStyle: 'italic', lineHeight: 1.5 }}>
+          I&rsquo;d show you a demo — but looking it up yourself makes it stick better.
+        </p>
+      </div>
       <ExerciseCard
         name="Conventional Deadlift"
-        figure={<ConventionalDeadliftSVG />}
+        index={0}
+        searchTerms={['conventional deadlift form', 'deadlift setup tutorial', 'deadlift bar path']}
+        formCues={['Bar over mid-foot — take the slack out before you pull', 'Hips drive the bar; it should not swing away from your legs']}
         info={{
           primary: 'Hamstrings, Glutes, Lower back',
           secondary: 'Lats, Traps, Core, Quads',
@@ -312,7 +111,9 @@ export default function ExerciseBreakdowns() {
 
       <ExerciseCard
         name="Ab Wheel Rollout"
-        figure={<AbWheelSVG />}
+        index={1}
+        searchTerms={['ab wheel rollout form', 'rollout anti extension', 'ab wheel tutorial beginner']}
+        formCues={['Core braced hard before you roll out — not after', 'Only go as far as you can without lower back arching; half range is fine']}
         info={{
           primary: 'Rectus abdominis, Transverse abdominis',
           secondary: 'Lats, Shoulders',
@@ -325,7 +126,9 @@ export default function ExerciseBreakdowns() {
 
       <ExerciseCard
         name="Cable Pull-Through"
-        figure={<CablePullThroughSVG />}
+        index={2}
+        searchTerms={['cable pull through form', 'hip hinge cable exercise', 'pull through glutes tutorial']}
+        formCues={['Hips hinge back — knees have a soft bend only, they do not drive the movement', 'Drive is from the glutes squeezing forward, not from arching the lower back']}
         info={{
           primary: 'Glutes, Hamstrings',
           secondary: 'Lower back (isometric), Core',
@@ -338,7 +141,9 @@ export default function ExerciseBreakdowns() {
 
       <ExerciseCard
         name="Rear Delt Fly"
-        figure={<RearDeltFlySVG />}
+        index={3}
+        searchTerms={['rear delt fly form', 'bent over rear delt raise', 'rear delt technique']}
+        formCues={['Lead with elbows — not wrists. Elbow is the highest point', '2-second hold at the top; dead stop at the bottom, no swinging']}
         info={{
           primary: 'Rear deltoids',
           secondary: 'Rhomboids, Middle traps',
@@ -351,7 +156,9 @@ export default function ExerciseBreakdowns() {
 
       <ExerciseCard
         name="EZ Bar Curl"
-        figure={<EZBarCurlSVG />}
+        index={4}
+        searchTerms={['ez bar curl form', 'barbell curl full range', 'bicep curl elbow position']}
+        formCues={['Elbows stay pinned to sides throughout — they do not move forward', 'Full range: arms extended at the bottom, full contraction at the top']}
         info={{
           primary: 'Biceps brachii',
           secondary: 'Brachialis, Brachioradialis',
@@ -365,6 +172,7 @@ export default function ExerciseBreakdowns() {
       <style>{`
         @media (max-width: 560px) {
           .exercise-card-grid { grid-template-columns: 1fr !important; }
+          .exercise-card-grid > div:first-child { border-right: none !important; border-bottom: 1px solid var(--paper-edge); }
         }
       `}</style>
     </div>

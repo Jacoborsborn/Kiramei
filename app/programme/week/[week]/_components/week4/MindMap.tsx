@@ -2,124 +2,6 @@
 
 import { useState } from 'react'
 
-const ACCENT = 'var(--accent)'
-const ACCENT_DIM = 'rgba(184,84,58,0.20)'
-const NODE_BG = 'var(--paper)'
-const NODE_BORDER = 'rgba(184,84,58,0.30)'
-const SESSION_BG = 'var(--paper-deep)'
-const CALLOUT_BG = 'var(--paper-deep)'
-const TEXT_MAIN = 'var(--ink)'
-const TEXT_DIM = 'var(--ink-soft)'
-const TEXT_MUTED = 'var(--ink-muted)'
-const LINE_COLOR = 'rgba(184,84,58,0.25)'
-
-const upperAExercises = [
-  'Bench Press 4×6 @RPE8',
-  'Barbell Row 4×6 @RPE8',
-  'DB OHP 3×10 @RPE7',
-  'Weighted Pulldown 3×8',
-  'Close Grip Bench 3×10',
-  'EZ Bar Curl 3×12',
-]
-
-const lowerAExercises = [
-  'Back Squat 4×6 @RPE8',
-  'Conventional Deadlift 4×5 @RPE8',
-  'Leg Press 3×12',
-  'Leg Curl 3×12',
-  'Hip Thrust heavy 4×8',
-  'Calf Raise 4×15',
-]
-
-const upperBExercises = [
-  'Incline DB Press 4×12 @RPE7',
-  'Cable Row wide 4×12',
-  'Lateral Raise 4×15',
-  'Rear Delt Fly 3×15',
-  'Tricep Overhead Ext 3×12',
-  'Cable Curl 3×15',
-]
-
-const lowerBExercises = [
-  'Bulgarian Split Squat 4×10',
-  'Leg Extension 4×15',
-  'Lying Leg Curl 4×12',
-  'Hip Thrust 4×12',
-  'Cable Pull-Through 3×15',
-  'Ab Wheel Rollout 3×8',
-]
-
-function SessionNode({
-  x, y, w, h, label, day, exercises,
-}: { x: number; y: number; w: number; h: number; label: string; day: string; exercises: string[] }) {
-  return (
-    <g>
-      <rect x={x} y={y} width={w} height={h} rx={10}
-        fill={SESSION_BG} stroke={NODE_BORDER} strokeWidth={1.2} />
-      <text x={x + w / 2} y={y + 20} textAnchor="middle"
-        fill={TEXT_MUTED} fontSize={9} fontWeight={700} letterSpacing="0.12em"
-        fontFamily="DM Sans, sans-serif">
-        {day}
-      </text>
-      <text x={x + w / 2} y={y + 36} textAnchor="middle"
-        fill={ACCENT} fontSize={11} fontWeight={700} letterSpacing="0.05em"
-        fontFamily="DM Sans, sans-serif">
-        {label}
-      </text>
-      <line x1={x + 16} y1={y + 44} x2={x + w - 16} y2={y + 44}
-        stroke="rgba(184,84,58,0.12)" strokeWidth={1} />
-      {exercises.map((ex, i) => (
-        <text key={i} x={x + 14} y={y + 60 + i * 19}
-          fill={TEXT_DIM} fontSize={10} fontFamily="DM Sans, sans-serif">
-          {ex}
-        </text>
-      ))}
-    </g>
-  )
-}
-
-function CalloutBubble({
-  x, y, w, h, label, body, pointerDir,
-}: { x: number; y: number; w: number; h: number; label: string; body: string[]; pointerDir: 'up' | 'down' | 'left' | 'right' }) {
-  const px = x + w / 2
-  const py = y + h / 2
-  let pointer: string
-  const ps = 12
-  if (pointerDir === 'down') {
-    pointer = `${px - ps},${y + h} ${px},${y + h + ps * 1.4} ${px + ps},${y + h}`
-  } else if (pointerDir === 'up') {
-    pointer = `${px - ps},${y} ${px},${y - ps * 1.4} ${px + ps},${y}`
-  } else if (pointerDir === 'left') {
-    pointer = `${x},${py - ps} ${x - ps * 1.4},${py} ${x},${py + ps}`
-  } else {
-    pointer = `${x + w},${py - ps} ${x + w + ps * 1.4},${py} ${x + w},${py + ps}`
-  }
-
-  return (
-    <g>
-      <rect x={x} y={y} width={w} height={h} rx={10}
-        fill={CALLOUT_BG} stroke={ACCENT_DIM} strokeWidth={1.2} />
-      <polygon points={pointer} fill={CALLOUT_BG} stroke={ACCENT_DIM} strokeWidth={1.2} />
-      {pointerDir === 'down' && <line x1={x + w * 0.3} y1={y + h} x2={x + w * 0.7} y2={y + h} stroke={CALLOUT_BG} strokeWidth={2} />}
-      {pointerDir === 'up' && <line x1={x + w * 0.3} y1={y} x2={x + w * 0.7} y2={y} stroke={CALLOUT_BG} strokeWidth={2} />}
-      {pointerDir === 'left' && <line x1={x} y1={y + h * 0.35} x2={x} y2={y + h * 0.65} stroke={CALLOUT_BG} strokeWidth={2} />}
-      {pointerDir === 'right' && <line x1={x + w} y1={y + h * 0.35} x2={x + w} y2={y + h * 0.65} stroke={CALLOUT_BG} strokeWidth={2} />}
-
-      <text x={x + w / 2} y={y + 22} textAnchor="middle"
-        fill={ACCENT} fontSize={10} fontWeight={700} letterSpacing="0.1em"
-        fontFamily="DM Sans, sans-serif">
-        {label}
-      </text>
-      {body.map((line, i) => (
-        <text key={i} x={x + w / 2} y={y + 38 + i * 16} textAnchor="middle"
-          fill={TEXT_DIM} fontSize={10} fontFamily="DM Sans, sans-serif">
-          {line}
-        </text>
-      ))}
-    </g>
-  )
-}
-
 export default function MindMap() {
   const [copied, setCopied] = useState(false)
 
@@ -164,143 +46,177 @@ Ab Wheel Rollout · 3×8 · 60s rest`
     })
   }
 
-  // Layout dimensions
-  const cx = 380, cy = 285, cw = 300, ch = 58
-
-  // Session nodes — 4 corners
-  const uaX = 50, uaY = 80, uaW = 268, uaH = 175
-  const laX = 50, laY = 480, laW = 268, laH = 175
-  const ubX = 760, ubY = 80, ubW = 268, ubH = 175
-  const lbX = 760, lbY = 480, lbW = 268, lbH = 175
-
-  // Callout positions — in the gaps
-  const c1X = 385, c1Y = 30, c1W = 295, c1H = 80   // top center — RPE scale
-  const c2X = 385, c2Y = 640, c2W = 295, c2H = 80  // bottom center — make sure
-  const c3X = 385, c3Y = 380, c3W = 295, c3H = 78  // middle — conventional DL
-
   return (
     <div>
       <div style={{
-        overflowX: 'auto', overflowY: 'auto', WebkitOverflowScrolling: 'touch' as 'touch',
-        borderRadius: 12, border: '1px solid var(--paper-edge)',
-        background: 'var(--paper-deep)', marginBottom: 40,
-        cursor: 'grab',
+        background: 'var(--paper)',
+        border: '1px solid var(--paper-edge)',
+        borderRadius: 3,
+        padding: 22,
+        marginBottom: 32,
+        boxShadow: '0 1px 0 rgba(31,27,22,0.04), 0 14px 28px -18px rgba(31,27,22,0.18)',
       }}>
-        <svg
-          width={1100} height={760}
-          viewBox="0 0 1100 760"
-          style={{ display: 'block', minWidth: 1100 }}
-          aria-label="Week 4 training mind map"
-        >
-          <defs>
-            <filter id="glow4">
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
-              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
-            <filter id="nodeShadow4">
-              <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="var(--accent)" floodOpacity="0.12" />
-            </filter>
-          </defs>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)', textTransform: 'uppercase' }}>
+            The week, on one page
+          </span>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', color: 'var(--ink-muted)', textTransform: 'uppercase' }}>
+            Upper / Lower · Wk 04
+          </span>
+        </div>
 
-          {/* Connector lines — center to sessions */}
-          <line x1={cx} y1={cy + ch / 2} x2={uaX + uaW} y2={uaY + uaH / 2}
-            stroke={LINE_COLOR} strokeWidth={1.4} filter="url(#glow4)" />
-          <line x1={cx} y1={cy + ch / 2} x2={laX + laW} y2={laY + laH / 2}
-            stroke={LINE_COLOR} strokeWidth={1.4} filter="url(#glow4)" />
-          <line x1={cx + cw} y1={cy + ch / 2} x2={ubX} y2={ubY + ubH / 2}
-            stroke={LINE_COLOR} strokeWidth={1.4} filter="url(#glow4)" />
-          <line x1={cx + cw} y1={cy + ch / 2} x2={lbX} y2={lbY + lbH / 2}
-            stroke={LINE_COLOR} strokeWidth={1.4} filter="url(#glow4)" />
-          {/* Center to callouts */}
-          <line x1={cx + cw / 2} y1={cy} x2={c1X + c1W / 2} y2={c1Y + c1H}
-            stroke={LINE_COLOR} strokeWidth={1.2} strokeDasharray="4 3" />
-          <line x1={cx + cw / 2} y1={cy + ch} x2={c2X + c2W / 2} y2={c2Y}
-            stroke={LINE_COLOR} strokeWidth={1.2} strokeDasharray="4 3" />
-          <line x1={cx + cw / 2} y1={cy + ch / 2} x2={c3X} y2={c3Y + c3H / 2}
-            stroke={LINE_COLOR} strokeWidth={1.2} strokeDasharray="4 3" />
+        <div style={{
+          width: '100%', height: 460,
+          background: 'var(--paper)',
+          backgroundImage: 'linear-gradient(to right, rgba(201,214,226,0.45) 1px, transparent 1px), linear-gradient(to bottom, rgba(201,214,226,0.45) 1px, transparent 1px)',
+          backgroundSize: '26px 26px',
+          border: '1px solid var(--paper-edge)',
+          position: 'relative',
+          overflow: 'hidden',
+        }} className="mm-canvas">
+          <svg viewBox="0 0 1000 460" preserveAspectRatio="none" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+            <defs>
+              <filter id="r-mm-wk4">
+                <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" />
+                <feDisplacementMap in="SourceGraphic" scale="2.5" />
+              </filter>
+            </defs>
+            <g stroke="#1F1B16" strokeWidth="1.4" fill="none" strokeLinecap="round" filter="url(#r-mm-wk4)" opacity="0.55">
+              <path d="M 500 230 Q 290 130, 100 75" />
+              <path d="M 500 230 Q 290 330, 100 385" />
+              <path d="M 500 230 Q 710 130, 900 75" />
+              <path d="M 500 230 Q 710 330, 900 385" />
+              <path d="M 500 230 Q 500 130, 500 65" />
+            </g>
+          </svg>
 
-          {/* Central node */}
-          <g filter="url(#nodeShadow4)">
-            <rect x={cx} y={cy} width={cw} height={ch} rx={12}
-              fill={NODE_BG} stroke={NODE_BORDER} strokeWidth={1.8} />
-          </g>
-          <text x={cx + cw / 2} y={cy + 24} textAnchor="middle"
-            fill={TEXT_MUTED} fontSize={9.5} fontWeight={700} letterSpacing="0.1em"
-            fontFamily="DM Sans, sans-serif">
-            WEEK 4
-          </text>
-          <text x={cx + cw / 2} y={cy + 42} textAnchor="middle"
-            fill={TEXT_MAIN} fontSize={13} fontWeight={700} letterSpacing="0.04em"
-            fontFamily="DM Sans, sans-serif">
-            RPE-BASED TRAINING
-          </text>
+          <div style={{
+            position: 'absolute', left: '50%', top: '50%',
+            transform: 'translate(-50%, -50%)',
+            background: 'var(--ink)', color: 'var(--paper)',
+            fontFamily: 'var(--serif)', fontSize: 15, fontWeight: 500,
+            padding: '12px 20px', borderRadius: 24,
+            boxShadow: '2px 3px 0 var(--accent)',
+            whiteSpace: 'nowrap', zIndex: 2,
+          }}>
+            RPE-Based Training
+          </div>
 
-          {/* Session nodes */}
-          <SessionNode x={uaX} y={uaY} w={uaW} h={uaH}
-            day="MONDAY · RPE 7-8" label="UPPER A" exercises={upperAExercises} />
-          <SessionNode x={laX} y={laY} w={laW} h={laH}
-            day="TUESDAY · RPE 7-8" label="LOWER A" exercises={lowerAExercises} />
-          <SessionNode x={ubX} y={ubY} w={ubW} h={ubH}
-            day="THURSDAY · HYPERTROPHY" label="UPPER B" exercises={upperBExercises} />
-          <SessionNode x={lbX} y={lbY} w={lbW} h={lbH}
-            day="FRIDAY · HYPERTROPHY" label="LOWER B" exercises={lowerBExercises} />
+          <div style={{
+            position: 'absolute', left: '5%', top: '10%',
+            background: 'var(--accent)', color: 'var(--paper)',
+            fontFamily: 'var(--serif)', fontSize: 13, fontWeight: 500,
+            padding: '7px 12px', borderRadius: 18,
+            border: '1.5px solid var(--accent)',
+            boxShadow: '1px 2px 0 var(--ink)', zIndex: 2, whiteSpace: 'nowrap',
+          }}>
+            Monday · Upper A
+          </div>
 
-          {/* Callout bubbles */}
-          <CalloutBubble x={c1X} y={c1Y} w={c1W} h={c1H}
-            pointerDir="down"
-            label="THE RPE SCALE →"
-            body={[
-              'RPE 10 = no reps left. RPE 8 = two reps left.',
-              'RPE 7 = three reps left. Target 7–8',
-              'on every working set.',
-            ]} />
+          <div style={{
+            position: 'absolute', left: '5%', top: '74%',
+            background: 'var(--accent)', color: 'var(--paper)',
+            fontFamily: 'var(--serif)', fontSize: 13, fontWeight: 500,
+            padding: '7px 12px', borderRadius: 18,
+            border: '1.5px solid var(--accent)',
+            boxShadow: '1px 2px 0 var(--ink)', zIndex: 2, whiteSpace: 'nowrap',
+          }}>
+            Tuesday · Lower A
+          </div>
 
-          <CalloutBubble x={c2X} y={c2Y} w={c2W} h={c2H}
-            pointerDir="up"
-            label="MAKE SURE YOU →"
-            body={[
-              'Decide your RPE target before the set.',
-              'Load accordingly. After the set, honestly',
-              'assess. Adjust the next set.',
-            ]} />
+          <div style={{
+            position: 'absolute', right: '5%', top: '10%',
+            background: 'var(--accent)', color: 'var(--paper)',
+            fontFamily: 'var(--serif)', fontSize: 13, fontWeight: 500,
+            padding: '7px 12px', borderRadius: 18,
+            border: '1.5px solid var(--accent)',
+            boxShadow: '1px 2px 0 var(--ink)', zIndex: 2, whiteSpace: 'nowrap',
+          }}>
+            Thursday · Upper B
+          </div>
 
-          <CalloutBubble x={c3X} y={c3Y} w={c3W} h={c3H}
-            pointerDir="right"
-            label="CONVENTIONAL DEADLIFT →"
-            body={[
-              'First time this week. Hip width stance.',
-              'Bar over mid-foot. Hinge to the bar.',
-              'Bar should drag up your shins.',
-            ]} />
-        </svg>
+          <div style={{
+            position: 'absolute', right: '5%', top: '74%',
+            background: 'var(--accent)', color: 'var(--paper)',
+            fontFamily: 'var(--serif)', fontSize: 13, fontWeight: 500,
+            padding: '7px 12px', borderRadius: 18,
+            border: '1.5px solid var(--accent)',
+            boxShadow: '1px 2px 0 var(--ink)', zIndex: 2, whiteSpace: 'nowrap',
+          }}>
+            Friday · Lower B
+          </div>
+
+          <div style={{
+            position: 'absolute', left: '37%', top: '4%',
+            background: '#DDE3D2', color: 'var(--ink)',
+            fontFamily: 'var(--sans)', fontSize: 11, fontWeight: 500,
+            padding: '5px 9px', borderRadius: 12,
+            border: '1.5px solid var(--sage)',
+            boxShadow: '1px 1px 0 var(--ink-muted)', zIndex: 2, whiteSpace: 'nowrap',
+          }}>
+            RPE 8 = 2 reps in reserve
+          </div>
+
+          <div style={{
+            position: 'absolute', left: '5%', top: '46%',
+            background: 'var(--paper)', color: 'var(--ink)',
+            fontFamily: 'var(--sans)', fontSize: 11, fontWeight: 500,
+            padding: '5px 9px', borderRadius: 12,
+            border: '1.5px solid var(--ink)',
+            boxShadow: '1px 1px 0 var(--ink-muted)', zIndex: 2, whiteSpace: 'nowrap',
+          }}>
+            Conv. DL debuts
+          </div>
+
+          <span style={{
+            position: 'absolute', left: '44%', top: '13%',
+            fontFamily: 'var(--hand)', color: 'var(--margin-red)',
+            fontSize: 16, lineHeight: 1.1, zIndex: 3,
+            transform: 'rotate(-3deg)',
+          }}>
+            decide before the set →
+          </span>
+          <span style={{
+            position: 'absolute', right: '7%', top: '44%',
+            fontFamily: 'var(--hand)', color: '#3D5A80',
+            fontSize: 15, lineHeight: 1.1, zIndex: 3,
+            transform: 'rotate(2deg)',
+          }}>
+            honest effort only
+          </span>
+          <span style={{
+            position: 'absolute', left: '38%', top: '84%',
+            fontFamily: 'var(--hand)', color: 'var(--margin-red)',
+            fontSize: 15, lineHeight: 1.1, zIndex: 3,
+            transform: 'rotate(-1deg)',
+          }}>
+            bar drags up the shins ↑
+          </span>
+        </div>
       </div>
 
       {/* Flat table */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <p style={{
-            fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
-            color: 'var(--ink-muted)',
-          }}>
-            FLAT VIEW · GYM USE
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
+            Flat view · Gym use
           </p>
           <button
             onClick={handleCopy}
             style={{
-              fontSize: 12, fontWeight: 600, color: copied ? 'var(--accent)' : 'var(--ink-muted)',
-              background: 'transparent', border: '1px solid',
-              borderColor: copied ? 'rgba(184,84,58,0.25)' : 'var(--paper-edge)',
-              borderRadius: 8, padding: '6px 14px', cursor: 'pointer',
+              fontSize: 11, fontWeight: 500, color: copied ? 'var(--accent)' : 'var(--ink-muted)',
+              background: 'transparent',
+              border: `1px solid ${copied ? 'rgba(184,84,58,0.25)' : 'var(--paper-edge)'}`,
+              borderRadius: 3, padding: '6px 14px', cursor: 'pointer',
+              fontFamily: 'var(--mono)', letterSpacing: '0.08em',
               transition: 'all 0.2s',
             }}
           >
-            {copied ? 'Copied ✓' : 'Copy Schedule'}
+            {copied ? 'Copied ✓' : 'Copy schedule'}
           </button>
         </div>
 
-        <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12,
-        }} className="flat-schedule-grid-w4">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12 }} className="flat-schedule-grid-w4">
           {[
             {
               day: 'MON', session: 'Upper A · RPE 7-8',
@@ -347,27 +263,16 @@ Ab Wheel Rollout · 3×8 · 60s rest`
               ],
             },
           ].map(({ day, session, rows }) => (
-            <div key={day} style={{
-              background: 'var(--paper-deep)',
-              border: '1px solid var(--paper-edge)',
-              borderRadius: 10, overflow: 'hidden',
-            }}>
-              <div style={{
-                background: 'rgba(184,84,58,0.07)', borderBottom: '1px solid rgba(184,84,58,0.10)',
-                padding: '10px 14px',
-              }}>
-                <p style={{ fontSize: 12, fontWeight: 700, color: ACCENT, letterSpacing: '0.08em' }}>{day}</p>
-                <p style={{ fontSize: 10, color: 'var(--ink-muted)' }}>{session}</p>
+            <div key={day} style={{ background: 'var(--paper)', border: '1px solid var(--paper-edge)', borderRadius: 3, overflow: 'hidden' }}>
+              <div style={{ borderBottom: '1px solid var(--paper-edge)', padding: '10px 14px' }}>
+                <p style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{day}</p>
+                <p style={{ fontFamily: 'var(--serif)', fontSize: 13, color: 'var(--ink-soft)', marginTop: 2 }}>{session}</p>
               </div>
-              <div style={{ padding: '8px 0' }}>
+              <div>
                 {rows.map(([name, sets, rest], i) => (
-                  <div key={i} style={{
-                    display: 'grid', gridTemplateColumns: '1fr auto',
-                    gap: 6, padding: '6px 14px',
-                    borderBottom: i < rows.length - 1 ? '1px solid var(--paper-edge)' : 'none',
-                  }}>
-                    <span style={{ fontSize: 11, color: TEXT_MAIN }}>{name}</span>
-                    <span style={{ fontSize: 10, color: ACCENT, fontWeight: 600, textAlign: 'right' }}>{sets}</span>
+                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 6, padding: '6px 14px', borderBottom: i < rows.length - 1 ? '1px solid var(--paper-edge)' : 'none' }}>
+                    <span style={{ fontFamily: 'var(--serif)', fontSize: 12, color: 'var(--ink)', fontWeight: 500 }}>{name}</span>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--accent)', fontWeight: 600, textAlign: 'right' }}>{sets}</span>
                   </div>
                 ))}
               </div>
@@ -382,6 +287,9 @@ Ab Wheel Rollout · 3×8 · 60s rest`
         }
         @media (max-width: 440px) {
           .flat-schedule-grid-w4 { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 600px) {
+          .mm-canvas { height: 380px !important; }
         }
       `}</style>
     </div>

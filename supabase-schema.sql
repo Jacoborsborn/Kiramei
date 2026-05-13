@@ -70,6 +70,7 @@ create table profiles (
   email            text,
   full_name        text,
   programme_access boolean not null default false,
+  nutrition_access boolean not null default false,
   template_access  boolean not null default false,
   created_at       timestamptz not null default now()
 );

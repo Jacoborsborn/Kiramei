@@ -27,9 +27,9 @@ function WaitlistForm({ product }: { product: 'nutrition' | 'bundle' }) {
   if (state === 'done') {
     return (
       <div style={{ padding: '16px 20px', background: 'rgba(184,84,58,0.06)', border: '1.5px solid rgba(184,84,58,0.25)', borderRadius: 3 }}>
-        <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 500, marginBottom: 4 }}>You&apos;re on the list.</p>
+        <p style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 500, marginBottom: 4 }}>Submitted — keep an eye on your inbox.</p>
         <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)', textTransform: 'uppercase' }}>
-          20% early access code sent to your inbox when we launch.
+          We&apos;ll send your 20% early access code the day it drops.
         </p>
       </div>
     )

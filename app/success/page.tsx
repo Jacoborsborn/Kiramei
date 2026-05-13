@@ -1,4 +1,5 @@
-import Navbar from '@/app/components/Navbar'
+import KmNavbar from '@/app/components/KmNavbar'
+import KmFooter from '@/app/components/KmFooter'
 import ActivateForm from './ActivateForm'
 import Stripe from 'stripe'
 
@@ -33,11 +34,12 @@ export default async function SuccessPage({
   }
 
   return (
-    <main style={{ background: '#080808', minHeight: '100vh', color: '#EEEAE4', display: 'flex', flexDirection: 'column' }}>
-      <Navbar />
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px' }}>
+    <div className="km-page">
+      <KmNavbar />
+      <main style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 24px' }}>
         <ActivateForm email={email} sessionId={session_id ?? ''} product={product} />
-      </div>
-    </main>
+      </main>
+      <KmFooter />
+    </div>
   )
 }

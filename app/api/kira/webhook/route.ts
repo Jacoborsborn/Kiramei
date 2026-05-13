@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createSupabaseServiceClient } from '@/lib/supabase-server'
+import { buildTrainingEmail, buildNutritionEmail, buildBundleEmail } from '@/app/lib/emailTemplates'
 
 export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
@@ -21,9 +22,9 @@ export async function POST(req: NextRequest) {
     if (session.mode === 'payment') {
       const product = session.metadata?.product
       if (product === 'programme') {
-        await handleProgrammeAccess(stripe, session, 'programme_access')
+        await handleProgrammeAccess(stripe, session, 'programme_access', 'training')
       } else if (product === 'template') {
-        await handleProgrammeAccess(stripe, session, 'template_access')
+        await handleProgrammeAccess(stripe, session, 'template_access', 'training')
       } else {
         // PDF delivery for training / nutrition / bundle
         await handlePdfDelivery(stripe, session)
@@ -67,6 +68,7 @@ async function handleProgrammeAccess(
   stripe: Stripe,
   session: Stripe.Checkout.Session,
   field: 'programme_access' | 'template_access',
+  product: 'training' | 'nutrition' | 'bundle' = 'training',
 ) {
   const email = session.customer_details?.email
   const name  = session.customer_details?.name || ''
@@ -101,83 +103,23 @@ async function handleProgrammeAccess(
   const { Resend } = await import('resend')
   const resend = new Resend(process.env.RESEND_API_KEY)
 
+  const subjects: Record<string, string> = {
+    training: `Your Training Blueprint is ready, ${firstName}.`,
+    nutrition: `Your Nutrition Blueprint is ready, ${firstName}.`,
+    bundle: `Your Full Stack Bundle is unlocked, ${firstName}.`,
+  }
+
+  const htmlBuilders: Record<string, (f: string, u: string) => string> = {
+    training: buildTrainingEmail,
+    nutrition: buildNutritionEmail,
+    bundle: buildBundleEmail,
+  }
+
   await resend.emails.send({
     from: 'Kira Mei <kira@kiramei.co.uk>',
     to: email,
-    subject: `Your Training Blueprint programme is ready, ${firstName}.`,
-    html: `
-<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#0D0D0D;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0D0D0D;padding:48px 0;">
-    <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#111111;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);">
-
-        <!-- header bar -->
-        <tr><td style="padding:32px 36px 24px;border-bottom:1px solid rgba(255,255,255,0.06);">
-          <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#4A7C59;">
-            Kira Mei — 8-Week Training Programme
-          </p>
-        </td></tr>
-
-        <!-- hero -->
-        <tr><td style="padding:40px 36px 12px;">
-          <h1 style="margin:0 0 16px;font-family:Georgia,serif;font-size:42px;font-weight:600;color:#EEEAE4;line-height:1.0;letter-spacing:-0.025em;">
-            You're in.
-          </h1>
-          <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:rgba(238,234,228,0.55);line-height:1.75;">
-            Hi ${firstName} — your 8-week interactive programme is live and waiting. Click below to get straight in. No password needed.
-          </p>
-        </td></tr>
-
-        <!-- CTA -->
-        <tr><td style="padding:28px 36px 8px;">
-          <a href="${loginUrl}"
-            style="display:inline-block;padding:16px 32px;background:#4A7C59;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;font-weight:700;text-decoration:none;border-radius:99px;letter-spacing:0.03em;">
-            Start your programme →
-          </a>
-          <p style="margin:14px 0 0;font-family:Arial,sans-serif;font-size:12px;color:rgba(238,234,228,0.2);line-height:1.6;">
-            This link signs you in automatically and expires after one use. After that, visit kiramei.co.uk/login to request a new one.
-          </p>
-        </td></tr>
-
-        <!-- what's inside -->
-        <tr><td style="padding:28px 36px 0;">
-          <div style="background:rgba(74,124,89,0.08);border:1px solid rgba(74,124,89,0.2);border-radius:12px;padding:22px 24px;">
-            <p style="margin:0 0 14px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(74,124,89,0.8);">
-              What's inside
-            </p>
-            <table cellpadding="0" cellspacing="0" width="100%">
-              ${[
-                ['8 progressive weeks', 'each one unlocks the next'],
-                ['Video breakdowns', 'every exercise explained'],
-                ['Weekly quizzes', 'lock in the knowledge'],
-                ['Week 8', 'you build your own programme for life'],
-              ].map(([title, sub]) => `
-              <tr>
-                <td style="padding:0 0 10px 0;">
-                  <span style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#EEEAE4;">${title}</span>
-                  <span style="font-family:Arial,sans-serif;font-size:13px;color:rgba(238,234,228,0.35);"> — ${sub}</span>
-                </td>
-              </tr>`).join('')}
-            </table>
-          </div>
-        </td></tr>
-
-        <!-- footer -->
-        <tr><td style="padding:28px 36px 28px;border-top:1px solid rgba(255,255,255,0.06);margin-top:24px;">
-          <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:rgba(238,234,228,0.2);letter-spacing:0.08em;text-transform:uppercase;">
-            Kira Mei · kiramei.co.uk
-          </p>
-        </td></tr>
-
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>
-    `,
+    subject: subjects[product] ?? subjects.training,
+    html: (htmlBuilders[product] ?? buildTrainingEmail)(firstName, loginUrl),
   })
 }
 

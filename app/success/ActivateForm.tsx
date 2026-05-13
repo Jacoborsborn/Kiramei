@@ -61,44 +61,44 @@ export default function ActivateForm({ email, sessionId, product }: Props) {
 
   const inputStyle: React.CSSProperties = {
     width: '100%', padding: '13px 16px', boxSizing: 'border-box',
-    background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
-    borderRadius: 10, fontSize: 14, color: '#EEEAE4', fontFamily: 'inherit', outline: 'none',
+    background: 'var(--paper)', border: '1.5px solid var(--paper-edge)',
+    borderRadius: 3, fontSize: 14, color: 'var(--ink)', fontFamily: 'inherit', outline: 'none',
   }
 
   return (
-    <div style={{ textAlign: 'center', maxWidth: 460, width: '100%' }}>
+    <div style={{ textAlign: 'center', maxWidth: 480, width: '100%' }}>
 
       <div style={{
-        width: 56, height: 56, borderRadius: '50%',
-        background: 'rgba(74,124,89,0.12)', border: '1.5px solid rgba(74,124,89,0.4)',
+        width: 52, height: 52, borderRadius: '50%',
+        background: 'rgba(184,84,58,0.08)', border: '1.5px solid var(--accent)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        margin: '0 auto 28px', fontSize: 22, color: '#4A7C59',
+        margin: '0 auto 24px', fontSize: 20, color: 'var(--accent)',
       }}>✓</div>
 
-      <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#4A7C59', marginBottom: 14 }}>
+      <span style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent)' }}>
         Payment confirmed
-      </p>
+      </span>
 
-      <h1 className="font-display" style={{ fontSize: 'clamp(36px, 7vw, 64px)', fontWeight: 600, lineHeight: 1, letterSpacing: '-0.025em', marginBottom: 16 }}>
-        You're in.
+      <h1 style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(2.4rem, 6vw, 3.6rem)', fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.05, margin: '12px 0 16px', color: 'var(--ink)' }}>
+        You&rsquo;re <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>in.</em>
       </h1>
 
-      <p style={{ fontSize: 15, color: 'rgba(238,234,228,0.5)', lineHeight: 1.7, marginBottom: 36 }}>
+      <p style={{ fontSize: 16, color: 'var(--ink-soft)', lineHeight: 1.7, marginBottom: 36 }}>
         Set a password to create your account and jump straight into your {productLabel}.
       </p>
 
       <form onSubmit={handleSubmit} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 12, color: 'rgba(238,234,228,0.35)', letterSpacing: '0.04em' }}>Email</label>
+          <label style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>Email</label>
           <input
-            style={{ ...inputStyle, color: 'rgba(238,234,228,0.4)', cursor: 'default' }}
+            style={{ ...inputStyle, color: 'var(--ink-muted)', cursor: 'default' }}
             type="email" value={email} readOnly tabIndex={-1}
           />
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 12, color: 'rgba(238,234,228,0.35)', letterSpacing: '0.04em' }}>Password</label>
+          <label style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>Password</label>
           <input
             style={inputStyle} type="password" value={password}
             onChange={e => setPassword(e.target.value)}
@@ -107,7 +107,7 @@ export default function ActivateForm({ email, sessionId, product }: Props) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 12, color: 'rgba(238,234,228,0.35)', letterSpacing: '0.04em' }}>Confirm password</label>
+          <label style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>Confirm password</label>
           <input
             style={inputStyle} type="password" value={confirm}
             onChange={e => setConfirm(e.target.value)}
@@ -116,7 +116,7 @@ export default function ActivateForm({ email, sessionId, product }: Props) {
         </div>
 
         {error && (
-          <p style={{ fontSize: 13, color: '#F08080', background: 'rgba(192,57,43,0.15)', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(192,57,43,0.3)', margin: 0 }}>
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--accent)', background: 'rgba(184,84,58,0.06)', padding: '10px 14px', border: '1px solid rgba(184,84,58,0.2)', borderRadius: 2, margin: 0 }}>
             {error}
           </p>
         )}
@@ -124,20 +124,21 @@ export default function ActivateForm({ email, sessionId, product }: Props) {
         <button
           type="submit" disabled={loading}
           style={{
-            marginTop: 6, padding: '14px',
-            background: loading ? 'rgba(238,234,228,0.1)' : '#EEEAE4',
-            color: loading ? 'rgba(238,234,228,0.3)' : '#080808',
-            border: 'none', borderRadius: 99, fontFamily: 'inherit',
-            fontSize: 15, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer',
+            marginTop: 6, padding: '14px 28px',
+            background: loading ? 'var(--paper-deep)' : 'var(--accent)',
+            color: loading ? 'var(--ink-muted)' : '#FBF7EE',
+            border: 'none', borderRadius: 3, fontFamily: 'var(--mono)',
+            fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
+            cursor: loading ? 'not-allowed' : 'pointer',
           }}
         >
-          {loading ? 'Creating account…' : `Create account & start →`}
+          {loading ? 'Creating account…' : 'Create account & start →'}
         </button>
       </form>
 
-      <p style={{ fontSize: 13, color: 'rgba(238,234,228,0.25)', marginTop: 24 }}>
+      <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.1em', color: 'var(--ink-muted)', marginTop: 24 }}>
         Already have an account?{' '}
-        <a href="/login" style={{ color: '#4A7C59', textDecoration: 'none' }}>Sign in</a>
+        <a href="/login" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Sign in</a>
       </p>
     </div>
   )

@@ -14,8 +14,8 @@ export const PRODUCTS: Record<ProductSlug, {
     slug: 'training',
     name: 'Training Blueprint',
     shortName: 'Training',
-    price: 49,
-    priceDisplay: '£49',
+    price: 49.99,
+    priceDisplay: '£49.99',
     oneLiner: 'Build your training brain.',
     stripePriceEnv: 'STRIPE_TRAINING_PRICE_ID',
     includes: ['training'],
@@ -24,8 +24,8 @@ export const PRODUCTS: Record<ProductSlug, {
     slug: 'nutrition',
     name: 'Nutrition Blueprint',
     shortName: 'Nutrition',
-    price: 39,
-    priceDisplay: '£39',
+    price: 49.99,
+    priceDisplay: '£49.99',
     oneLiner: 'Stop guessing food.',
     stripePriceEnv: 'STRIPE_NUTRITION_PRICE_ID',
     includes: ['nutrition'],
@@ -34,16 +34,15 @@ export const PRODUCTS: Record<ProductSlug, {
     slug: 'bundle',
     name: 'Full Stack Bundle',
     shortName: 'Bundle',
-    price: 69,
-    priceDisplay: '£69',
+    price: 78.99,
+    priceDisplay: '£78.99',
     oneLiner: 'The whole education.',
     stripePriceEnv: 'STRIPE_BUNDLE_PRICE_ID',
     includes: ['training', 'nutrition'],
   },
 }
 
-export const BUNDLE_SAVES =
-  PRODUCTS.training.price + PRODUCTS.nutrition.price - PRODUCTS.bundle.price // £19
+export const BUNDLE_SAVES = 20 // £20 off combined price
 
 export function entitlementsFor(slug: ProductSlug): ProductSlug[] {
   return PRODUCTS[slug].includes
