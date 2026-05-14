@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
 interface Props {
   userId: string
@@ -25,20 +24,16 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
     return () => window.removeEventListener('quiz:passed', handleQuizPass)
   }, [])
 
-  // Also re-check Supabase on mount if quiz wasn't passed in server props
+  // Re-check server state on mount if quiz wasn't passed in server props
   useEffect(() => {
     if (!initialQuizPassed) {
-      const supabase = createSupabaseBrowserClient()
-      supabase
-        .from('week_progress')
-        .select('quiz_passed, week_complete')
-        .eq('user_id', userId)
-        .eq('week_number', weekNum)
-        .maybeSingle()
-        .then(({ data }) => {
+      fetch(`/api/programme/week-state?weekNum=${weekNum}`)
+        .then(r => r.json())
+        .then(data => {
           if (data?.quiz_passed) setQuizPassed(true)
           if (data?.week_complete) setComplete(true)
         })
+        .catch(() => null)
     }
   }, [])
 
@@ -46,15 +41,18 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
     if (!quizPassed || complete || loading) return
     setLoading(true)
 
-    const supabase = createSupabaseBrowserClient()
-    await supabase.from('week_progress').upsert({
-      user_id: userId,
-      week_number: weekNum,
-      week_complete: true,
-      completed_at: new Date().toISOString(),
-    }, { onConflict: 'user_id,week_number' })
+    const res = await fetch('/api/programme/complete-week', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ weekNum }),
+    })
 
-    // Fire lifecycle email — week 4 gets the halfway email, others get week-complete
+    if (!res.ok) {
+      setLoading(false)
+      return
+    }
+
+    // Fire lifecycle email
     if (weekNum === 4) {
       fetch('/api/email/week-4-halfway', { method: 'POST' }).catch(() => null)
     } else {
@@ -69,7 +67,6 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
     setCelebrated(true)
     setLoading(false)
 
-    // Navigate after 2s — use location.href for a clean server render with fresh data
     if (weekNum < 8) {
       setTimeout(() => {
         window.location.href = `/programme/week/${weekNum + 1}`
