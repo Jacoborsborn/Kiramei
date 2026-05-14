@@ -53,6 +53,7 @@ function ActivateFlow() {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
 
+  const [name, setName] = useState('')
   const [goal, setGoal] = useState('')
   const [experience, setExperience] = useState('')
   const [trainingDays, setTrainingDays] = useState(0)
@@ -128,6 +129,7 @@ function ActivateFlow() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         token,
+        ...(name.trim() && { name: name.trim() }),
         ...(goal && { goal }),
         ...(experience && { experience }),
         ...(trainingDays && { trainingDaysPerWk: trainingDays }),
@@ -373,6 +375,18 @@ function ActivateFlow() {
                 <p style={{ fontSize: 15.5, lineHeight: 1.7, color: 'var(--ink-soft)', marginBottom: 28 }}>
                   This helps us personalise your experience. Totally optional — skip if you like.
                 </p>
+
+                <div className="sg-field" style={{ marginBottom: 24 }}>
+                  <label>Your name</label>
+                  <input
+                    className="sg-input"
+                    type="text"
+                    placeholder="First and last name"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    autoComplete="name"
+                  />
+                </div>
 
                 <div style={{ marginBottom: 22 }}>
                   <p style={{ fontFamily: 'var(--mono)', fontSize: 10.5, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 10 }}>Your goal</p>

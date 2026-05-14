@@ -81,9 +81,24 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
     <>
       {/* Header */}
       <div style={{ padding: '0 28px 20px', borderBottom: '1px solid var(--paper-edge)', marginBottom: 8 }}>
-        <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 8 }}>
-          Training Blueprint
-        </p>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase' }}>
+            Training Blueprint
+          </p>
+          <a
+            href="/account"
+            title="Account"
+            style={{
+              width: 32, height: 32, borderRadius: '50%',
+              background: 'var(--ink)', color: 'var(--paper)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em',
+              textDecoration: 'none', flexShrink: 0,
+            }}
+          >
+            {firstName.charAt(0).toUpperCase()}
+          </a>
+        </div>
         <h2 style={{ fontFamily: 'var(--serif)', fontSize: 26, fontWeight: 500, letterSpacing: '-0.01em', marginBottom: 6, lineHeight: 1.1, color: 'var(--ink)' }}>
           Your eight weeks.
         </h2>
@@ -267,13 +282,27 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
         <a href="/" style={{ fontFamily: 'var(--serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', textDecoration: 'none', letterSpacing: '-0.01em' }}>
           kira mei
         </a>
-        <button
-          onClick={() => setMenuOpen(o => !o)}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--ink)', fontSize: 18 }}
-          aria-label="Menu"
-        >
-          {menuOpen ? '✕' : '☰'}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <a
+            href="/account"
+            style={{
+              width: 30, height: 30, borderRadius: '50%',
+              background: 'var(--ink)', color: 'var(--paper)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700,
+              textDecoration: 'none',
+            }}
+          >
+            {firstName.charAt(0).toUpperCase()}
+          </a>
+          <button
+            onClick={() => setMenuOpen(o => !o)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--ink)', fontSize: 18 }}
+            aria-label="Menu"
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
       </header>
 
       {/* Mobile drawer */}
