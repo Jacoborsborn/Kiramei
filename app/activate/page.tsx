@@ -56,6 +56,8 @@ function ActivateFlow() {
   const [goal, setGoal] = useState('')
   const [experience, setExperience] = useState('')
   const [trainingDays, setTrainingDays] = useState(0)
+  const [hearAbout, setHearAbout] = useState('')
+  const [hearAboutOther, setHearAboutOther] = useState('')
 
   const [weeklyRecap, setWeeklyRecap] = useState(true)
   const [productDrops, setProductDrops] = useState(true)
@@ -120,6 +122,7 @@ function ActivateFlow() {
 
   async function handleSaveProfile() {
     setLoading(true); setError('')
+    const source = hearAbout === 'Other' ? (hearAboutOther.trim() || 'Other') : hearAbout
     await fetch('/api/activation/save-profile', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -128,6 +131,7 @@ function ActivateFlow() {
         ...(goal && { goal }),
         ...(experience && { experience }),
         ...(trainingDays && { trainingDaysPerWk: trainingDays }),
+        ...(source && { hearAbout: source }),
       }),
     })
     setLoading(false)
@@ -195,7 +199,7 @@ function ActivateFlow() {
   }
   const barColour = strengthColours[strength.cls] ?? 'var(--paper-edge)'
 
-  const portalUrl = purchaseProduct === 'nutrition' ? '/nutrition-portal' : '/training'
+  const portalUrl = purchaseProduct === 'nutrition' ? '/nutrition-portal' : '/programme'
 
   return (
     <>
@@ -405,6 +409,32 @@ function ActivateFlow() {
                   </div>
                 </div>
 
+                <div style={{ marginBottom: 28 }}>
+                  <p style={{ fontFamily: 'var(--mono)', fontSize: 10.5, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 10 }}>Where did you hear about us?</p>
+                  <div className="goal-grid">
+                    {['Instagram', 'TikTok', 'Google', 'AI', 'Word of mouth', 'Other'].map(src => (
+                      <button
+                        key={src}
+                        className={`goal-tile${hearAbout === src ? ' sel' : ''}`}
+                        onClick={() => { setHearAbout(hearAbout === src ? '' : src); setHearAboutOther('') }}
+                      >
+                        <span className="t">{src}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {hearAbout === 'Other' && (
+                    <input
+                      className="sg-input"
+                      type="text"
+                      placeholder="Tell us more…"
+                      value={hearAboutOther}
+                      onChange={e => setHearAboutOther(e.target.value)}
+                      style={{ marginTop: 12 }}
+                      autoFocus
+                    />
+                  )}
+                </div>
+
                 {error && <p className="sg-err">{error}</p>}
 
                 <div className="sg-actions">
@@ -442,7 +472,7 @@ function ActivateFlow() {
                     </div>
                     <label className="sg-switch">
                       <input type="checkbox" checked={val} onChange={e => set(e.target.checked)} />
-                      <span className="sg-tr" onClick={() => set(!val)} />
+                      <span className="sg-tr" />
                     </label>
                   </div>
                 ))}

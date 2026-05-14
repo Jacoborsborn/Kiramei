@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseServiceClient } from '@/lib/supabase-server'
 
 export async function POST(req: NextRequest) {
-  const { token, goal, experience, trainingDaysPerWk } = await req.json()
+  const { token, goal, experience, trainingDaysPerWk, hearAbout } = await req.json()
   if (!token) return NextResponse.json({ error: 'Missing token' }, { status: 400 })
 
   const supabase = createSupabaseServiceClient()
@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
   if (goal !== undefined) update.goal = goal
   if (experience !== undefined) update.experience = experience
   if (trainingDaysPerWk !== undefined) update.training_days_pw = trainingDaysPerWk
+  if (hearAbout !== undefined) update.hear_about = hearAbout
 
   if (Object.keys(update).length > 0) {
     await supabase.from('profiles').update(update).eq('id', row.user_id)
