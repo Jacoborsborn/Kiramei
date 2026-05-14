@@ -14,6 +14,7 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
   const [quizPassed, setQuizPassed] = useState(initialQuizPassed)
   const [loading, setLoading] = useState(false)
   const [celebrated, setCelebrated] = useState(false)
+  const [saveError, setSaveError] = useState(false)
 
   // Allow the quiz component on this page to signal a pass
   useEffect(() => {
@@ -49,6 +50,7 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
 
     if (!res.ok) {
       setLoading(false)
+      setSaveError(true)
       return
     }
 
@@ -133,8 +135,14 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
   }
 
   return (
+    <>
+      {saveError && (
+        <p style={{ fontSize: 13, color: 'var(--accent)', marginBottom: 12, textAlign: 'center' }}>
+          Something went wrong — please try again or reload the page.
+        </p>
+      )}
     <button
-      onClick={handleComplete}
+      onClick={() => { setSaveError(false); handleComplete() }}
       disabled={loading}
       style={{
         width: '100%', padding: '18px 24px', borderRadius: 12,
@@ -155,5 +163,6 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
         </>
       )}
     </button>
+    </>
   )
 }

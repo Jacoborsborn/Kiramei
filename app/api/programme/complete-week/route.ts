@@ -13,30 +13,21 @@ export async function POST(req: NextRequest) {
 
   const service = createSupabaseServiceClient()
 
-  // Verify the quiz is actually passed before allowing completion
-  const { data: existing } = await service
-    .from('week_progress')
-    .select('quiz_passed, week_complete')
-    .eq('user_id', user.id)
-    .eq('week_number', weekNum)
-    .maybeSingle()
-
-  if (!existing?.quiz_passed) {
-    return NextResponse.json({ error: 'Quiz not passed' }, { status: 403 })
-  }
-
-  if (existing.week_complete) {
-    return NextResponse.json({ ok: true, alreadyComplete: true })
-  }
-
   const { error } = await service
     .from('week_progress')
-    .update({ week_complete: true, completed_at: new Date().toISOString() })
-    .eq('user_id', user.id)
-    .eq('week_number', weekNum)
+    .upsert(
+      {
+        user_id: user.id,
+        week_number: weekNum,
+        quiz_passed: true,
+        week_complete: true,
+        completed_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id,week_number' }
+    )
 
   if (error) {
-    console.error('complete-week upsert error:', error)
+    console.error('complete-week error:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
