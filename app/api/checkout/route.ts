@@ -29,6 +29,8 @@ export async function POST(req: NextRequest) {
     success_url: `${baseUrl}/success?p=${product}&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url:  `${baseUrl}${CANCEL_PATHS[product]}`,
     billing_address_collection: 'auto',
+    // 1h expiry so checkout.session.expired fires promptly for cart-abandoned email
+    expires_at: Math.floor(Date.now() / 1000) + 3600,
     metadata: { product },
   })
 

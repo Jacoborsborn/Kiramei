@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createSupabaseServiceClient } from '@/lib/supabase-server'
 import { buildTrainingEmail, buildNutritionEmail, buildBundleEmail, buildActivationEmail } from '@/app/lib/emailTemplates'
+import { buildCartAbandonedEmail } from '@/app/lib/email-upsell-templates'
 
 export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
@@ -37,6 +38,15 @@ export async function POST(req: NextRequest) {
       await handleSubscriptionCreated(session)
       return NextResponse.json({ received: true })
     }
+  }
+
+  if (event.type === 'checkout.session.expired') {
+    const session = event.data.object as Stripe.Checkout.Session
+    // Only fire for one-time training product sessions (not subscription coaching sessions)
+    if (session.mode === 'payment' && session.customer_details?.email) {
+      await handleCartAbandoned(session)
+    }
+    return NextResponse.json({ received: true })
   }
 
   if (event.type === 'customer.subscription.deleted') {
@@ -253,4 +263,42 @@ async function handleSubscriptionCreated(session: Stripe.Checkout.Session) {
       html: buildActivationEmail(firstName, activationUrl),
     })
   }
+}
+
+// ── Cart abandoned (checkout.session.expired, payment mode only) ────────────
+// Fires 1h after checkout opened (sessions expire in 1h — see /api/checkout).
+// customer_details.email is only present if the user got far enough to enter it.
+//
+// UK PECR note: this person is NOT yet a customer so the soft opt-in exemption
+// does not apply. Legally this requires prior consent. Until a pre-checkout
+// email-capture step with an explicit opt-in is added, suppress by setting
+// CART_ABANDONED_EMAIL_ENABLED=true in env (opt-in to sending, off by default).
+
+async function handleCartAbandoned(session: Stripe.Checkout.Session) {
+  if (process.env.CART_ABANDONED_EMAIL_ENABLED !== 'true') return
+
+  const email = session.customer_details!.email!
+  const name  = session.customer_details?.name ?? ''
+  const firstName = name.split(' ')[0] || 'there'
+
+  const product = session.metadata?.product ?? 'training'
+  const productNames: Record<string, string> = {
+    training:  'Training Blueprint',
+    nutrition: 'Nutrition Blueprint',
+    bundle:    'Full Stack Bundle',
+  }
+  const productName = productNames[product] ?? 'blueprint'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL!
+  const productPageUrl = `${baseUrl}/${product}`
+
+  const { Resend } = await import('resend')
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
+  await resend.emails.send({
+    from: 'Kira Mei <hello@kiramei.co.uk>',
+    replyTo: 'hello@kiramei.co.uk',
+    to: email,
+    subject: 'A thought about your blueprint.',
+    html: buildCartAbandonedEmail(firstName, productName, productPageUrl),
+  })
 }

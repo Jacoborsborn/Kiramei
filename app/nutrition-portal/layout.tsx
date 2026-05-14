@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 import NutSidebar from './_components/NutSidebar'
 
 export const metadata = { title: 'Nutrition Blueprint — Kira Mei' }
@@ -10,8 +10,7 @@ export default async function NutritionPortalLayout({ children }: { children: Re
 
   if (!user) redirect('/login?redirect=/nutrition-portal')
 
-  const service = createSupabaseServiceClient()
-  const { data: profile } = await service
+  const { data: profile } = await supabase
     .from('profiles')
     .select('nutrition_access, programme_access, full_name, email')
     .eq('id', user.id)

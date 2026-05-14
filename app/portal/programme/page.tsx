@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 import ProgrammeViewer from './_components/ProgrammeViewer'
 import type { PlanJSON } from '@/lib/planEmail'
 
@@ -8,8 +8,7 @@ export default async function ProgrammePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const service = createSupabaseServiceClient()
-  const { data: programme } = await service
+  const { data: programme } = await supabase
     .from('kira_programmes')
     .select('programme, sent_at')
     .eq('user_id', user.id)

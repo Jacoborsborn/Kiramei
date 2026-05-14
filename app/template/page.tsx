@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 import TemplatBuilder from './TemplateBuilder'
 import ProgrammeSidebar from '@/app/programme/_components/ProgrammeSidebar'
 
@@ -11,8 +11,7 @@ export default async function TemplatePage() {
 
   if (!user) redirect('/login?redirect=/template')
 
-  const service = createSupabaseServiceClient()
-  const { data: profile } = await service
+  const { data: profile } = await supabase
     .from('profiles')
     .select('template_access, programme_access, full_name, email')
     .eq('id', user.id)

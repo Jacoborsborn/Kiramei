@@ -1,14 +1,13 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 export default async function PortalHomePage() {
   const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const service = createSupabaseServiceClient()
-  const { data: lead } = await service
+  const { data: lead } = await supabase
     .from('kira_leads')
     .select('name, plan_selected, created_at')
     .eq('user_id', user.id)
@@ -16,7 +15,7 @@ export default async function PortalHomePage() {
     .limit(1)
     .single()
 
-  const { data: programme } = await service
+  const { data: programme } = await supabase
     .from('kira_programmes')
     .select('id, sent_at')
     .eq('user_id', user.id)

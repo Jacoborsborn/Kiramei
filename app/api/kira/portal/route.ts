@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,8 +8,7 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const service = createSupabaseServiceClient()
-    const { data: lead } = await service
+    const { data: lead } = await supabase
       .from('kira_leads')
       .select('stripe_customer_id')
       .eq('user_id', user.id)

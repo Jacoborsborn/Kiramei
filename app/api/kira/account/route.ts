@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 export async function GET() {
   const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const service = createSupabaseServiceClient()
-  const { data: lead } = await service
+  const { data: lead } = await supabase
     .from('kira_leads')
     .select('name')
     .eq('user_id', user.id)
@@ -24,9 +23,8 @@ export async function PATCH(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const service = createSupabaseServiceClient()
 
-  const { error } = await service
+  const { error } = await supabase
     .from('kira_leads')
     .update({ name: body.name })
     .eq('user_id', user.id)

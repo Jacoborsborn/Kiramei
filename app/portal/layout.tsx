@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 import PortalNav from './_components/PortalNav'
 
 export const metadata = { title: 'Client Portal — Kira Mei' }
@@ -12,8 +12,7 @@ export default async function PortalLayout({ children }: { children: React.React
     redirect('/login')
   }
 
-  const service = createSupabaseServiceClient()
-  const { data: lead } = await service
+  const { data: lead } = await supabase
     .from('kira_leads')
     .select('name, plan_selected')
     .eq('user_id', user.id)

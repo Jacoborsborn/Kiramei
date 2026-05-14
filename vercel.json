@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/email/week-inactive",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/email/post-completion-30d",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

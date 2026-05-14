@@ -1,5 +1,5 @@
 import { notFound, redirect } from 'next/navigation'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 // Week 1 components
 import Brief1 from './_components/week1/Brief'
@@ -188,11 +188,9 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?redirect=/programme')
 
-  const service = createSupabaseServiceClient()
-
   // Enforce week unlock logic
   if (weekNum > 1) {
-    const { data: prevWeek } = await service
+    const { data: prevWeek } = await supabase
       .from('week_progress')
       .select('week_complete')
       .eq('user_id', user.id)
@@ -204,7 +202,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
     }
   }
 
-  const { data: progress } = await service
+  const { data: progress } = await supabase
     .from('week_progress')
     .select('*')
     .eq('user_id', user.id)
@@ -212,7 +210,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
     .maybeSingle()
 
   // Fetch exercise logs for the current week
-  const { data: rawLogs } = await service
+  const { data: rawLogs } = await supabase
     .from('exercise_logs')
     .select('session_label, exercise_name, weight_kg, reps')
     .eq('user_id', user.id)
@@ -233,7 +231,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
   let programmeStartDate: string | null = null
   let sessionCount: number | null = null
   if (weekNum === 8) {
-    const { data: week1Progress } = await service
+    const { data: week1Progress } = await supabase
       .from('week_progress')
       .select('created_at')
       .eq('user_id', user.id)
@@ -241,7 +239,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
       .maybeSingle()
     programmeStartDate = week1Progress?.created_at ?? null
 
-    const { count } = await service
+    const { count } = await supabase
       .from('exercise_logs')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)

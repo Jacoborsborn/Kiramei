@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 import ProgrammeSidebar from './_components/ProgrammeSidebar'
 
 export const metadata = { title: 'Training Blueprint — Kira Mei' }
@@ -10,8 +10,7 @@ export default async function ProgrammeLayout({ children }: { children: React.Re
 
   if (!user) redirect('/login?redirect=/programme')
 
-  const service = createSupabaseServiceClient()
-  const { data: profile } = await service
+  const { data: profile } = await supabase
     .from('profiles')
     .select('programme_access, full_name, email')
     .eq('id', user.id)

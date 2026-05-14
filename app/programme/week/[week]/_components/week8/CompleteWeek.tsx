@@ -698,6 +698,9 @@ export default function CompleteWeek({ userId, initialComplete, initialQuizPasse
       user_id: userId, week_number: 8, week_complete: true, completed_at: new Date().toISOString(),
     }, { onConflict: 'user_id,week_number' })
     await supabase.from('profiles').update({ programme_complete: true }).eq('id', userId)
+
+    fetch('/api/email/week-8-graduation', { method: 'POST' }).catch(() => null)
+
     setComplete(true)
     setLoading(false)
     setShowModal(true)

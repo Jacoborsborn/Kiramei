@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 type BodyComp = {
   frame_type: string | null
@@ -15,8 +15,7 @@ export default async function BodyCompPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const service = createSupabaseServiceClient()
-  const { data: report } = await service
+  const { data: report } = await supabase
     .from('kira_body_comp')
     .select('*')
     .eq('user_id', user.id)

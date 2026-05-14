@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 export async function GET(req: NextRequest) {
   const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const service = createSupabaseServiceClient()
-  const { data, error } = await service
+  const { data, error } = await supabase
     .from('kira_checkins')
     .select('*')
     .eq('user_id', user.id)
@@ -23,10 +22,9 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const service = createSupabaseServiceClient()
 
   // Get lead_id for this user
-  const { data: lead } = await service
+  const { data: lead } = await supabase
     .from('kira_leads')
     .select('id, plan_selected')
     .eq('user_id', user.id)
@@ -38,7 +36,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Pro plan required' }, { status: 403 })
   }
 
-  const { data, error } = await service.from('kira_checkins').insert({
+  const { data, error } = await supabase.from('kira_checkins').insert({
     user_id: user.id,
     lead_id: lead.id,
     week_number: body.week_number,

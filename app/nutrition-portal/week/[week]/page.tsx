@@ -1,5 +1,5 @@
 import { notFound, redirect } from 'next/navigation'
-import { createSupabaseServerClient, createSupabaseServiceClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { NUTRITION_WEEKS } from '@/app/lib/nutrition-curriculum'
 import { NutBrief, NutMindMap, NutLibrary, NutLesson, NutMealPlan } from './_components/shared/NutSections'
 import { NutQuiz, NutReflection, NutComplete, NutPlate } from './_components/shared/NutInteractive'
@@ -31,11 +31,9 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?redirect=/nutrition-portal')
 
-  const service = createSupabaseServiceClient()
-
   // Week gating: require previous week complete
   if (weekNum > 1) {
-    const { data: prev } = await service
+    const { data: prev } = await supabase
       .from('week_progress')
       .select('week_complete')
       .eq('user_id', user.id)
@@ -44,7 +42,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
     if (!prev?.week_complete) redirect(`/nutrition-portal/week/${weekNum - 1}`)
   }
 
-  const { data: progress } = await service
+  const { data: progress } = await supabase
     .from('week_progress')
     .select('*')
     .eq('user_id', user.id)

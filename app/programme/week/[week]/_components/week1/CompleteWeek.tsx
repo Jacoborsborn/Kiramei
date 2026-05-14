@@ -56,6 +56,17 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
       completed_at: new Date().toISOString(),
     }, { onConflict: 'user_id,week_number' })
 
+    // Fire lifecycle email — week 4 gets the halfway email, others get week-complete
+    if (weekNum === 4) {
+      fetch('/api/email/week-4-halfway', { method: 'POST' }).catch(() => null)
+    } else {
+      fetch('/api/email/week-complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ weekNum }),
+      }).catch(() => null)
+    }
+
     setComplete(true)
     setCelebrated(true)
     setLoading(false)
