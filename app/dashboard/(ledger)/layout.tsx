@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import DashboardShell from './DashboardShell'
-import '../../../site/shared.css'
 import './ledger.css'
 
 export const metadata: Metadata = {
