@@ -137,7 +137,7 @@ export function NutLesson({ lesson }: { lesson: NutritionWeek['lesson'] }) {
           <p key={i} style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--ink-soft)' }} dangerouslySetInnerHTML={{ __html: p }} />
         ))}
       </div>
-      <div style={{ marginTop: 32, padding: '20px 24px', background: 'rgba(184,84,58,0.05)', borderLeft: '3px solid var(--accent)', border: '1px solid rgba(184,84,58,0.18)', borderLeft: '3px solid var(--accent)' }}>
+      <div style={{ marginTop: 32, padding: '20px 24px', background: 'rgba(184,84,58,0.05)', border: '1px solid rgba(184,84,58,0.18)', borderLeft: '3px solid var(--accent)' }}>
         <p style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 10 }}>Kira's note</p>
         <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 16, lineHeight: 1.65, color: 'var(--ink)' }}>{lesson.kiraNote}</p>
         <p style={{ fontFamily: 'var(--hand)', fontSize: 18, color: 'var(--ink-muted)', marginTop: 10 }}>— Kira</p>
