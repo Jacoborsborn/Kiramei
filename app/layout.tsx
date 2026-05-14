@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Script from 'next/script'
+import CookieConsent from '@/app/components/CookieConsent'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         {children}
-        <Script src="/km-track.js" strategy="afterInteractive" />
+        <CookieConsent />
       </body>
     </html>
   )

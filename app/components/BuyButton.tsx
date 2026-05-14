@@ -6,12 +6,18 @@ interface BuyButtonProps {
   product: 'training' | 'nutrition' | 'bundle'
   label?: string
   style?: React.CSSProperties
+  requireTerms?: boolean
 }
 
-export default function BuyButton({ product, label = 'Buy Now →', style }: BuyButtonProps) {
+export default function BuyButton({ product, label = 'Buy Now →', style, requireTerms }: BuyButtonProps) {
   const [loading, setLoading] = useState(false)
+  const [agreedTerms, setAgreedTerms] = useState(false)
+  const [agreedCancellation, setAgreedCancellation] = useState(false)
+
+  const canProceed = !requireTerms || (agreedTerms && agreedCancellation)
 
   async function handleClick() {
+    if (!canProceed) return
     setLoading(true)
     try {
       const res = await fetch('/api/checkout', {
@@ -27,12 +33,13 @@ export default function BuyButton({ product, label = 'Buy Now →', style }: Buy
     }
   }
 
-  const baseStyle: React.CSSProperties = {
+  const btnStyle: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
     padding: '15px 36px', borderRadius: 99, border: 'none',
-    background: 'var(--accent)', color: '#FBF7EE',
+    background: canProceed ? 'var(--accent)' : 'var(--paper-edge)',
+    color: canProceed ? '#FBF7EE' : 'var(--ink-muted)',
     fontSize: 15, fontWeight: 600, letterSpacing: '0.03em',
-    cursor: loading ? 'wait' : 'pointer',
+    cursor: loading ? 'wait' : canProceed ? 'pointer' : 'not-allowed',
     fontFamily: "'DM Sans', sans-serif",
     transition: 'background 0.15s, transform 0.15s',
     opacity: loading ? 0.7 : 1,
@@ -40,14 +47,60 @@ export default function BuyButton({ product, label = 'Buy Now →', style }: Buy
   }
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={loading}
-      style={baseStyle}
-      onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#C0583A' }}
-      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--accent)' }}
-    >
-      {loading ? 'Redirecting…' : label}
-    </button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start' }}>
+      {requireTerms && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 480 }}>
+          <Checkbox
+            checked={agreedTerms}
+            onChange={setAgreedTerms}
+            label={<>I have read and agree to the <a href="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Terms & Conditions</a>, including the no-refund policy for digital products.</>}
+          />
+          <Checkbox
+            checked={agreedCancellation}
+            onChange={setAgreedCancellation}
+            label="I understand that delivery starts immediately upon payment and I waive my 14-day right to cancel."
+          />
+        </div>
+      )}
+      <button
+        onClick={handleClick}
+        disabled={loading || !canProceed}
+        style={btnStyle}
+        onMouseEnter={e => { if (!loading && canProceed) (e.currentTarget as HTMLElement).style.background = '#C0583A' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = canProceed ? 'var(--accent)' : 'var(--paper-edge)' }}
+      >
+        {loading ? 'Redirecting…' : label}
+      </button>
+    </div>
+  )
+}
+
+function Checkbox({ checked, onChange, label }: {
+  checked: boolean
+  onChange: (v: boolean) => void
+  label: React.ReactNode
+}) {
+  return (
+    <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', cursor: 'pointer' }}>
+      <span
+        onClick={() => onChange(!checked)}
+        style={{
+          flexShrink: 0, marginTop: 3,
+          width: 17, height: 17,
+          border: `1.5px solid ${checked ? 'var(--accent)' : 'var(--ink-muted)'}`,
+          borderRadius: 3,
+          background: checked ? 'var(--accent)' : 'transparent',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'all 0.12s',
+        }}
+      >
+        {checked && (
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+            <path d="M1 4l3 3 5-6" stroke="#FBF7EE" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </span>
+      <span style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink-soft)' }}>{label}</span>
+    </label>
   )
 }
