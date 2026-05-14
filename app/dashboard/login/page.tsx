@@ -1,93 +1,181 @@
 'use client'
 
 import { useState } from 'react'
-import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('')
+export default function FounderLoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
 
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      setError(error.message)
-      setLoading(false)
+    const res = await fetch('/api/founder/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    })
+
+    if (res.ok) {
+      router.push('/dashboard')
     } else {
-      router.push('/dashboard/leads')
+      const data = await res.json().catch(() => ({}))
+      setError(data.error ?? 'Authentication failed')
+      setLoading(false)
     }
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--paper)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-      <div className="paper-card" style={{ width: '100%', maxWidth: 400, padding: '48px 40px' }}>
-        <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: 24 }}>
-          Dashboard
-        </p>
-        <h1 className="font-display" style={{ fontSize: 36, fontWeight: 600, color: 'var(--ink)', marginBottom: 32, lineHeight: 1.1 }}>
-          Sign in.
-        </h1>
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--paper)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+    }}>
+      {/* Cross-grid background */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'linear-gradient(to right, var(--rule-soft, rgba(31,27,22,0.06)) 1px, transparent 1px), linear-gradient(to bottom, var(--rule-soft, rgba(31,27,22,0.06)) 1px, transparent 1px)',
+        backgroundSize: '32px 32px',
+        opacity: 0.4,
+        pointerEvents: 'none',
+      }} />
 
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-muted)' }}>Email</label>
-            <input
-              className="kira-input"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
+      <div style={{
+        position: 'relative',
+        width: 380,
+        background: 'var(--paper)',
+        border: '1px solid var(--paper-edge, rgba(31,27,22,0.1))',
+        padding: '40px 36px',
+        borderRadius: 3,
+        boxShadow: '0 4px 0 rgba(31,27,22,0.04), 0 24px 60px -28px rgba(31,27,22,0.35)',
+      }}>
+        {/* Tape strip */}
+        <div style={{
+          position: 'absolute',
+          top: -10,
+          left: '50%',
+          transform: 'translateX(-50%) rotate(-1.5deg)',
+          width: 90,
+          height: 16,
+          background: 'rgba(184,146,58,0.2)',
+          border: '1px solid rgba(184,146,58,0.3)',
+        }} />
+
+        <div style={{ marginBottom: 28, textAlign: 'center' }}>
+          <div style={{
+            fontFamily: 'var(--serif)',
+            fontSize: 28,
+            fontWeight: 500,
+            letterSpacing: '-0.02em',
+            marginBottom: 4,
+          }}>
+            kira<span style={{ fontStyle: 'italic', color: 'var(--accent, #B8543A)' }}>mei</span>
           </div>
+          <div style={{
+            fontFamily: 'var(--mono)',
+            fontSize: 10,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'var(--ink-muted, #8a8279)',
+          }}>
+            founder's ledger
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-muted)' }}>Password</label>
+            <label style={{
+              fontFamily: 'var(--mono)',
+              fontSize: 10,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'var(--ink-muted, #8a8279)',
+            }}>
+              Password
+            </label>
             <input
-              className="kira-input"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
+              autoFocus
               autoComplete="current-password"
+              style={{
+                background: 'var(--paper)',
+                border: '1px solid var(--paper-edge, rgba(31,27,22,0.1))',
+                padding: '9px 12px',
+                borderRadius: 2,
+                fontFamily: 'var(--sans)',
+                fontSize: 14,
+                color: 'var(--ink)',
+                outline: 'none',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
             />
           </div>
 
           {error && (
-            <p style={{ fontSize: 13, color: '#C0392B', background: '#FEF0F0', padding: '10px 14px', borderRadius: 8, border: '1px solid #F0AAAA' }}>
+            <div style={{
+              fontFamily: 'var(--mono)',
+              fontSize: 11,
+              letterSpacing: '0.08em',
+              color: 'var(--accent, #B8543A)',
+              padding: '8px 10px',
+              background: 'rgba(184,84,58,0.06)',
+              border: '1px solid rgba(184,84,58,0.2)',
+              borderRadius: 2,
+            }}>
               {error}
-            </p>
+            </div>
           )}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !password}
             style={{
-              marginTop: 8,
-              padding: '14px',
-              background: loading ? 'var(--border)' : 'var(--ink)',
-              color: loading ? 'var(--ink-muted)' : '#F8F6F1',
-              border: 'none',
-              borderRadius: 99,
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: loading ? 'not-allowed' : 'pointer',
+              marginTop: 4,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              fontFamily: 'var(--sans)',
+              fontSize: 13,
+              fontWeight: 500,
+              padding: '9px 16px',
+              borderRadius: 3,
+              cursor: loading || !password ? 'not-allowed' : 'pointer',
+              border: '1px solid var(--ink)',
+              background: 'var(--ink)',
+              color: 'var(--paper)',
+              opacity: loading || !password ? 0.55 : 1,
+              transition: 'transform 0.12s ease, box-shadow 0.12s ease',
             }}
           >
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'Verifying…' : 'Unlock ledger'}
           </button>
         </form>
+
+        <div style={{
+          marginTop: 20,
+          paddingTop: 16,
+          borderTop: '1px solid var(--paper-edge, rgba(31,27,22,0.1))',
+          fontFamily: 'var(--mono)',
+          fontSize: 10,
+          letterSpacing: '0.12em',
+          color: 'var(--ink-muted, #8a8279)',
+          textAlign: 'center',
+        }}>
+          PRIVATE — NOT FOR PUBLIC ACCESS
+        </div>
       </div>
     </div>
   )

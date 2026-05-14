@@ -2,8 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Link from 'next/link'
-import PasswordModal from './PasswordModal'
-import FounderDashboard from './FounderDashboard'
+import { useRouter } from 'next/navigation'
 
 const NAV_LINKS = [
   { href: '/training',  label: 'Training',  key: 'training' },
@@ -18,10 +17,9 @@ interface KmNavbarProps {
 
 export default function KmNavbar({ activePage }: KmNavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [dashOpen, setDashOpen] = useState(false)
   const tapCount = useRef(0)
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const router = useRouter()
 
   function handleLogoClick(e: React.MouseEvent) {
     tapCount.current += 1
@@ -29,9 +27,9 @@ export default function KmNavbar({ activePage }: KmNavbarProps) {
     if (tapCount.current >= 3) {
       e.preventDefault()
       tapCount.current = 0
-      setModalOpen(true)
+      router.push('/dashboard/login')
     } else {
-      tapTimer.current = setTimeout(() => { tapCount.current = 0 }, 400)
+      tapTimer.current = setTimeout(() => { tapCount.current = 0 }, 1500)
     }
   }
 
@@ -91,16 +89,6 @@ export default function KmNavbar({ activePage }: KmNavbarProps) {
         )}
       </nav>
 
-      {modalOpen && (
-        <PasswordModal
-          onSuccess={() => { setModalOpen(false); setDashOpen(true) }}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
-
-      {dashOpen && (
-        <FounderDashboard onClose={() => setDashOpen(false)} />
-      )}
     </>
   )
 }

@@ -209,8 +209,8 @@ export default function Home() {
                   Eight weeks of education, structure and real training. By the end you&apos;ll understand your body well enough to never need another programme.
                 </p>
                 <div className="flex gap-4" style={{ flexWrap: 'wrap' }}>
-                  <Link href="#products" className="btn btn-accent">See the plans →</Link>
-                  <Link href="/about" className="btn btn-ghost">About Kira</Link>
+                  <Link href="#products" className="btn btn-accent" data-track="See the plans">See the plans →</Link>
+                  <Link href="/about" className="btn btn-ghost" data-track="About Kira">About Kira</Link>
                 </div>
                 <div className="hero-meta">
                   <div><span className="label">Format</span><strong>In-site · weeks 1–8</strong></div>
@@ -302,7 +302,7 @@ export default function Home() {
                   <ul className="product-feats">
                     {p.features.map(f => <li key={f}>{f}</li>)}
                   </ul>
-                  <Link href={p.href} className="btn">
+                  <Link href={p.href} className="btn" data-track={`Open the ${p.label}`}>
                     Open the programme →
                   </Link>
                 </div>
@@ -374,7 +374,7 @@ export default function Home() {
               Start <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>understanding</em>.
             </h2>
             <p className="lead">One purchase. Eight weeks. A lifetime of understanding.</p>
-            <Link href="#products" className="btn btn-accent">See the plans →</Link>
+            <Link href="#products" className="btn btn-accent" data-track="See the plans (footer)">See the plans →</Link>
           </div>
         </section>
       </main>
