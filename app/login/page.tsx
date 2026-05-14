@@ -192,7 +192,7 @@ function LoginForm() {
               <input
                 className="kira-input" type="email" value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="jane@email.com" required autoComplete="email"
+                placeholder="jane@email.com" required autoComplete="off"
               />
             </div>
             <div className="login-field">

@@ -81,22 +81,16 @@ async function handleProgrammeAccess(
   const existing = users.find(u => u.email === email)
 
   let userId: string
-  let loginUrl: string
-
-  const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL}/programme`
+  const loginUrl = `${process.env.NEXT_PUBLIC_APP_URL}/login`
 
   if (existing) {
     userId = existing.id
     await supabase.from('profiles').upsert({ id: userId, email, [field]: true }, { onConflict: 'id' })
-    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } })
-    loginUrl = linkData?.properties?.action_link ?? `${process.env.NEXT_PUBLIC_APP_URL}/login`
   } else {
     const { data: userData } = await supabase.auth.admin.createUser({ email, email_confirm: true, user_metadata: { full_name: name } })
     if (!userData?.user) return
     userId = userData.user.id
     await supabase.from('profiles').upsert({ id: userId, email, full_name: name, [field]: true }, { onConflict: 'id' })
-    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } })
-    loginUrl = linkData?.properties?.action_link ?? `${process.env.NEXT_PUBLIC_APP_URL}/login`
   }
 
   const firstName = name.split(' ')[0] || 'there'
@@ -141,17 +135,12 @@ async function handlePdfDelivery(stripe: Stripe, session: Stripe.Checkout.Sessio
 
   if (priceId !== trainingPriceId && priceId !== nutritionPriceId && priceId !== bundlePriceId) return
 
-  // Create/find account so they get a magic link into the site
   const supabase = createSupabaseServiceClient()
   const { data: { users } } = await supabase.auth.admin.listUsers()
   const existing = users.find(u => u.email === email)
-  const redirectTo = baseUrl
 
-  let loginUrl = `${baseUrl}/login`
-  if (existing) {
-    const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } })
-    loginUrl = linkData?.properties?.action_link ?? loginUrl
-  } else {
+  const loginUrl = `${baseUrl}/login`
+  if (!existing) {
     const { data: userData } = await supabase.auth.admin.createUser({
       email,
       email_confirm: true,
@@ -162,8 +151,6 @@ async function handlePdfDelivery(stripe: Stripe, session: Stripe.Checkout.Sessio
         { id: userData.user.id, email, full_name: name },
         { onConflict: 'id' },
       )
-      const { data: linkData } = await supabase.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } })
-      loginUrl = linkData?.properties?.action_link ?? loginUrl
     }
   }
 
