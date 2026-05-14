@@ -112,7 +112,7 @@ export default function Quiz({ userId, initialPassed, onPass }: Props) {
       }, { onConflict: 'user_id,week_number' })
       setSaving(false)
       setPassed(true)
-      window.dispatchEvent(new Event('week1:quiz-passed'))
+      window.dispatchEvent(new Event('quiz:passed'))
       onPass?.()
     }
   }

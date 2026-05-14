@@ -680,6 +680,12 @@ export default function CompleteWeek({ userId, initialComplete, initialQuizPasse
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
+    function handleQuizPass() { setQuizPassed(true) }
+    window.addEventListener('quiz:passed', handleQuizPass)
+    return () => window.removeEventListener('quiz:passed', handleQuizPass)
+  }, [])
+
+  useEffect(() => {
     if (!initialQuizPassed) {
       const supabase = createSupabaseBrowserClient()
       supabase.from('week_progress').select('quiz_passed, week_complete').eq('user_id', userId).eq('week_number', 8).maybeSingle()

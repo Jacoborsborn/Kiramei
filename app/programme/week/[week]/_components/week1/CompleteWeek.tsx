@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
 interface Props {
@@ -12,7 +11,6 @@ interface Props {
 }
 
 export default function CompleteWeek({ userId, weekNum, initialComplete, initialQuizPassed }: Props) {
-  const router = useRouter()
   const [complete, setComplete] = useState(initialComplete)
   const [quizPassed, setQuizPassed] = useState(initialQuizPassed)
   const [loading, setLoading] = useState(false)
@@ -23,8 +21,8 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
     function handleQuizPass() {
       setQuizPassed(true)
     }
-    window.addEventListener('week1:quiz-passed', handleQuizPass)
-    return () => window.removeEventListener('week1:quiz-passed', handleQuizPass)
+    window.addEventListener('quiz:passed', handleQuizPass)
+    return () => window.removeEventListener('quiz:passed', handleQuizPass)
   }, [])
 
   // Also re-check Supabase on mount if quiz wasn't passed in server props
@@ -71,11 +69,10 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
     setCelebrated(true)
     setLoading(false)
 
-    // Navigate after 2s
+    // Navigate after 2s — use location.href for a clean server render with fresh data
     if (weekNum < 8) {
       setTimeout(() => {
-        router.push(`/programme/week/${weekNum + 1}`)
-        router.refresh()
+        window.location.href = `/programme/week/${weekNum + 1}`
       }, 2200)
     }
   }

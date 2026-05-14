@@ -53,6 +53,7 @@ export default function QuizBase({ userId, weekNum, questions, initialPassed, on
       }, { onConflict: 'user_id,week_number' })
       setSaving(false)
       setPassed(true)
+      window.dispatchEvent(new Event('quiz:passed'))
       onPass?.()
     }
   }
