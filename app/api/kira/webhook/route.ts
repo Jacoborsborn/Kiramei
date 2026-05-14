@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createSupabaseServiceClient } from '@/lib/supabase-server'
-import { buildTrainingEmail, buildNutritionEmail, buildBundleEmail, buildActivationEmail } from '@/app/lib/emailTemplates'
+import { buildTrainingEmail, buildNutritionEmail, buildBundleEmail, buildActivationEmail, buildAccountActivationEmail, buildAccessGrantedEmail } from '@/app/lib/emailTemplates'
 import { buildCartAbandonedEmail } from '@/app/lib/email-upsell-templates'
+import { provisionAccount } from '@/app/lib/accounts'
 
 export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
@@ -26,8 +27,9 @@ export async function POST(req: NextRequest) {
         await handleProgrammeAccess(stripe, session, 'programme_access', 'training')
       } else if (product === 'template') {
         await handleProgrammeAccess(stripe, session, 'template_access', 'training')
+      } else if (product === 'training' || product === 'nutrition' || product === 'bundle') {
+        await handleProductPurchase(stripe, session, product, event.id)
       } else {
-        // PDF delivery for training / nutrition / bundle
         await handlePdfDelivery(stripe, session)
       }
       return NextResponse.json({ received: true })
@@ -38,6 +40,12 @@ export async function POST(req: NextRequest) {
       await handleSubscriptionCreated(session)
       return NextResponse.json({ received: true })
     }
+  }
+
+  if (event.type === 'charge.refunded') {
+    const charge = event.data.object as Stripe.Charge
+    await handleChargeRefunded(stripe, charge)
+    return NextResponse.json({ received: true })
   }
 
   if (event.type === 'checkout.session.expired') {
@@ -70,6 +78,116 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({ received: true })
+}
+
+// ── Account provisioning for training / nutrition / bundle ──────
+
+async function handleProductPurchase(
+  stripe: Stripe,
+  session: Stripe.Checkout.Session,
+  product: 'training' | 'nutrition' | 'bundle',
+  stripeEventId: string,
+) {
+  const email = session.customer_details?.email
+  const name  = session.customer_details?.name || ''
+  if (!email) return
+
+  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 })
+  const amountTotal = lineItems.data[0]?.amount_total ?? session.amount_total ?? 0
+
+  const supabase = createSupabaseServiceClient()
+  const referralCode = session.metadata?.ref_code
+
+  const { isNew, userId, activationToken, otp } = await provisionAccount({
+    email,
+    name,
+    stripeEventId,
+    productSku: product,
+    amountPence: amountTotal,
+    referralCode,
+    supabase,
+  })
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('email_verified_at, first_name')
+    .eq('id', userId)
+    .single()
+
+  const firstName = (profile?.first_name || name.split(' ')[0]) || 'there'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL!
+
+  const { Resend } = await import('resend')
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
+  if (isNew && activationToken && otp) {
+    const activateUrl = `${appUrl}/activate?token=${activationToken}`
+    await resend.emails.send({
+      from: 'Kira Mei <kira@kiramei.co.uk>',
+      to: email,
+      subject: "You're in. Here's your code.",
+      html: buildAccountActivationEmail(firstName, activateUrl, otp),
+    })
+  } else if (!isNew && profile?.email_verified_at) {
+    const productNames: Record<string, string> = {
+      training: 'Training Blueprint',
+      nutrition: 'Nutrition Blueprint',
+      bundle: 'Full Stack Bundle',
+    }
+    const portalUrl = product === 'nutrition' ? `${appUrl}/nutrition-portal` : `${appUrl}/programme`
+    await resend.emails.send({
+      from: 'Kira Mei <kira@kiramei.co.uk>',
+      to: email,
+      subject: `Your ${productNames[product]} is unlocked`,
+      html: buildAccessGrantedEmail(firstName, productNames[product], portalUrl),
+    })
+  }
+}
+
+// ── Charge refunded ──────────────────────────────────────────────
+
+async function handleChargeRefunded(stripe: Stripe, charge: Stripe.Charge) {
+  if (!charge.payment_intent) return
+  const supabase = createSupabaseServiceClient()
+
+  let sessionId: string | undefined
+  try {
+    const sessions = await stripe.checkout.sessions.list({
+      payment_intent: charge.payment_intent as string,
+      limit: 1,
+    })
+    sessionId = sessions.data[0]?.id
+  } catch {
+    return
+  }
+
+  if (!sessionId) return
+
+  const { data: order } = await supabase
+    .from('orders')
+    .select('id, user_id')
+    .eq('stripe_id', sessionId)
+    .maybeSingle()
+
+  if (!order) return
+
+  await supabase.from('orders').update({ status: 'refunded' }).eq('id', order.id)
+
+  const { data: referral } = await supabase
+    .from('referrals')
+    .select('id, referrer_id, reward_pence, status')
+    .eq('order_id', order.id)
+    .in('status', ['pending', 'joined'])
+    .maybeSingle()
+
+  if (!referral) return
+
+  await supabase.from('referrals').update({ status: 'refunded' }).eq('id', referral.id)
+
+  await supabase.rpc('decrement_credit', {
+    p_user_id: referral.referrer_id,
+    p_amount: referral.reward_pence,
+  })
 }
 
 // ── Programme / template access grant ──────────────────────────

@@ -1,5 +1,106 @@
 import { C, mono, serif, wrapper, ctaBlock, accessRow, receipt } from './_emailShared'
 
+export function buildAccountActivationEmail(firstName: string, activateUrl: string, otp: string): string {
+  const name = firstName || 'there'
+  const body = `
+    <p style="margin:0 0 6px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Account Activation</p>
+    <p style="margin:0 0 10px;font-family:${serif};font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:${C.ink};">You&rsquo;re <em style="font-style:italic;color:${C.accent};">in</em>, ${name}.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${C.inkSoft};">Your blueprint is waiting. Tap the button or enter the 8-digit code below.</p>
+
+    ${ctaBlock('Ready when you are', 'Activate your account.', 'Activate account &rarr;', activateUrl)}
+
+    <p style="margin:0 0 10px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Your activation code</p>
+    <p style="margin:0 0 24px;font-family:${mono};font-size:40px;font-weight:500;letter-spacing:0.3em;color:${C.ink};text-align:center;padding:20px;background:${C.paperDeep};border:1px solid ${C.paperEdge};">${otp}</p>
+
+    <p style="font-size:13.5px;line-height:1.7;color:${C.inkSoft};margin:0;">This link expires in 7 days. Any questions? Just reply to this email.</p>
+  `
+  return wrapper("You're in. Here's your code.", body)
+}
+
+export function buildAccessGrantedEmail(firstName: string, productName: string, portalUrl: string): string {
+  const name = firstName || 'there'
+  const body = `
+    <p style="margin:0 0 6px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Access Granted</p>
+    <p style="margin:0 0 10px;font-family:${serif};font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:${C.ink};">Your ${productName} is <em style="font-style:italic;color:${C.accent};">unlocked</em>, ${name}.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${C.inkSoft};">We&rsquo;ve added ${productName} to your account. Sign in to access it now.</p>
+
+    ${ctaBlock('Ready when you are', `Open your ${productName}.`, 'Go to portal &rarr;', portalUrl)}
+
+    <p style="font-size:13.5px;line-height:1.7;color:${C.inkSoft};margin:0;">Any questions? Just reply to this email.</p>
+  `
+  return wrapper(`Your ${productName} is unlocked`, body)
+}
+
+export function buildMagicLinkEmail(firstName: string, magicLinkUrl: string): string {
+  const name = firstName || 'there'
+  const body = `
+    <p style="margin:0 0 6px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Sign in</p>
+    <p style="margin:0 0 10px;font-family:${serif};font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:${C.ink};">Hi ${name}.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${C.inkSoft};">Tap the button below to sign in. This link expires in 15 minutes and can only be used once.</p>
+
+    ${ctaBlock('One tap', 'Sign in to Kira Mei.', 'Sign in &rarr;', magicLinkUrl)}
+
+    <p style="font-size:13.5px;line-height:1.7;color:${C.inkSoft};margin:0;">Didn&rsquo;t request this? You can safely ignore it.</p>
+  `
+  return wrapper('Sign in to Kira Mei', body)
+}
+
+export function buildReferralUnlockedEmail(firstName: string, creditAmount: string, spendUrl: string): string {
+  const name = firstName || 'there'
+  const body = `
+    <p style="margin:0 0 6px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Referral reward</p>
+    <p style="margin:0 0 10px;font-family:${serif};font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:${C.ink};">${creditAmount} just landed in your account, ${name}.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${C.inkSoft};">Your referral reward has been unlocked. Use it against your next purchase.</p>
+
+    ${ctaBlock('Your reward is ready', 'Use it against your next order.', 'Spend it &rarr;', spendUrl)}
+
+    <p style="font-size:13.5px;line-height:1.7;color:${C.inkSoft};margin:0;">Credits expire after 12 months if unused.</p>
+  `
+  return wrapper('£10 just landed in your account', body)
+}
+
+export function buildFriendJoinedEmail(firstName: string, friendFirstName: string, referUrl: string): string {
+  const name = firstName || 'there'
+  const body = `
+    <p style="margin:0 0 6px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Referral update</p>
+    <p style="margin:0 0 10px;font-family:${serif};font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:${C.ink};">${friendFirstName} just joined &mdash; thanks for sharing, ${name}.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${C.inkSoft};">Your reward will unlock 14 days after their purchase, once we&rsquo;re past the refund window.</p>
+
+    ${ctaBlock('Keep sharing', 'Send your link to more friends.', 'Refer more &rarr;', referUrl)}
+
+    <p style="font-size:13.5px;line-height:1.7;color:${C.inkSoft};margin:0;">Any questions? Just reply to this email.</p>
+  `
+  return wrapper(`${friendFirstName} just joined — thanks for sharing`, body)
+}
+
+export function buildPasswordChangedEmail(firstName: string, secureUrl: string): string {
+  const name = firstName || 'there'
+  const body = `
+    <p style="margin:0 0 6px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Security notice</p>
+    <p style="margin:0 0 10px;font-family:${serif};font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:${C.ink};">Your password was changed, ${name}.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${C.inkSoft};">Your Kira Mei account password was just updated. If you made this change, no action is needed.</p>
+
+    ${ctaBlock("Wasn't you?", 'Secure your account immediately.', 'Not you? &rarr;', secureUrl)}
+
+    <p style="font-size:13.5px;line-height:1.7;color:${C.inkSoft};margin:0;">If you didn&rsquo;t change your password, please secure your account right away.</p>
+  `
+  return wrapper('Your password was changed', body)
+}
+
+export function buildAccountDeletionEmail(firstName: string, cancelUrl: string): string {
+  const name = firstName || 'there'
+  const body = `
+    <p style="margin:0 0 6px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Account notice</p>
+    <p style="margin:0 0 10px;font-family:${serif};font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:${C.ink};">Your account is closing, ${name}.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${C.inkSoft};">We&rsquo;ve received a request to delete your Kira Mei account. Your account and all data will be permanently removed in 14 days. If you changed your mind, cancel below.</p>
+
+    ${ctaBlock('Changed your mind?', 'Keep your account and all your content.', 'Keep my account &rarr;', cancelUrl)}
+
+    <p style="font-size:13.5px;line-height:1.7;color:${C.inkSoft};margin:0;">If you did request deletion, no action is needed. Your account will be removed on schedule.</p>
+  `
+  return wrapper('Account closing — 14 days to cancel', body)
+}
+
 export function buildActivationEmail(firstName: string, activationUrl: string): string {
   const name = firstName || 'there'
   const body = `
