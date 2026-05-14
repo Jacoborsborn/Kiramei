@@ -134,6 +134,20 @@ function receipt(lines: [string, string][], discount?: [string, string], total?:
   </table>`
 }
 
+export function buildActivationEmail(firstName: string, activationUrl: string): string {
+  const name = firstName || 'there'
+  const body = `
+    <p style="margin:0 0 6px;font-family:${mono};font-size:10px;letter-spacing:0.16em;color:${C.inkMuted};text-transform:uppercase;">Client Portal</p>
+    <p style="margin:0 0 10px;font-family:${serif};font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:${C.ink};">Payment confirmed, <em style="font-style:italic;color:${C.accent};">${name}.</em></p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${C.inkSoft};">Your programme is being built. You'll receive it within 4 days. First, set up your client portal — this is where you'll view your programme, manage your subscription, and track your progress.</p>
+
+    ${ctaBlock('Ready when you are', 'Activate your account.', 'Set up portal access &rarr;', activationUrl)}
+
+    <p style="font-size:14px;line-height:1.7;color:${C.inkSoft};margin:0 0 8px;">This link expires in 72 hours. Any questions? Just reply to this email.</p>
+  `
+  return wrapper('Your Kira Mei account is ready.', body)
+}
+
 export function buildTrainingEmail(firstName: string, loginUrl: string): string {
   const name = firstName || 'there'
   const body = `
