@@ -11,10 +11,9 @@ interface BuyButtonProps {
 
 export default function BuyButton({ product, label = 'Buy Now →', style, requireTerms }: BuyButtonProps) {
   const [loading, setLoading] = useState(false)
-  const [agreedTerms, setAgreedTerms] = useState(false)
-  const [agreedCancellation, setAgreedCancellation] = useState(false)
+  const [agreed, setAgreed] = useState(false)
 
-  const canProceed = !requireTerms || (agreedTerms && agreedCancellation)
+  const canProceed = !requireTerms || agreed
 
   async function handleClick() {
     if (!canProceed) return
@@ -49,18 +48,11 @@ export default function BuyButton({ product, label = 'Buy Now →', style, requi
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start' }}>
       {requireTerms && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 480 }}>
-          <Checkbox
-            checked={agreedTerms}
-            onChange={setAgreedTerms}
-            label={<>I have read and agree to the <a href="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Terms & Conditions</a>, including the no-refund policy for digital products.</>}
-          />
-          <Checkbox
-            checked={agreedCancellation}
-            onChange={setAgreedCancellation}
-            label="I understand that delivery starts immediately upon payment and I waive my 14-day right to cancel."
-          />
-        </div>
+        <Checkbox
+          checked={agreed}
+          onChange={setAgreed}
+          label={<>I agree to the <a href="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Terms & Conditions</a>, including that this is a digital product with instant delivery.</>}
+        />
       )}
       <button
         onClick={handleClick}
