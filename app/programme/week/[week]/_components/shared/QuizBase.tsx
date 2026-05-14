@@ -49,8 +49,9 @@ export default function QuizBase({ userId, weekNum, questions, initialPassed, on
       await supabase.from('week_progress').upsert({
         user_id: userId,
         week_number: weekNum,
+        programme_type: 'training',
         quiz_passed: true,
-      }, { onConflict: 'user_id,week_number' })
+      }, { onConflict: 'user_id,week_number,programme_type' })
       setSaving(false)
       setPassed(true)
       window.dispatchEvent(new Event('quiz:passed'))

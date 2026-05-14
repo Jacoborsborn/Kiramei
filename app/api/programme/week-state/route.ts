@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
     .select('quiz_passed, week_complete')
     .eq('user_id', user.id)
     .eq('week_number', weekNum)
+    .eq('programme_type', 'training')
     .maybeSingle()
 
   return NextResponse.json(data ?? { quiz_passed: false, week_complete: false })

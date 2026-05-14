@@ -195,6 +195,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
       .select('week_complete')
       .eq('user_id', user.id)
       .eq('week_number', weekNum - 1)
+      .eq('programme_type', 'training')
       .maybeSingle()
 
     if (!prevWeek?.week_complete) {
@@ -207,6 +208,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
     .select('*')
     .eq('user_id', user.id)
     .eq('week_number', weekNum)
+    .eq('programme_type', 'training')
     .maybeSingle()
 
   // Fetch exercise logs for the current week

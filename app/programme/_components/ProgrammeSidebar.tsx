@@ -47,6 +47,7 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
         .from('week_progress')
         .select('week_number, week_complete')
         .eq('user_id', user.id)
+        .eq('programme_type', 'training')
         .order('week_number')
 
       const states: WeekState[] = Array.from({ length: 8 }, (_, i) => {

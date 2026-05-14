@@ -19,11 +19,12 @@ export async function POST(req: NextRequest) {
       {
         user_id: user.id,
         week_number: weekNum,
+        programme_type: 'training',
         quiz_passed: true,
         week_complete: true,
         completed_at: new Date().toISOString(),
       },
-      { onConflict: 'user_id,week_number' }
+      { onConflict: 'user_id,week_number,programme_type' }
     )
 
   if (error) {
