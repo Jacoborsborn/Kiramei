@@ -90,6 +90,17 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
     )
   }
 
+  const WEEK_LINES: Record<number, string> = {
+    1: 'The pattern is in your body now. Week 2 builds on it.',
+    2: 'You stayed when most people quit. That\'s the whole battle.',
+    3: 'Upper/lower split starts now. You\'ve earned it.',
+    4: 'Halfway. The compounding is already happening.',
+    5: 'You\'re in the part of the programme most people never reach.',
+    6: 'Two weeks left. Stay heavy. Stay boring.',
+    7: 'Deload done. The gains arrive in the recovery.',
+    8: 'Eight weeks. Programme complete.',
+  }
+
   if (celebrated) {
     return (
       <div style={{
@@ -101,10 +112,10 @@ export default function CompleteWeek({ userId, weekNum, initialComplete, initial
           fontSize: 16, fontWeight: 600, color: 'var(--accent)',
           letterSpacing: '-0.01em', marginBottom: 8,
         }}>
-          Week 1 done.
+          Week {weekNum} done.
         </p>
         <p style={{ fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.6 }}>
-          The pattern is in your body now. Week 2 builds on it.
+          {WEEK_LINES[weekNum]}
         </p>
         {weekNum < 8 && (
           <p style={{ fontSize: 12, color: 'var(--ink-muted)', marginTop: 12 }}>
