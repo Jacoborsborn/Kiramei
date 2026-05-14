@@ -190,7 +190,7 @@ async function handlePdfDelivery(stripe: Stripe, session: Stripe.Checkout.Sessio
   await resend.emails.send({
     from: 'Kira Mei <kira@kiramei.co.uk>',
     to: email,
-    subject: emailSubjects[productKey] ?? subject,
+    subject: emailSubjects[productKey],
     html: buildEmail(firstName, loginUrl),
   })
 }
