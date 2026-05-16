@@ -1,5 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { verifySessionToken, COOKIE_NAME } from '@/lib/founder-auth'
 
 // Week 1 components
 import Brief1 from './_components/week1/Brief'
@@ -188,8 +190,11 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?redirect=/programme')
 
-  // Enforce week unlock logic
-  if (weekNum > 1) {
+  const cookieStore = await cookies()
+  const isFounder = verifySessionToken(cookieStore.get(COOKIE_NAME)?.value ?? '')
+
+  // Enforce week unlock logic — founders bypass this
+  if (!isFounder && weekNum > 1) {
     const { data: prevWeek } = await supabase
       .from('week_progress')
       .select('week_complete')

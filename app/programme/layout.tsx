@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
+import { headers, cookies } from 'next/headers'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { verifySessionToken, COOKIE_NAME } from '@/lib/founder-auth'
 import ProgrammeSidebar from './_components/ProgrammeSidebar'
 
 export const metadata = { title: 'Training Blueprint — Kira Mei' }
@@ -8,6 +9,9 @@ export const metadata = { title: 'Training Blueprint — Kira Mei' }
 export default async function ProgrammeLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  const cookieStore = await cookies()
+  const isFounder = verifySessionToken(cookieStore.get(COOKIE_NAME)?.value ?? '')
 
   if (!user) {
     const headersList = await headers()
@@ -21,7 +25,7 @@ export default async function ProgrammeLayout({ children }: { children: React.Re
     .eq('id', user.id)
     .single()
 
-  if (!profile?.programme_access) redirect('/pricing')
+  if (!isFounder && !profile?.programme_access) redirect('/')
 
   const firstName = profile.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'there'
   return (

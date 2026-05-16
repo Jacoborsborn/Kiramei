@@ -17,7 +17,7 @@ export default async function TemplatePage() {
     .eq('id', user.id)
     .single()
 
-  if (!profile?.template_access && !profile?.programme_access) redirect('/pricing')
+  if (!profile?.template_access && !profile?.programme_access) redirect('/')
 
   const firstName = profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'there'
 

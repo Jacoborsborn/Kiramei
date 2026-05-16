@@ -19,7 +19,7 @@ function LoginForm() {
   async function getPostAuthRedirect(supabase: ReturnType<typeof createSupabaseBrowserClient>) {
     if (redirect) return redirect
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return '/pricing'
+    if (!user) return '/'
     const { data: profile } = await supabase
       .from('profiles')
       .select('programme_access')
@@ -32,7 +32,7 @@ function LoginForm() {
       .eq('user_id', user.id)
       .limit(1)
       .maybeSingle()
-    return lead ? '/portal' : '/pricing'
+    return lead ? '/portal' : '/'
   }
 
   async function handleSignIn(e: React.FormEvent) {
@@ -74,7 +74,7 @@ function LoginForm() {
       }, { onConflict: 'id' })
     }
     if (data.session) {
-      router.push('/pricing')
+      router.push('/')
       router.refresh()
     } else {
       setSuccessMsg('Check your email to confirm your account, then come back to sign in.')

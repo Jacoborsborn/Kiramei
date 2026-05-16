@@ -12,22 +12,28 @@ interface BuyButtonProps {
 export default function BuyButton({ product, label = 'Buy Now →', style, requireTerms }: BuyButtonProps) {
   const [loading, setLoading] = useState(false)
   const [agreed, setAgreed] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const canProceed = !requireTerms || agreed
 
   async function handleClick() {
     if (!canProceed) return
     setLoading(true)
+    setError(null)
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ product }),
       })
-      if (!res.ok) throw new Error('Checkout failed')
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || `Server error ${res.status}`)
+      }
       const { url } = await res.json()
       if (url) window.location.href = url
-    } catch {
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong')
       setLoading(false)
     }
   }
@@ -63,6 +69,11 @@ export default function BuyButton({ product, label = 'Buy Now →', style, requi
       >
         {loading ? 'Redirecting…' : label}
       </button>
+      {error && (
+        <p style={{ margin: 0, fontSize: 13, color: '#C0583A', fontFamily: 'var(--mono)' }}>
+          Error: {error}
+        </p>
+      )}
     </div>
   )
 }
