@@ -27,7 +27,7 @@ export default async function ProgrammeLayout({ children }: { children: React.Re
 
   if (!isFounder && !profile?.programme_access) redirect('/')
 
-  const firstName = profile.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'there'
+  const firstName = profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'there'
   return (
     <div style={{ minHeight: '100vh', background: 'var(--paper)', color: 'var(--ink)' }}>
       <ProgrammeSidebar firstName={firstName} userEmail={user.email ?? ''} />
