@@ -11,6 +11,7 @@ const NAV = [
   { mark: '04', label: 'Transactions',   href: '/dashboard/transactions' },
   { mark: '05', label: 'Analytics',      href: '/dashboard/analytics' },
   { mark: '06', label: 'Access',         href: '/dashboard/access' },
+  { mark: '07', label: 'Programme',      href: '/dashboard/programme' },
 ]
 
 const TITLES: Record<string, { title: string; sub: string }> = {
@@ -20,6 +21,7 @@ const TITLES: Record<string, { title: string; sub: string }> = {
   '/dashboard/transactions': { title: 'Transactions',    sub: 'the money ledger' },
   '/dashboard/analytics':    { title: 'Analytics',       sub: 'first-party · no third parties' },
   '/dashboard/access':       { title: 'Founder Access',  sub: 'security & settings' },
+  '/dashboard/programme':    { title: 'Programme',       sub: 'preview weeks 1–8' },
 }
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
