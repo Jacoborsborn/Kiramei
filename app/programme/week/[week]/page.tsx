@@ -186,15 +186,16 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
 
   if (isNaN(weekNum) || weekNum < 1 || weekNum > 8) notFound()
 
-  const supabase = await createSupabaseServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login?redirect=/programme')
-
   const cookieStore = await cookies()
   const isFounder = verifySessionToken(cookieStore.get(COOKIE_NAME)?.value ?? '')
 
+  const supabase = await createSupabaseServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!isFounder && !user) redirect('/login?redirect=/programme')
+
   // Enforce week unlock logic — founders bypass this
-  if (!isFounder && weekNum > 1) {
+  if (!isFounder && user && weekNum > 1) {
     const { data: prevWeek } = await supabase
       .from('week_progress')
       .select('week_complete')
@@ -208,20 +209,22 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
     }
   }
 
-  const { data: progress } = await supabase
+  const userId = user?.id ?? ''
+
+  const { data: progress } = userId ? await supabase
     .from('week_progress')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('user_id', userId)
     .eq('week_number', weekNum)
     .eq('programme_type', 'training')
-    .maybeSingle()
+    .maybeSingle() : { data: null }
 
   // Fetch exercise logs for the current week
-  const { data: rawLogs } = await supabase
+  const { data: rawLogs } = userId ? await supabase
     .from('exercise_logs')
     .select('session_label, exercise_name, weight_kg, reps')
-    .eq('user_id', user.id)
-    .eq('week_number', weekNum)
+    .eq('user_id', userId)
+    .eq('week_number', weekNum) : { data: null }
 
   // Deduplicate: keep last entry per session+exercise
   const seenKeys = new Set<string>()
@@ -237,11 +240,11 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
   // For week 8: fetch programme start date and session count
   let programmeStartDate: string | null = null
   let sessionCount: number | null = null
-  if (weekNum === 8) {
+  if (weekNum === 8 && userId) {
     const { data: week1Progress } = await supabase
       .from('week_progress')
       .select('created_at')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .eq('week_number', 1)
       .maybeSingle()
     programmeStartDate = week1Progress?.created_at ?? null
@@ -249,7 +252,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
     const { count } = await supabase
       .from('exercise_logs')
       .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
     sessionCount = count ?? null
   }
 

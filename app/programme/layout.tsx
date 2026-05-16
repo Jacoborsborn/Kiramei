@@ -13,6 +13,20 @@ export default async function ProgrammeLayout({ children }: { children: React.Re
   const cookieStore = await cookies()
   const isFounder = verifySessionToken(cookieStore.get(COOKIE_NAME)?.value ?? '')
 
+  // Founders bypass all auth — no Supabase session needed
+  if (isFounder) {
+    const firstName = user?.email?.split('@')[0] ?? 'Founder'
+    const userEmail = user?.email ?? ''
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--paper)', color: 'var(--ink)' }}>
+        <ProgrammeSidebar firstName={firstName} userEmail={userEmail} />
+        <main className="programme-main" style={{ minHeight: '100vh', padding: '48px 32px 80px' }}>
+          {children}
+        </main>
+      </div>
+    )
+  }
+
   if (!user) {
     const headersList = await headers()
     const pathname = headersList.get('x-pathname') ?? '/programme'
@@ -25,7 +39,7 @@ export default async function ProgrammeLayout({ children }: { children: React.Re
     .eq('id', user.id)
     .single()
 
-  if (!isFounder && !profile?.programme_access) redirect('/')
+  if (!profile?.programme_access) redirect('/')
 
   const firstName = profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'there'
   return (
