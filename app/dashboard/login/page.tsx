@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
 export default function FounderLoginPage() {
   const [password, setPassword] = useState('')
@@ -21,6 +22,14 @@ export default function FounderLoginPage() {
     })
 
     if (res.ok) {
+      const data = await res.json().catch(() => ({}))
+      if (data.session?.access_token) {
+        const supabase = createSupabaseBrowserClient()
+        await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        })
+      }
       router.push('/dashboard')
     } else {
       const data = await res.json().catch(() => ({}))
