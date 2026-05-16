@@ -31,15 +31,23 @@ interface WeekState {
   unlocked: boolean
 }
 
-export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = false }: { firstName: string; userEmail: string; hasNutrition?: boolean }) {
+export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = false, isFounder = false }: { firstName: string; userEmail: string; hasNutrition?: boolean; isFounder?: boolean }) {
   const pathname = usePathname()
   const router = useRouter()
   const [signingOut, setSigningOut] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [weekStates, setWeekStates] = useState<WeekState[]>(Array(8).fill({ complete: false, unlocked: false }))
+  const [weekStates, setWeekStates] = useState<WeekState[]>(
+    isFounder
+      ? Array(8).fill({ complete: false, unlocked: true })
+      : Array(8).fill({ complete: false, unlocked: false })
+  )
   const [completedCount, setCompletedCount] = useState(0)
 
   useEffect(() => {
+    if (isFounder) {
+      setWeekStates(Array(8).fill({ complete: false, unlocked: true }))
+      return
+    }
     const supabase = createSupabaseBrowserClient()
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) return
@@ -61,7 +69,7 @@ export default function ProgrammeSidebar({ firstName, userEmail, hasNutrition = 
       setWeekStates(states)
       setCompletedCount(states.filter(s => s.complete).length)
     })
-  }, [pathname])
+  }, [pathname, isFounder])
 
   async function handleSignOut() {
     setSigningOut(true)

@@ -19,7 +19,7 @@ export default async function ProgrammeLayout({ children }: { children: React.Re
     const userEmail = user?.email ?? ''
     return (
       <div style={{ minHeight: '100vh', background: 'var(--paper)', color: 'var(--ink)' }}>
-        <ProgrammeSidebar firstName={firstName} userEmail={userEmail} />
+        <ProgrammeSidebar firstName={firstName} userEmail={userEmail} isFounder />
         <main className="programme-main" style={{ minHeight: '100vh', padding: '48px 32px 80px' }}>
           {children}
         </main>
