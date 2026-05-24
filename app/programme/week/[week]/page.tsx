@@ -259,10 +259,10 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
   const meta = WEEK_META[weekNum]
 
   function renderWeekSections() {
-    const scheduleProps = { userId: user!.id, initialLogs }
-    const quizProps = { userId: user!.id, initialPassed: progress?.quiz_passed ?? false }
+    const scheduleProps = { userId, initialLogs }
+    const quizProps = { userId, initialPassed: progress?.quiz_passed ?? false }
     const completeProps = {
-      userId: user!.id,
+      userId,
       weekNum,
       initialComplete: progress?.week_complete ?? false,
       initialQuizPassed: progress?.quiz_passed ?? false,
@@ -276,8 +276,8 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
             <Section num={2} title="Mind Map"><MindMap1 /></Section>
             <Section num={3} title="Exercise Breakdowns"><ExerciseBreakdowns1 /></Section>
             <Section num={4} title="Week Lesson"><Lesson1 /></Section>
-            <Section num={5} title="Clean Schedule"><Schedule1 userId={user!.id} initialLogs={initialLogs} /></Section>
-            <Section num={6} title="Week 1 Check · Before you move on"><Quiz1 userId={user!.id} initialPassed={progress?.quiz_passed ?? false} /></Section>
+            <Section num={5} title="Clean Schedule"><Schedule1 userId={userId} initialLogs={initialLogs} /></Section>
+            <Section num={6} title="Week 1 Check · Before you move on"><Quiz1 userId={userId} initialPassed={progress?.quiz_passed ?? false} /></Section>
             <Section num={7} title="Complete Week"><CompleteWeek1 {...completeProps} /></Section>
           </>
         )
@@ -364,7 +364,7 @@ export default async function WeekPage({ params }: { params: Promise<{ week: str
             <Section num={6} title="Week 8 Check"><Quiz8 {...quizProps} /></Section>
             <Section num={7} title="Complete Programme">
               <CompleteWeek8
-                userId={user!.id}
+                userId={userId}
                 initialComplete={progress?.week_complete ?? false}
                 initialQuizPassed={progress?.quiz_passed ?? false}
                 programmeStartDate={programmeStartDate}
