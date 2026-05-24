@@ -1,180 +1,153 @@
-import { ExerciseHomeworkPanel } from '../shared/ExerciseHomeworkPanel'
+import { ExerciseCardNew, type ExerciseItem } from '../shared/ExerciseCardNew'
 
-const ACCENT = 'var(--accent)'
-const TEXT_MAIN = 'var(--ink)'
-const TEXT_DIM = 'var(--ink-soft)'
-const TEXT_MUTED = 'var(--ink-muted)'
-
-interface ExerciseInfoProps {
-  primary: string
-  secondary: string
-  tempo: string
-  cue: string
-  why: string
-  mistake: string
-}
-
-function InfoPanel({ primary, secondary, tempo, cue, why, mistake }: ExerciseInfoProps) {
-  const rows: [string, string][] = [
-    ['Primary', primary],
-    ['Secondary', secondary],
-    ['Tempo', tempo],
-    ['Cue', cue],
-    ['Why', why],
-    ['Common mistake', mistake],
-  ]
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-      {rows.map(([label, value]) => (
-        <div key={label}>
-          <p style={{
-            fontSize: 9.5, fontWeight: 700, letterSpacing: '0.1em',
-            color: label === 'Primary' ? ACCENT : TEXT_MUTED,
-            textTransform: 'uppercase', marginBottom: 4,
-          }}>
-            {label}
-          </p>
-          <p style={{ fontSize: 13, color: TEXT_DIM, lineHeight: 1.6 }}>{value}</p>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-interface ExerciseCardProps {
-  name: string
-  index: number
-  searchTerms: string[]
-  formCues: string[]
-  info: ExerciseInfoProps
-}
-
-function ExerciseCard({ name, index, searchTerms, formCues, info }: ExerciseCardProps) {
-  return (
-    <div style={{
-      border: '1px solid var(--paper-edge)', borderRadius: 14,
-      overflow: 'hidden', marginBottom: 28,
-    }}>
-      <div style={{
-        background: 'rgba(184,84,58,0.06)', borderBottom: '1px solid rgba(184,84,58,0.10)',
-        padding: '14px 20px',
-      }}>
-        <p style={{ fontSize: 15, fontWeight: 700, color: TEXT_MAIN, letterSpacing: '0.01em' }}>
-          {name}
-        </p>
-      </div>
-      <div style={{
-        display: 'grid', gridTemplateColumns: '220px 1fr', gap: 0,
-      }} className="exercise-card-grid">
-        <div style={{
-          background: 'rgba(31,27,22,0.06)',
-          borderRight: '1px solid var(--paper-edge)',
-        }}>
-          <ExerciseHomeworkPanel index={index} searchTerms={searchTerms} formCues={formCues} />
-        </div>
-        <div style={{ padding: '28px 24px' }}>
-          <InfoPanel {...info} />
-        </div>
-      </div>
-    </div>
-  )
-}
+const exercises: ExerciseItem[] = [
+  {
+    name: 'Conventional Deadlift',
+    plain: 'The most complete posterior chain movement — trained as an upper day pull this week',
+    primary: 'Hamstrings, Glutes, Lower Back',
+    secondary: 'Lats, Traps, Core, Quads',
+    anatomySub: 'Full posterior chain',
+    pattern: 'Hinge',
+    equipment: 'Barbell',
+    prescription: '4 × 5 · RPE 8',
+    prescriptionNote: 'Take the slack out before every pull',
+    muscles: [
+      { name: 'Hamstrings', pct: 85 },
+      { name: 'Glutes', pct: 80 },
+      { name: 'Lower Back', pct: 75 },
+      { name: 'Lats', pct: 60 },
+    ],
+    steps: [
+      'Bar over mid-foot. Hip-width stance. Grip just outside your legs',
+      'Hinge to the bar — neutral spine, lats engaged, chest up',
+      'Take the slack out: feel the bar go tight before you actually pull',
+      'Drive the floor away — bar stays close to your legs all the way up. Stand tall at lockout',
+    ],
+    cue: 'Bar over mid-foot. Hinge to the bar. Take the slack out before you pull. The bar moves with your hips, not after them.',
+    mistake: 'Jerking the bar off the floor. Take the slack out first — feel it go tight. Then drive.',
+    why: 'The deadlift trains the entire posterior chain in one movement. Learn it properly and you will use it for the rest of your training life.',
+    stripeColor: 'var(--sage)',
+  },
+  {
+    name: 'Ab Wheel Rollout',
+    plain: 'Anti-extension core exercise — stops your spine from extending under load',
+    primary: 'Rectus Abdominis, Deep Core',
+    secondary: 'Lats, Shoulders',
+    anatomySub: 'Anti-extension core',
+    pattern: 'Core',
+    equipment: 'Ab Wheel',
+    prescription: '3 × 8 · Bodyweight',
+    prescriptionNote: 'Half range with control beats full range with collapse',
+    muscles: [
+      { name: 'Deep Core', pct: 90 },
+      { name: 'Rectus Abdominis', pct: 80 },
+      { name: 'Lats', pct: 50 },
+    ],
+    steps: [
+      'Kneel on the floor, wheel under your shoulders, core braced hard',
+      'Roll forward slowly — lower back stays flat. Do not let it arch',
+      'Only go as far as you can maintain a neutral spine — half range is fine',
+      'Pull back using your core and lats — do not push with your arms',
+    ],
+    cue: 'Brace your core hard before you roll out — not after. Only go as far as you can without your lower back arching.',
+    mistake: 'Going too far and dumping into the lower back. Start with 60% of what feels possible and build from there.',
+    why: 'Trains anti-extension — stopping your spine from extending under load. This transfers directly to every compound lift.',
+    stripeColor: 'var(--gold)',
+  },
+  {
+    name: 'Cable Pull-Through',
+    plain: 'Hip hinge with a cable — reinforces the RDL pattern and targets the glutes through the hip drive',
+    primary: 'Glutes, Hamstrings',
+    secondary: 'Lower Back (isometric), Core',
+    anatomySub: 'Hip hinge reinforcement',
+    pattern: 'Hinge',
+    equipment: 'Cable Machine · Rope',
+    prescription: '3 × 15 · RPE 6',
+    prescriptionNote: 'Drive comes from glutes, not back',
+    muscles: [
+      { name: 'Glutes', pct: 85 },
+      { name: 'Hamstrings', pct: 75 },
+      { name: 'Lower Back', pct: 40 },
+    ],
+    steps: [
+      'Cable at the lowest setting, rope between your legs, facing away',
+      'Hinge forward at the hips — knees have a soft bend only, they do not drive',
+      'Feel the hamstring stretch at the bottom, then squeeze glutes to drive hips through',
+      'Stand tall at lockout — do not lean back excessively',
+    ],
+    cue: 'This is a hip hinge with a cable. The drive comes from squeezing your glutes, not extending your lower back.',
+    mistake: 'Squatting rather than hinging. The knees have a soft bend only — they are not driving the movement.',
+    why: 'Reinforces the hip hinge pattern under light load — carries directly over to deadlift and RDL. Excellent isolated glute stimulus too.',
+    stripeColor: 'var(--sage)',
+  },
+  {
+    name: 'Rear Delt Fly',
+    plain: 'Isolation exercise for the rear deltoid — the most neglected muscle in most training plans',
+    primary: 'Rear Deltoids',
+    secondary: 'Rhomboids, Mid Traps',
+    anatomySub: 'Shoulder health',
+    pattern: 'Pull',
+    equipment: 'Dumbbells',
+    prescription: '3 × 15 · RPE 6',
+    prescriptionNote: 'Lighter than you think — lead with elbows',
+    muscles: [
+      { name: 'Rear Delts', pct: 90 },
+      { name: 'Rhomboids', pct: 65 },
+      { name: 'Mid Traps', pct: 55 },
+    ],
+    steps: [
+      'Hinge forward until torso is nearly parallel — or sit on the end of a bench',
+      'Slight soft bend in the elbows, palms facing each other at the start',
+      'Lead with the elbow — raise until arms are parallel to the floor',
+      '2-second hold at the top. Dead stop at the bottom — no swinging',
+    ],
+    cue: 'Lighter than you think. Lead with the elbow, not the wrist. Squeeze at the top for 2 seconds.',
+    mistake: 'Using momentum and swinging up. Dead stop at the bottom. Control every single rep.',
+    why: 'Weak rear delts lead to rounded shoulders and shoulder injuries over time. This balances every press you\'ve done this programme.',
+    stripeColor: '#3D5A80',
+  },
+  {
+    name: 'EZ Bar Curl',
+    plain: 'Bicep isolation with a bar — EZ grip reduces wrist stress while allowing full load',
+    primary: 'Biceps Brachii',
+    secondary: 'Brachialis, Brachioradialis',
+    anatomySub: 'Elbow flexion',
+    pattern: 'Isolation',
+    equipment: 'EZ Bar',
+    prescription: '3 × 10 · RPE 7',
+    prescriptionNote: 'Elbows pinned — do not swing',
+    muscles: [
+      { name: 'Biceps', pct: 90 },
+      { name: 'Brachialis', pct: 65 },
+      { name: 'Brachioradialis', pct: 50 },
+    ],
+    steps: [
+      'Stand tall, EZ bar in a supinated grip, elbows pinned to your sides',
+      'Curl the bar up in a smooth arc — elbows stay fixed throughout',
+      'Full contraction at the top — feel the bicep squeeze',
+      'Lower in 2 seconds — arms fully extended at the bottom before the next rep',
+    ],
+    cue: 'Elbows stay pinned for every rep. Full range — start with arms extended, finish with full contraction.',
+    mistake: 'Swinging the torso back. That is your lower back helping your biceps — which helps neither.',
+    why: 'Biceps are trained after back — they will be pre-fatigued. Weight lower than you expect. That is correct.',
+    stripeColor: 'var(--accent)',
+  },
+]
 
 export default function ExerciseBreakdowns() {
   return (
     <div>
       <div style={{ marginBottom: 28 }}>
         <p style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
-          This week&rsquo;s task
+          This week&rsquo;s exercises
         </p>
-        <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.6, marginBottom: 6 }}>
-          Before you train this week, look into each of these exercises. See how they&rsquo;re done, what muscles they work, and what good form looks like.
-        </p>
-        <p style={{ fontSize: 12, color: 'var(--ink-muted)', fontStyle: 'italic', lineHeight: 1.5 }}>
-          I&rsquo;d show you a demo — but looking it up yourself makes it stick better.
+        <p style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.6, marginBottom: 6 }}>
+          Two new exercises this week — the conventional deadlift and ab wheel. Study the deadlift card before your first pull session.
         </p>
       </div>
-      <ExerciseCard
-        name="Conventional Deadlift"
-        index={0}
-        searchTerms={['conventional deadlift form', 'deadlift setup tutorial', 'deadlift bar path']}
-        formCues={['Bar over mid-foot — take the slack out before you pull', 'Hips drive the bar; it should not swing away from your legs']}
-        info={{
-          primary: 'Hamstrings, Glutes, Lower back',
-          secondary: 'Lats, Traps, Core, Quads',
-          tempo: 'Deliberate setup · 1 second pull · controlled lower',
-          cue: 'Bar over mid-foot. Hinge to the bar. Take the slack out before you pull. The bar should move with your hips, not after them.',
-          why: 'The deadlift trains the entire posterior chain in one movement. Learn it properly and you will use it forever.',
-          mistake: 'Jerking the bar off the floor. Take the slack out first — feel it go tight. Then drive.',
-        }}
-      />
-
-      <ExerciseCard
-        name="Ab Wheel Rollout"
-        index={1}
-        searchTerms={['ab wheel rollout form', 'rollout anti extension', 'ab wheel tutorial beginner']}
-        formCues={['Core braced hard before you roll out — not after', 'Only go as far as you can without lower back arching; half range is fine']}
-        info={{
-          primary: 'Rectus abdominis, Transverse abdominis',
-          secondary: 'Lats, Shoulders',
-          tempo: '3 seconds out · pause · 2 seconds back',
-          cue: 'Brace your core hard before you roll out. Only go as far as you can without your lower back arching. Half range with control is better than full range with collapse.',
-          why: 'Trains anti-extension — stopping your spine from extending under load. Translates directly to every compound lift.',
-          mistake: 'Going too far and dumping into the lower back. Start with 60% of what feels possible.',
-        }}
-      />
-
-      <ExerciseCard
-        name="Cable Pull-Through"
-        index={2}
-        searchTerms={['cable pull through form', 'hip hinge cable exercise', 'pull through glutes tutorial']}
-        formCues={['Hips hinge back — knees have a soft bend only, they do not drive the movement', 'Drive is from the glutes squeezing forward, not from arching the lower back']}
-        info={{
-          primary: 'Glutes, Hamstrings',
-          secondary: 'Lower back (isometric), Core',
-          tempo: '2 seconds hinge back · drive hips through · 1 second squeeze',
-          cue: 'This is a hip hinge with a cable. The drive comes from squeezing your glutes, not extending your lower back.',
-          why: 'Reinforces the hip hinge pattern under light load — carries over to deadlift and RDL. Excellent isolated glute exercise.',
-          mistake: 'Squatting rather than hinging. The knees have a soft bend — they are not driving the movement.',
-        }}
-      />
-
-      <ExerciseCard
-        name="Rear Delt Fly"
-        index={3}
-        searchTerms={['rear delt fly form', 'bent over rear delt raise', 'rear delt technique']}
-        formCues={['Lead with elbows — not wrists. Elbow is the highest point', '2-second hold at the top; dead stop at the bottom, no swinging']}
-        info={{
-          primary: 'Rear deltoids',
-          secondary: 'Rhomboids, Middle traps',
-          tempo: '1 second up · 2 second hold · 2 seconds lower',
-          cue: 'Lighter than you think. Lead with the elbow, not the wrist. Squeeze at the top for 2 seconds.',
-          why: 'The rear delt is the most neglected muscle. Weak rear delts lead to rounded shoulders and eventual shoulder injuries. You need this to balance your pressing.',
-          mistake: 'Using momentum and swinging up. Dead stop at the bottom. Control every rep.',
-        }}
-      />
-
-      <ExerciseCard
-        name="EZ Bar Curl"
-        index={4}
-        searchTerms={['ez bar curl form', 'barbell curl full range', 'bicep curl elbow position']}
-        formCues={['Elbows stay pinned to sides throughout — they do not move forward', 'Full range: arms extended at the bottom, full contraction at the top']}
-        info={{
-          primary: 'Biceps brachii',
-          secondary: 'Brachialis, Brachioradialis',
-          tempo: '1 second up · 1 second squeeze · 2 seconds lower',
-          cue: 'Elbows stay pinned for every rep. Full range — start with arms extended, finish with full contraction.',
-          why: 'EZ bar reduces wrist stress. Biceps are trained after back — they will be pre-fatigued. Weight lower than you expect — that is correct.',
-          mistake: 'Swinging the torso back. That is your lower back helping your biceps — which helps neither.',
-        }}
-      />
-
-      <style>{`
-        @media (max-width: 560px) {
-          .exercise-card-grid { grid-template-columns: 1fr !important; }
-          .exercise-card-grid > div:first-child { border-right: none !important; border-bottom: 1px solid var(--paper-edge); }
-        }
-      `}</style>
+      {exercises.map((ex, i) => (
+        <ExerciseCardNew key={ex.name} ex={ex} index={i} />
+      ))}
     </div>
   )
 }

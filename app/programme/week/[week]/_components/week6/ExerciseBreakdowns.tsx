@@ -1,168 +1,155 @@
-import { ExerciseHomeworkPanel } from '../shared/ExerciseHomeworkPanel'
+import { ExerciseCardNew, type ExerciseItem } from '../shared/ExerciseCardNew'
 
-interface ExerciseData {
-  name: string
-  searchTerms: string[]
-  formCues: string[]
-  primary: string
-  secondary: string
-  tempo: string
-  cue: string
-  why: string
-  mistake: string
-}
-
-function ExerciseCard({ ex, index }: { ex: ExerciseData; index: number }) {
-  return (
-    <div style={{
-      display: 'grid', gridTemplateColumns: '220px 1fr', gap: 0,
-      border: '1px solid var(--paper-edge)',
-      borderRadius: 12, overflow: 'hidden',
-      background: 'var(--paper-deep)',
-    }} className="exercise-card">
-      {/* Left — homework panel */}
-      <div style={{
-        background: 'rgba(31,27,22,0.06)',
-        borderRight: '1px solid var(--paper-edge)',
-      }}>
-        <ExerciseHomeworkPanel index={index} searchTerms={ex.searchTerms} formCues={ex.formCues} />
-      </div>
-
-      <div style={{ padding: '24px 24px' }}>
-        <h4 style={{
-          fontSize: 16, fontWeight: 700, color: 'var(--ink)',
-          letterSpacing: '-0.01em', marginBottom: 16,
-        }}>
-          {ex.name}
-        </h4>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <div>
-            <span style={labelStyle}>Primary</span>
-            <span style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 600 }}>{ex.primary}</span>
-          </div>
-          <div>
-            <span style={labelStyle}>Secondary</span>
-            <span style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{ex.secondary}</span>
-          </div>
-          <div>
-            <span style={labelStyle}>Tempo</span>
-            <span style={{ fontSize: 12.5, color: 'var(--ink)', fontFamily: 'monospace' }}>{ex.tempo}</span>
-          </div>
-          <div style={{
-            background: 'rgba(184,84,58,0.06)', border: '1px solid rgba(184,84,58,0.12)',
-            borderRadius: 8, padding: '10px 14px',
-          }}>
-            <p style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: 4 }}>
-              CUE
-            </p>
-            <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.55, fontStyle: 'italic' }}>
-              &ldquo;{ex.cue}&rdquo;
-            </p>
-          </div>
-          <div>
-            <span style={labelStyle}>Why this exercise</span>
-            <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.6 }}>{ex.why}</p>
-          </div>
-          <div style={{
-            background: 'var(--paper-deep)', border: '1px solid var(--paper-edge)',
-            borderRadius: 8, padding: '10px 14px',
-          }}>
-            <p style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--ink-muted)', letterSpacing: '0.1em', marginBottom: 4 }}>COMMON MISTAKE</p>
-            <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.55 }}>{ex.mistake}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const labelStyle: React.CSSProperties = {
-  display: 'block', fontSize: 9.5, fontWeight: 700, letterSpacing: '0.1em',
-  textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 4,
-}
-
-const exercises: ExerciseData[] = [
+const exercises: ExerciseItem[] = [
   {
     name: 'Chest Supported Row',
-    searchTerms: ['chest supported row form', 'incline bench dumbbell row', 'supported row technique'],
-    formCues: ['Chest stays on the pad every rep — if it lifts, you\'re using your lower back', 'Drive elbows down and back, not upward into a shrug'],
-    primary: 'Lats, Rhomboids, Middle traps',
-    secondary: 'Rear delt, Biceps',
-    tempo: '1 second row · 2 second hold · 2 seconds lower',
+    plain: 'Incline bench dumbbell row with chest supported — removes all lower back involvement',
+    primary: 'Lats, Rhomboids, Mid Traps',
+    secondary: 'Rear Delt, Biceps',
+    anatomySub: 'Pure upper back pull',
+    pattern: 'Pull',
+    equipment: 'Incline Bench · Dumbbells',
+    prescription: '4 × 10 · RPE 7–8',
+    prescriptionNote: 'Chest stays on the pad every rep',
+    muscles: [
+      { name: 'Rhomboids', pct: 90 },
+      { name: 'Lats', pct: 80 },
+      { name: 'Rear Delt', pct: 65 },
+      { name: 'Biceps', pct: 50 },
+    ],
+    steps: [
+      'Lie face-down on a 45-degree incline bench, dumbbells hanging below',
+      'Chest stays on the pad every single rep — if it lifts, your lower back is taking over',
+      'Drive elbows down and back — not upward into a shrug',
+      'Full stretch at the bottom, full squeeze at the top',
+    ],
     cue: 'Chest stays in contact with the pad for every rep. If it lifts, your lower back is taking over.',
-    why: 'Every row you have done has some lower back involvement. This removes it completely.',
     mistake: 'Shrugging at the top instead of retracting the shoulder blades. Drive elbows back and down, not up.',
+    why: 'Every row you have done has some lower back involvement. This removes it completely — pure upper back stimulus.',
+    stripeColor: '#3D5A80',
   },
   {
     name: 'Tricep Superset — Pushdown + Overhead Extension',
-    searchTerms: ['tricep pushdown form', 'overhead tricep extension', 'tricep cable superset'],
-    formCues: ['Pushdown: elbows pinned to sides, full extension at the bottom', 'Overhead extension: elbows point forward — they don\'t flare wide'],
-    primary: 'Triceps (all three heads)',
+    plain: 'Back-to-back tricep exercises training all three heads in one superset',
+    primary: 'Triceps (All Three Heads)',
     secondary: 'None significant',
-    tempo: '1 second push · 1 second hold · 2 seconds return on both',
+    anatomySub: 'Elbow extension',
+    pattern: 'Isolation',
+    equipment: 'Cable Machine',
+    prescription: '3 × 12 + 10 · Superset',
+    prescriptionNote: 'No rest between exercises',
+    muscles: [
+      { name: 'Triceps (lateral)', pct: 85 },
+      { name: 'Triceps (long head)', pct: 90 },
+      { name: 'Triceps (medial)', pct: 75 },
+    ],
+    steps: [
+      'Pushdown: elbows pinned to sides, full extension at the bottom on every rep',
+      'Overhead extension: elbows point forward — they do not flare wide',
+      'Move straight from pushdown to overhead extension — no rest between',
+      'Rest 90 seconds after both exercises are complete',
+    ],
     cue: 'No rest between exercises. Pushdown first, then straight into overhead extension. Rest 90 seconds after both.',
-    why: 'Pushdown emphasises lateral and medial heads. Overhead hits the long head. One superset trains all three.',
-    mistake: 'Going too heavy. Start 30% lighter than your solo overhead weight.',
+    mistake: 'Going too heavy. Start 30% lighter than your solo overhead weight — two exercises are back to back.',
+    why: 'Pushdown emphasises the lateral and medial heads. Overhead hits the long head exclusively. One superset trains all three.',
+    stripeColor: 'var(--accent)',
   },
   {
     name: 'Curl Superset — EZ Bar + Hammer',
-    searchTerms: ['ez bar curl form', 'hammer curl technique', 'bicep superset arms'],
-    formCues: ['EZ bar: elbows pinned, full range from extended to fully contracted', 'Hammers: neutral grip throughout, controlled lower on every rep'],
-    primary: 'Biceps brachii (EZ), Brachialis (Hammer)',
-    secondary: 'Brachioradialis, Forearm flexors',
-    tempo: '1 second up · 1 second squeeze · 2 seconds lower on both',
+    plain: 'Two curl variations back-to-back — trains different aspects of the same muscle group',
+    primary: 'Biceps Brachii, Brachialis',
+    secondary: 'Brachioradialis, Forearms',
+    anatomySub: 'Complete elbow flexion',
+    pattern: 'Isolation',
+    equipment: 'EZ Bar · Dumbbells',
+    prescription: '3 × 10 + 10 · Superset',
+    prescriptionNote: 'EZ bar first — straight into hammers',
+    muscles: [
+      { name: 'Biceps', pct: 90 },
+      { name: 'Brachialis', pct: 85 },
+      { name: 'Brachioradialis', pct: 65 },
+    ],
+    steps: [
+      'EZ bar curl: elbows pinned, full range from extended to fully contracted',
+      'Move immediately to hammer curls — pick up dumbbells, palms face each other',
+      'Hammers: neutral grip throughout, controlled lower on every rep',
+      'Your arms should be significantly fatigued by the end of both exercises',
+    ],
     cue: 'EZ bar first — straight into hammers with no rest. Your arms should be significantly fatigued by the end.',
+    mistake: 'Rushing between the exercises. Move immediately but do not sacrifice your setup or form.',
     why: 'Two different grips train different aspects of the same muscle group. Together more comprehensive than either alone.',
-    mistake: 'Rushing between the exercises. Move immediately but do not sacrifice setup.',
+    stripeColor: 'var(--accent)',
   },
   {
     name: 'Bulgarian Split Squat (Weighted)',
-    searchTerms: ['weighted bulgarian split squat', 'BSS with dumbbells', 'split squat front foot position'],
-    formCues: ['Front shin vertical at the bottom — foot position is everything', 'Torso upright; dumbbells hang straight at your sides'],
+    plain: 'Same split squat from week 3 — now with dumbbells added after mastering balance',
     primary: 'Quads, Glutes',
-    secondary: 'Hamstrings, Core, Hip flexors',
-    tempo: '3 seconds down · pause · drive up',
+    secondary: 'Hamstrings, Core, Hip Flexors',
+    anatomySub: 'Unilateral lower body',
+    pattern: 'Unilateral Squat',
+    equipment: 'Dumbbells · Bench',
+    prescription: '3 × 10 each leg · RPE 7',
+    prescriptionNote: 'Same pattern as week 3, now loaded',
+    muscles: [
+      { name: 'Quads', pct: 85 },
+      { name: 'Glutes', pct: 75 },
+      { name: 'Hamstrings', pct: 45 },
+      { name: 'Core', pct: 40 },
+    ],
+    steps: [
+      'Same foot position as week 3 — front shin vertical at the bottom',
+      'Dumbbells hang at your sides, torso upright',
+      'Lower straight down — knee tracks over toes',
+      'Drive through the front heel. Place a marker for foot position as fatigue sets in',
+    ],
     cue: 'You started this at bodyweight in week 3. This week you add dumbbells. The movement pattern is exactly the same.',
-    why: 'Develops unilateral leg strength. Identifies and corrects imbalances. Also stretches hip flexor of rear leg.',
-    mistake: 'Front foot migrating forward as fatigue sets in. Place a marker for your foot position.',
+    mistake: 'Front foot migrating forward as fatigue sets in. Place something on the floor to mark your foot position.',
+    why: 'Develops unilateral leg strength with real load now. Also identifies any imbalances that the bodyweight version masked.',
+    stripeColor: 'var(--accent)',
   },
   {
     name: 'Face Pull (4×20)',
-    searchTerms: ['face pull form', 'face pull external rotation', 'cable face pull elbows high'],
-    formCues: ['Elbows high — above ear height at the finish position', 'External rotation at end range is the whole point — feel the back of your shoulder'],
-    primary: 'Rear deltoids, External rotators',
-    secondary: 'Middle traps, Rhomboids',
-    tempo: '1 second pull · 3 second hold · 2 seconds return',
-    cue: 'Twenty reps. Three second hold. This is shoulder health exercise first. The external rotation at the end is everything.',
-    why: 'Six weeks of pressing accumulates stress on the anterior shoulder. Face pulls counteract this completely.',
-    mistake: 'Pulling to the chin instead of the face with elbows high.',
+    plain: 'High-rep shoulder health work — external rotation emphasis after six weeks of pressing',
+    primary: 'Rear Delts, External Rotators',
+    secondary: 'Mid Traps, Rhomboids',
+    anatomySub: 'Shoulder health',
+    pattern: 'Pull',
+    equipment: 'Cable Machine · Rope',
+    prescription: '4 × 20 · RPE 6',
+    prescriptionNote: '3-second hold — external rotation is everything',
+    muscles: [
+      { name: 'Rear Delts', pct: 85 },
+      { name: 'Rotator Cuff', pct: 80 },
+      { name: 'Mid Traps', pct: 60 },
+      { name: 'Rhomboids', pct: 55 },
+    ],
+    steps: [
+      'Light weight — this is therapeutic, not a strength exercise',
+      'Elbows high — above ear height at the finish position',
+      'Pull to face, then externally rotate at end range — thumbs point behind you',
+      '3-second hold at end range. This is the whole point',
+    ],
+    cue: 'Twenty reps. Three second hold. This is a shoulder health exercise first. The external rotation at the end is everything.',
+    mistake: 'Pulling to the chin instead of the face with elbows high. The elbows need to be above the ears.',
+    why: 'Six weeks of pressing accumulates anterior shoulder stress. Face pulls with high hold time counteract this completely.',
+    stripeColor: '#3D5A80',
   },
 ]
 
 export default function ExerciseBreakdowns() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div style={{ marginBottom: 24 }}>
+    <div>
+      <div style={{ marginBottom: 28 }}>
         <p style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
-          This week&rsquo;s task
+          This week&rsquo;s exercises
         </p>
-        <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.6, marginBottom: 6 }}>
-          Before you train this week, look into each of these exercises. See how they&rsquo;re done, what muscles they work, and what good form looks like.
-        </p>
-        <p style={{ fontSize: 12, color: 'var(--ink-muted)', fontStyle: 'italic', lineHeight: 1.5 }}>
-          I&rsquo;d show you a demo — but looking it up yourself makes it stick better.
+        <p style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.6, marginBottom: 6 }}>
+          Second PPL week. Two supersets introduced — study the execution carefully so you know the transition between exercises.
         </p>
       </div>
       {exercises.map((ex, i) => (
-        <ExerciseCard key={ex.name} ex={ex} index={i} />
+        <ExerciseCardNew key={ex.name} ex={ex} index={i} />
       ))}
-      <style>{`
-        @media (max-width: 640px) {
-          .exercise-card { grid-template-columns: 1fr !important; }
-          .exercise-card > div:first-child { border-right: none !important; border-bottom: 1px solid var(--paper-edge); }
-        }
-      `}</style>
     </div>
   )
 }

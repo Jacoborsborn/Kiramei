@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createSupabaseServiceClient } from '@/lib/supabase-server'
+import { COOKIE_NAME } from '@/lib/founder-auth'
 
 function getDevice(ua: string): string {
   if (/ipad|tablet/i.test(ua)) return 'tablet'
@@ -11,6 +12,8 @@ function getDevice(ua: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  if (req.cookies.get(COOKIE_NAME)) return new Response(null, { status: 204 })
+
   try {
     let body: Record<string, unknown>
     try {

@@ -1,164 +1,155 @@
-import { ExerciseHomeworkPanel } from '../shared/ExerciseHomeworkPanel'
+import { ExerciseCardNew, type ExerciseItem } from '../shared/ExerciseCardNew'
 
-interface ExerciseData {
-  name: string
-  searchTerms: string[]
-  formCues: string[]
-  primary: string
-  secondary: string
-  tempo: string
-  cue: string
-  why: string
-  mistake: string
-}
-
-const labelStyle: React.CSSProperties = {
-  display: 'block', fontSize: 9.5, fontWeight: 700, letterSpacing: '0.1em',
-  textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: 4,
-}
-
-function ExerciseCard({ ex, index }: { ex: ExerciseData; index: number }) {
-  return (
-    <div style={{
-      display: 'grid', gridTemplateColumns: '220px 1fr', gap: 0,
-      border: '1px solid var(--paper-edge)',
-      borderRadius: 12, overflow: 'hidden',
-      background: 'var(--paper-deep)',
-    }} className="exercise-card">
-      {/* Left — homework panel */}
-      <div style={{
-        background: 'rgba(31,27,22,0.06)',
-        borderRight: '1px solid var(--paper-edge)',
-      }}>
-        <ExerciseHomeworkPanel index={index} searchTerms={ex.searchTerms} formCues={ex.formCues} />
-      </div>
-
-      {/* Right — breakdown panel */}
-      <div style={{ padding: '24px 24px' }}>
-        <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--ink)', letterSpacing: '-0.01em', marginBottom: 16 }}>
-          {ex.name}
-        </h4>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <div>
-            <span style={labelStyle}>Primary</span>
-            <span style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 600 }}>{ex.primary}</span>
-          </div>
-          <div>
-            <span style={labelStyle}>Secondary</span>
-            <span style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{ex.secondary}</span>
-          </div>
-          <div>
-            <span style={labelStyle}>Tempo</span>
-            <span style={{ fontSize: 12.5, color: 'var(--ink)', fontFamily: 'monospace' }}>{ex.tempo}</span>
-          </div>
-          <div style={{
-            background: 'rgba(184,84,58,0.06)', border: '1px solid rgba(184,84,58,0.12)',
-            borderRadius: 8, padding: '10px 14px',
-          }}>
-            <p style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: 4 }}>CUE</p>
-            <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.55, fontStyle: 'italic' }}>
-              &ldquo;{ex.cue}&rdquo;
-            </p>
-          </div>
-          <div>
-            <span style={labelStyle}>Why this exercise</span>
-            <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.6 }}>{ex.why}</p>
-          </div>
-          <div style={{
-            background: 'var(--paper-deep)', border: '1px solid var(--paper-edge)',
-            borderRadius: 8, padding: '10px 14px',
-          }}>
-            <p style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--ink-muted)', letterSpacing: '0.1em', marginBottom: 4 }}>COMMON MISTAKE</p>
-            <p style={{ fontSize: 12.5, color: 'var(--ink-soft)', lineHeight: 1.55 }}>{ex.mistake}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const exercises: ExerciseData[] = [
+const exercises: ExerciseItem[] = [
   {
     name: 'Barbell Bench Press',
-    searchTerms: ['bench press form', 'barbell bench setup', 'bench press elbow angle'],
-    formCues: ['Shoulder blades pinched back and down before the lift', 'Elbows at 45–60° from torso — not flared to 90°'],
-    primary: 'Chest (pectoralis major)',
-    secondary: 'Front delt, Triceps',
-    tempo: '2 seconds down · touch chest · 1 second up',
+    plain: 'Horizontal pressing — the most effective chest builder with even barbell loading',
+    primary: 'Chest (Pectoralis Major)',
+    secondary: 'Front Delt, Triceps',
+    anatomySub: 'Horizontal push',
+    pattern: 'Push',
+    equipment: 'Barbell · Bench',
+    prescription: '4 × 8 · RPE 7–8',
+    prescriptionNote: 'Blades pinched before you unrack',
+    muscles: [
+      { name: 'Chest', pct: 85 },
+      { name: 'Front Delt', pct: 65 },
+      { name: 'Triceps', pct: 60 },
+    ],
+    steps: [
+      'Pinch your shoulder blades together and pull them down — hold that throughout',
+      'Grip just wider than shoulder-width. Bar over mid-chest when lowered',
+      'Lower with control — 2 seconds down, touch the chest, pause',
+      'Press in a slight arc back toward the rack — full lockout at the top',
+    ],
     cue: 'Shoulder blades pinched together and pulled down before you unrack. Bar sits on your upper traps not your neck.',
-    why: 'Horizontal pressing is a fundamental movement pattern. The barbell allows even loading and consistent progress.',
-    mistake: 'Elbows flaring to 90 degrees. Keep them at 45–60 degrees from your torso.',
+    mistake: 'Elbows flaring to 90 degrees. Keep them at 45–60 degrees from your torso — this protects the shoulder.',
+    why: 'Horizontal pressing is a fundamental movement pattern. The barbell allows even loading on both sides and consistent progress across sets.',
+    stripeColor: 'var(--gold)',
   },
   {
     name: 'Barbell Row',
-    searchTerms: ['bent over barbell row', 'barbell row form', 'row bar path lower sternum'],
-    formCues: ['Bar pulls to lower sternum — not belly, not upper chest', 'Torso stays braced, no jerking to swing the weight'],
-    primary: 'Lats, Rhomboids, Middle traps',
-    secondary: 'Rear delt, Biceps',
-    tempo: '1 second pull · 1 second squeeze · 2 seconds lower',
+    plain: 'Horizontal back pull — the direct counterpart to the bench press',
+    primary: 'Lats, Rhomboids, Mid Traps',
+    secondary: 'Rear Delt, Biceps',
+    anatomySub: 'Upper back pull',
+    pattern: 'Pull',
+    equipment: 'Barbell',
+    prescription: '4 × 8 · RPE 7–8',
+    prescriptionNote: 'Pull to lower sternum, not belly',
+    muscles: [
+      { name: 'Rhomboids', pct: 85 },
+      { name: 'Lats', pct: 80 },
+      { name: 'Rear Delt', pct: 55 },
+      { name: 'Biceps', pct: 50 },
+    ],
+    steps: [
+      'Hinge until torso is roughly 45 degrees — chest up, flat back',
+      'Grip just outside shoulder-width, bar hanging under lower chest',
+      'Pull bar to your lower sternum — elbows drive back and slightly out',
+      'Squeeze shoulder blades at the top, lower with full control',
+    ],
     cue: 'Chest up. Pull to your lower sternum — not your belly button, not your upper chest.',
-    why: 'Every push needs a pull. The barbell row is the direct counterpart to the bench press.',
-    mistake: 'Using momentum — jerking the torso upright to swing the weight.',
+    mistake: 'Using momentum — jerking the torso upright to swing the weight up. Slow it down.',
+    why: 'Every push needs a pull. The barbell row is the direct counterpart to the bench press. Skip this and your shoulder health suffers.',
+    stripeColor: '#3D5A80',
   },
   {
     name: 'Bulgarian Split Squat (Bodyweight)',
-    searchTerms: ['bulgarian split squat form', 'rear foot elevated split squat', 'BSS foot position'],
-    formCues: ['Front shin stays vertical at the bottom — foot far enough forward', 'Rear knee drops nearly to the floor — torso stays upright'],
+    plain: 'Single-leg squat variant that exposes and fixes imbalances between legs',
     primary: 'Quads, Glutes',
-    secondary: 'Hamstrings, Core, Hip flexors',
-    tempo: '3 seconds down · pause · 1 second up',
+    secondary: 'Hamstrings, Core, Hip Flexors',
+    anatomySub: 'Unilateral lower body',
+    pattern: 'Unilateral Squat',
+    equipment: 'Bench',
+    prescription: '3 × 10 each leg · Bodyweight',
+    prescriptionNote: 'Master balance before adding load',
+    muscles: [
+      { name: 'Quads', pct: 85 },
+      { name: 'Glutes', pct: 70 },
+      { name: 'Hamstrings', pct: 45 },
+      { name: 'Core', pct: 40 },
+    ],
+    steps: [
+      'Rear foot elevated on a bench — laces down or toes on the edge',
+      'Front foot far enough forward that your shin stays roughly vertical at the bottom',
+      'Lower straight down — knee tracks over toes. Do not let it cave inward',
+      'Drive through the heel of the front foot to stand — do not push off the rear leg',
+    ],
     cue: 'Front foot far enough forward that your shin stays vertical at the bottom. Bodyweight this week — master the balance before adding load.',
-    why: 'Best single-leg exercise in existence. Identifies imbalances, loads glute and quad simultaneously.',
-    mistake: 'Rear foot too close. This pitches you forward and turns it into a hip flexor stretch.',
+    mistake: 'Front foot too close to the bench, causing the shin to angle forward excessively under load.',
+    why: 'Bilateral squats can hide imbalances. The split squat forces each leg to work independently — and stretches the hip flexor of the rear leg as a bonus.',
+    stripeColor: 'var(--accent)',
   },
   {
     name: 'Hip Thrust (Heavy)',
-    searchTerms: ['barbell hip thrust heavy', 'loaded hip thrust form', 'hip thrust bar position'],
-    formCues: ['Drive through heels — not toes', 'Chin tucked throughout; back does not arch at the top'],
-    primary: 'Glutes (maximus)',
+    plain: 'Loaded glute isolation at its heaviest so far — maximum glute stimulus',
+    primary: 'Glutes',
     secondary: 'Hamstrings, Core',
-    tempo: '1 second up · 2 second hold · 2 seconds lower',
-    cue: 'Friday is your heavy lower day. Add meaningful weight — RPE 7–8 by set 3. Chin tucked, brace before you drive.',
-    why: 'The pattern is established. This week you learn what it feels like to actually load it.',
-    mistake: 'Losing the squeeze by rep 10. Shorter set with quality beats longer set with nothing.',
+    anatomySub: 'Glute isolation',
+    pattern: 'Hip Extension',
+    equipment: 'Barbell · Bench',
+    prescription: '4 × 8 · RPE 8',
+    prescriptionNote: 'Heaviest you\'ve used yet',
+    muscles: [
+      { name: 'Glutes', pct: 95 },
+      { name: 'Hamstrings', pct: 50 },
+      { name: 'Core', pct: 25 },
+    ],
+    steps: [
+      'Barbell padded, sitting over your hips at the hip crease',
+      'Upper back on bench, chin tucked, feet flat — drive through heels',
+      'Full extension at the top — glutes squeezing hard, hips level',
+      '2-second hold at the top. Lower with control before the next rep',
+    ],
+    cue: 'Drive through your heels. Squeeze at the top for the full two seconds. Do not rush the hold.',
+    mistake: 'Letting the lower back arch at lockout. That is your back, not your glutes. Chin tucked, core braced.',
+    why: 'You started bodyweight, then added a plate, now a barbell. The glute stimulus at this load is significantly greater than anything before it.',
+    stripeColor: 'var(--margin-red)',
   },
   {
     name: 'Face Pull',
-    searchTerms: ['cable face pull form', 'face pull elbow position', 'face pull external rotation'],
-    formCues: ['Elbows high — above shoulder height at the finish', 'Pull to your face with external rotation — not to your chin'],
-    primary: 'Rear delts, External rotators',
-    secondary: 'Middle traps, Rhomboids',
-    tempo: '1 second pull · 2 second hold · 2 seconds forward',
-    cue: 'Elbows high — above shoulder height. Pull to your face, not your chin. Feel the back of your shoulder.',
-    why: 'Four days of pressing and pulling stresses your shoulder joint. The face pull counteracts this — it keeps you injury-free long term.',
-    mistake: 'Pulling to the neck and ignoring the external rotation.',
+    plain: 'Cable shoulder health movement — pulls the rear delt back and externally rotates the shoulder',
+    primary: 'Rear Delts, External Rotators',
+    secondary: 'Rhomboids, Mid Traps',
+    anatomySub: 'Shoulder health',
+    pattern: 'Pull',
+    equipment: 'Cable Machine · Rope',
+    prescription: '3 × 15 · RPE 6',
+    prescriptionNote: 'Light — this is maintenance, not strength',
+    muscles: [
+      { name: 'Rear Delts', pct: 85 },
+      { name: 'Rhomboids', pct: 70 },
+      { name: 'Rotator Cuff', pct: 65 },
+      { name: 'Mid Traps', pct: 55 },
+    ],
+    steps: [
+      'Rope attachment at face height, step back enough to feel tension throughout',
+      'Pull the rope to your face — elbows high, flaring outward',
+      'At end range: externally rotate, thumbs pointing behind you',
+      '1-second hold, then return with control',
+    ],
+    cue: 'Pull to your face. Elbows high. At end range, thumbs go back — that external rotation is the whole point.',
+    mistake: 'Pulling to the chin with elbows low. That trains the wrong muscles entirely. Elbows high, pull to the face.',
+    why: 'Every pressing session stresses the anterior shoulder. Face pulls counteract this. They are not accessory — they are insurance.',
+    stripeColor: '#3D5A80',
   },
 ]
 
 export default function ExerciseBreakdowns() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div style={{ marginBottom: 24 }}>
+    <div>
+      <div style={{ marginBottom: 28 }}>
         <p style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
-          This week&rsquo;s task
+          This week&rsquo;s exercises
         </p>
-        <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.6, marginBottom: 6 }}>
-          Before you train this week, look into each of these exercises. See how they&rsquo;re done, what muscles they work, and what good form looks like.
-        </p>
-        <p style={{ fontSize: 12, color: 'var(--ink-muted)', fontStyle: 'italic', lineHeight: 1.5 }}>
-          I&rsquo;d show you a demo — but looking it up yourself makes it stick better.
+        <p style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.6, marginBottom: 6 }}>
+          Upper/Lower split begins this week. New exercises include the bench press and Bulgarian split squat — study those first.
         </p>
       </div>
       {exercises.map((ex, i) => (
-        <ExerciseCard key={ex.name} ex={ex} index={i} />
+        <ExerciseCardNew key={ex.name} ex={ex} index={i} />
       ))}
-      <style>{`
-        @media (max-width: 640px) {
-          .exercise-card { grid-template-columns: 1fr !important; }
-          .exercise-card > div:first-child { border-right: none !important; border-bottom: 1px solid var(--paper-edge); }
-        }
-      `}</style>
     </div>
   )
 }
