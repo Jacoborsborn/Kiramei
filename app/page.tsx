@@ -141,7 +141,7 @@ const FAQS = [
   },
   {
     q: 'What if I don\u2019t love it?',
-    a: 'Email me within 7 days, full refund. No forms, no questions. You keep nothing, you owe nothing.',
+    a: 'Email me within 14 days, full refund — provided you haven’t unlocked Week 3 yet. (Unlocking Week 3 means you’ve worked through Weeks 1 and 2, which is enough material that a refund stops being fair on either side.) No forms, no questions otherwise. You keep nothing, you owe nothing.',
   },
 ]
 
@@ -572,6 +572,18 @@ export default function Page() {
           max-width: 640px; margin-top: 22px;
         }
         .risk-coupon p strong { font-style: normal; color: var(--ink); font-weight: 600; }
+        .risk-fineprint {
+          margin-top: 18px !important;
+          padding: 16px 20px;
+          border-top: 1px dashed var(--paper-edge);
+          font-family: var(--serif);
+          font-style: italic;
+          font-size: 14.5px !important;
+          line-height: 1.65 !important;
+          color: var(--ink-muted) !important;
+          max-width: 640px;
+        }
+        .risk-fineprint strong { font-style: normal; color: var(--ink-soft); font-weight: 600; }
         .risk-stamp {
           position: absolute; right: -10px; top: 24px;
           width: 130px; height: 130px; border-radius: 50%;
@@ -850,7 +862,7 @@ export default function Page() {
                 </div>
 
                 <div className="t-trust">
-                  7-day refund<span>·</span>Instant access<span>·</span>Yours forever
+                  14-day refund<span>·</span>Instant access<span>·</span>Yours forever
                 </div>
               </div>
 
@@ -1413,15 +1425,18 @@ export default function Page() {
               <div className="risk-coupon-inner">
                 <span className="eyebrow">08 · No risk</span>
                 <h2>
-                  Try the first week. <em>Don&rsquo;t love it?</em> Email me.
+                  Try Week 1. <em>And Week 2.</em> Then decide.
                 </h2>
                 <p>
-                  You get the whole programme on day one. Open Week 1. Read the chapter. Train the three sessions. <strong>If you don&rsquo;t feel sharper in the gym by day 7</strong> — email me at hello@kiramei.co.uk and I&rsquo;ll refund every penny. No forms. No questions. No &lsquo;please tell us why you&rsquo;re leaving&rsquo; survey. Just back to your card.
+                  You have <strong>14 days</strong> from purchase to work through Week 1 — and Week 2 if you move fast. If by then it hasn&rsquo;t changed how you train, email <strong>hello@kiramei.co.uk</strong> and I&rsquo;ll refund every penny. No forms. No questions. No &lsquo;please tell us why you&rsquo;re leaving&rsquo; survey. Just back to your card.
+                </p>
+                <p className="risk-fineprint">
+                  <strong>One honest condition:</strong> unlocking Week 3 ends the refund window early. By then you&rsquo;ve absorbed enough of the material that it wouldn&rsquo;t be fair on either of us. We&rsquo;re trusting each other.
                 </p>
                 <div className="risk-stamp">
                   <div className="risk-stamp-inner">
-                    <span className="big">7&#8209;day</span>
-                    <span className="lbl">Refund<br />No questions</span>
+                    <span className="big">14&#8209;day</span>
+                    <span className="lbl">Refund<br />until Week 3</span>
                   </div>
                 </div>
               </div>
@@ -1518,13 +1533,13 @@ export default function Page() {
               Stop following. Start <em>understanding</em>.
             </h2>
             <p className="t-cta-sub">
-              Eight weeks. &pound;49.99 once. A 7-day refund if it doesn&rsquo;t change how you train.
+              Eight weeks. &pound;49.99 once. A 14-day refund if it doesn&rsquo;t change how you train.
             </p>
             <div style={{ display: 'inline-flex', gap: 20, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <BuyButton requireTerms product="training" label={'Get the Training Blueprint — £49.99 →'} />
             </div>
             <div className="t-cta-trust">
-              Instant access<span>·</span>No subscription<span>·</span>7-day refund
+              Instant access<span>·</span>No subscription<span>·</span>14-day refund
             </div>
             <div>
               <span className="t-cta-margin">see you on the other side of week one.</span>
