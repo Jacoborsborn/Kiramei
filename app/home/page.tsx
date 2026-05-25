@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import KmNavbar from './components/KmNavbar'
-import KmFooter from './components/KmFooter'
+import KmNavbar from '@/app/components/KmNavbar'
+import KmFooter from '@/app/components/KmFooter'
 
 const PRODUCTS = [
   {
