@@ -12,9 +12,10 @@ interface BuyButtonProps {
 export default function BuyButton({ product, label = 'Buy Now →', style, requireTerms }: BuyButtonProps) {
   const [loading, setLoading] = useState(false)
   const [agreed, setAgreed] = useState(false)
+  const [ageConfirmed, setAgeConfirmed] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const canProceed = !requireTerms || agreed
+  const canProceed = !requireTerms || (agreed && ageConfirmed)
 
   async function handleClick() {
     if (!canProceed) return
@@ -54,11 +55,18 @@ export default function BuyButton({ product, label = 'Buy Now →', style, requi
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start' }}>
       {requireTerms && (
-        <Checkbox
-          checked={agreed}
-          onChange={setAgreed}
-          label={<>I agree to the <a href="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Terms & Conditions</a>, including that this is a digital product with instant delivery.</>}
-        />
+        <>
+          <Checkbox
+            checked={ageConfirmed}
+            onChange={setAgeConfirmed}
+            label={<>I confirm I am <strong>18 years of age or older</strong>.</>}
+          />
+          <Checkbox
+            checked={agreed}
+            onChange={setAgreed}
+            label={<>I agree to the <a href="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Terms & Conditions</a> and <a href="/privacy" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Privacy Policy</a>, including that this is a digital product with instant access.</>}
+          />
+        </>
       )}
       <button
         onClick={handleClick}
