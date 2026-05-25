@@ -765,13 +765,60 @@ export default function Page() {
           .maths-table td.what { font-size: 15px; }
           .risk-stamp { display: none; }
         }
+
+        /* ════════════════════════════════════════
+           SECTION JUMP (between-section guide arrows)
+        ════════════════════════════════════════ */
+        html { scroll-behavior: smooth; }
+        section[id^="sec-"] { scroll-margin-top: 80px; }
+        .section-jump {
+          position: relative;
+          display: flex; justify-content: center;
+          padding: 28px 0 24px;
+          background: var(--paper);
+        }
+        .section-jump::before {
+          content: ''; position: absolute;
+          left: 50%; top: 0;
+          width: 1px; height: 22px;
+          background: var(--paper-edge);
+          transform: translateX(-50%);
+        }
+        .section-jump a {
+          font-family: var(--hand);
+          font-size: 22px; line-height: 1;
+          color: var(--margin-red);
+          text-decoration: none;
+          display: inline-flex; align-items: center; gap: 12px;
+          padding: 10px 18px;
+          transform: rotate(-1.2deg);
+          transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .section-jump a .arrow {
+          font-family: var(--mono); font-style: normal;
+          font-size: 18px; font-weight: 600;
+          color: var(--accent);
+          transition: transform 0.2s ease;
+          display: inline-block;
+        }
+        .section-jump a:hover { color: var(--accent); }
+        .section-jump a:hover .arrow { transform: translateY(3px); }
+        .section-jump a .dot {
+          width: 4px; height: 4px; border-radius: 50%;
+          background: var(--paper-edge);
+          display: inline-block;
+        }
+        @media (max-width: 640px) {
+          .section-jump { padding: 22px 0 18px; }
+          .section-jump a { font-size: 19px; gap: 10px; padding: 8px 14px; }
+        }
       `}</style>
 
       <main>
         {/* ════════════════════════════════════════════════════════
             SECTION 1 · HERO
         ════════════════════════════════════════════════════════ */}
-        <section className="t-hero">
+        <section className="t-hero" id="sec-hero">
           <div className="t-hero-bg" />
           <div className="km-container">
             <div className="t-hero-grid">
@@ -828,15 +875,19 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-problem"><span className="arrow">↓</span> next <span className="dot" /> the problem</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 2 · PROBLEM (Agitate)
         ════════════════════════════════════════════════════════ */}
-        <section className="prob-section">
+        <section className="prob-section" id="sec-problem">
           <div className="km-container">
             <div className="prob-head">
               <span className="eyebrow">01 · If this sounds familiar</span>
               <h2>
-                You&rsquo;ve already paid for the gym. So why does it still feel like <em>everyone else got a manual</em> you didn&rsquo;t?
+                You&rsquo;ve already paid for the gym. So why does it still feel like <em>everyone else got a manual</em>&nbsp;you didn&rsquo;t?
               </h2>
             </div>
             <div className="prob-grid">
@@ -852,10 +903,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-why"><span className="arrow">↓</span> next <span className="dot" /> the real problem</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 3 · WHY (deeper agitation)
         ════════════════════════════════════════════════════════ */}
-        <section className="why-section">
+        <section className="why-section" id="sec-why">
           <div className="km-container">
             <div className="why-grid">
               <div>
@@ -881,10 +936,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-solution"><span className="arrow">↓</span> next <span className="dot" /> what this is</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 4 · SOLUTION (intro + curriculum)
         ════════════════════════════════════════════════════════ */}
-        <section className="t-solution">
+        <section className="t-solution" id="sec-solution">
           <div className="km-container">
             <div className="t-solution-head">
               <span className="eyebrow">03 · What this is</span>
@@ -916,10 +975,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-qualifier"><span className="arrow">↓</span> next <span className="dot" /> is this you?</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 5 · QUALIFIER (for / not for)
         ════════════════════════════════════════════════════════ */}
-        <section className="qual-section">
+        <section className="qual-section" id="sec-qualifier">
           <div className="km-container">
             <div className="qual-head">
               <span className="eyebrow">04 · Is this you?</span>
@@ -950,10 +1013,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-spotlight"><span className="arrow">↓</span> next <span className="dot" /> inside week one</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 6 · WEEK 01 SPOTLIGHT (preserved + hook added)
         ════════════════════════════════════════════════════════ */}
-        <section className="t-spot">
+        <section className="t-spot" id="sec-spotlight">
           <div className="km-container">
             <div className="t-spot-grid">
               <div>
@@ -1001,10 +1068,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-toolbox"><span className="arrow">↓</span> next <span className="dot" /> the toolbox</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 7 · THE TOOLBOX (preserved structure, rewritten copy)
         ════════════════════════════════════════════════════════ */}
-        <section className="t-payoff">
+        <section className="t-payoff" id="sec-toolbox">
           <div className="km-container">
 
             <div className="t-payoff-intro">
@@ -1296,10 +1367,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-testimonials"><span className="arrow">↓</span> next <span className="dot" /> real women, real outcomes</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 8 · TESTIMONIALS
         ════════════════════════════════════════════════════════ */}
-        <section className="tst-section">
+        <section className="tst-section" id="sec-testimonials">
           <div className="km-container">
             <div className="tst-head">
               <span className="eyebrow">07 · From real women</span>
@@ -1325,10 +1400,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-refund"><span className="arrow">↓</span> next <span className="dot" /> no-risk refund</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 9 · RISK REVERSAL (coupon)
         ════════════════════════════════════════════════════════ */}
-        <section className="risk-section">
+        <section className="risk-section" id="sec-refund">
           <div className="km-container">
             <div className="risk-coupon">
               <div className="risk-coupon-inner">
@@ -1350,10 +1429,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-maths"><span className="arrow">↓</span> next <span className="dot" /> the maths</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 10 · PRICING MATHS
         ════════════════════════════════════════════════════════ */}
-        <section className="maths-section">
+        <section className="maths-section" id="sec-maths">
           <div className="km-container">
             <div className="maths-head">
               <span className="eyebrow">09 · The maths</span>
@@ -1391,10 +1474,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-faq"><span className="arrow">↓</span> next <span className="dot" /> your questions</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 11 · FAQ
         ════════════════════════════════════════════════════════ */}
-        <section className="faq-section">
+        <section className="faq-section" id="sec-faq">
           <div className="km-container">
             <div className="faq-head">
               <span className="eyebrow">10 · Questions you&rsquo;re probably asking</span>
@@ -1417,10 +1504,14 @@ export default function Page() {
           </div>
         </section>
 
+        <div className="section-jump">
+          <a href="#sec-cta"><span className="arrow">↓</span> next <span className="dot" /> ready when you are</a>
+        </div>
+
         {/* ════════════════════════════════════════════════════════
             SECTION 12 · FINAL CTA
         ════════════════════════════════════════════════════════ */}
-        <section className="t-cta">
+        <section className="t-cta" id="sec-cta">
           <div className="km-container-narrow">
             <span className="eyebrow">Ready when you are</span>
             <h2>
