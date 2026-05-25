@@ -22,7 +22,7 @@ export default function Privacy() {
           <Section title="1. Who We Are">
             <p>This Privacy Policy describes how <strong>Kira Mei</strong> ("we", "us", "our") collects, uses, stores, and protects your personal data when you visit <strong>www.kiramei.co.uk</strong> or purchase our digital products.</p>
             <p>We are the data controller for the purposes of UK GDPR and the Data Protection Act 2018.</p>
-            <p>Contact: <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--accent)' }}>kiira.mei@outlook.com</a></p>
+            <p>Contact: <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--accent)' }}>hello@kiramei.co.uk</a></p>
           </Section>
 
           <Section title="2. What Data We Collect">
@@ -50,7 +50,7 @@ export default function Privacy() {
           <Section title="3. Why We Collect Your Data (Legal Basis)">
             <p>We process your personal data on the following legal bases under UK GDPR:</p>
             <ul>
-              <li><strong>Contract performance:</strong> To process your payment, deliver your purchased PDF(s) to your email, and provide order-related communications.</li>
+              <li><strong>Contract performance:</strong> To process your payment, send your account-activation link, provide access to the web portal, and provide order-related communications.</li>
               <li><strong>Legitimate interests:</strong> To operate first-party analytics that help us understand how the website is used and improve the experience. This tracking is privacy-friendly — it uses no third-party scripts, does not profile you for advertising, and collects no sensitive personal data.</li>
               <li><strong>Consent:</strong> For any optional marketing communications you opt into at checkout. You may withdraw consent at any time.</li>
               <li><strong>Legal obligation:</strong> To retain payment and transaction records as required for tax and regulatory purposes.</li>
@@ -60,8 +60,9 @@ export default function Privacy() {
           <Section title="4. How We Use Your Data">
             <p>Your data is used to:</p>
             <ul>
-              <li>Process your payment and deliver your digital products</li>
-              <li>Send order confirmation and PDF delivery emails</li>
+              <li>Process your payment and provide access to your digital products</li>
+              <li>Send order confirmation and account-activation emails</li>
+              <li>Track your progress through the programme weeks (which weeks you have unlocked and completed) so the portal can show you the right content</li>
               <li>Respond to your support queries</li>
               <li>Understand which pages and content are most useful (via analytics)</li>
               <li>Measure the effectiveness of our marketing campaigns (via UTM data)</li>
@@ -119,7 +120,7 @@ export default function Privacy() {
               <li><strong>Right to object:</strong> Object to processing based on legitimate interests or for direct marketing</li>
               <li><strong>Right to withdraw consent:</strong> Withdraw consent for marketing at any time (this does not affect processing carried out prior to withdrawal)</li>
             </ul>
-            <p>To exercise any of these rights, email <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--accent)' }}>kiira.mei@outlook.com</a>. We will respond within 30 days. We may need to verify your identity before processing a request.</p>
+            <p>To exercise any of these rights, email <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--accent)' }}>hello@kiramei.co.uk</a>. We will respond within 30 days. We may need to verify your identity before processing a request.</p>
           </Section>
 
           <Section title="9. Security">
@@ -142,7 +143,7 @@ export default function Privacy() {
           </Section>
 
           <Section title="12. Complaints">
-            <p>If you are unhappy with how we have handled your personal data, please contact us first at <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--accent)' }}>kiira.mei@outlook.com</a>.</p>
+            <p>If you are unhappy with how we have handled your personal data, please contact us first at <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--accent)' }}>hello@kiramei.co.uk</a>.</p>
             <p>You also have the right to lodge a complaint with the <strong>Information Commissioner's Office (ICO)</strong>:</p>
             <p>Website: <a href="https://ico.org.uk" style={{ color: 'var(--accent)' }} target="_blank" rel="noopener noreferrer">ico.org.uk</a><br />Helpline: 0303 123 1113</p>
           </Section>

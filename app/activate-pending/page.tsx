@@ -34,7 +34,7 @@ export default function ActivatePendingPage() {
             fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.6, textAlign: 'left',
           }}>
             <strong style={{ color: 'var(--ink)', display: 'block', marginBottom: 6 }}>Didn&apos;t receive the email?</strong>
-            Check your spam folder, or contact <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--sage)' }}>kiira.mei@outlook.com</a> and we&apos;ll resend your activation link.
+            Check your spam folder, or contact <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--sage)' }}>hello@kiramei.co.uk</a> and we&apos;ll resend your activation link.
           </div>
 
           <p style={{ marginTop: 32, fontSize: 13, color: 'var(--ink-faint)' }}>

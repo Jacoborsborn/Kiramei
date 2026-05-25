@@ -20,18 +20,18 @@ export default function Terms() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
 
           <Section title="1. Who We Are">
-            <p>These Terms & Conditions govern your purchase and use of digital products available at <strong>www.kiramei.co.uk</strong>, operated by Kira Mei ("we", "us", "our"). Contact: <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--accent)' }}>kiira.mei@outlook.com</a>.</p>
+            <p>These Terms & Conditions govern your purchase and use of digital products available at <strong>www.kiramei.co.uk</strong>. <strong>Kira Mei</strong> is an editorial brand created and operated by <strong>Jacob Orsborn-Smith</strong>. All training methodology, content and customer support is authored and provided by the founder. Contact: <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--accent)' }}>hello@kiramei.co.uk</a>.</p>
             <p>By completing a purchase you confirm that you have read, understood, and agree to these terms in full. If you do not agree, do not proceed with a purchase.</p>
           </Section>
 
           <Section title="2. Our Products">
-            <p>Kira Mei sells the following digital PDF products:</p>
+            <p>Kira Mei sells the following digital products:</p>
             <ul>
-              <li><strong>Training Blueprint</strong> — an 8-week progressive training education guide (£49.99)</li>
-              <li><strong>Nutrition Blueprint</strong> — an 8-week nutrition framework and education guide (£49.99)</li>
+              <li><strong>Training Blueprint</strong> — an 8-week progressive training education programme delivered via an interactive web portal (£49.99)</li>
+              <li><strong>Nutrition Blueprint</strong> — an 8-week nutrition framework and education programme delivered via an interactive web portal (£49.99)</li>
               <li><strong>Full Stack Bundle</strong> — both blueprints together at a discounted rate (£78.99)</li>
             </ul>
-            <p>All products are delivered digitally as PDF files via email. There are no physical goods, no subscription, and no recurring charges. Each product is a one-time purchase.</p>
+            <p>Products are delivered as a personalised account on our web portal, accessed via a login link sent to your email after purchase. Content unlocks progressively week-by-week as you complete each week. There are no physical goods, no subscription, and no recurring charges. Each product is a one-time purchase that grants lifetime access to your account.</p>
             <p>Content is educational in nature. The blueprints teach training and nutrition principles — they are not bespoke or personalised programmes.</p>
           </Section>
 
@@ -59,17 +59,22 @@ export default function Terms() {
           </Section>
 
           <Section title="6. Delivery">
-            <p>Upon successful payment, your PDF(s) will be delivered to the email address provided at checkout. Delivery is typically <strong>instant</strong> — you should receive your files within a few minutes.</p>
-            <p>If you have not received your files within 30 minutes of purchase, check your spam or junk folder, then contact us at <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--accent)' }}>kiira.mei@outlook.com</a>.</p>
+            <p>Upon successful payment, an account-activation link will be sent to the email address you provide at checkout. Delivery is typically <strong>instant</strong> — you should receive the link within a few minutes. Once activated, your account grants access to the web portal where Week 1 unlocks immediately. Subsequent weeks unlock progressively as you complete each one.</p>
+            <p>If you have not received the activation link within 30 minutes of purchase, check your spam or junk folder, then contact us at <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--accent)' }}>hello@kiramei.co.uk</a>.</p>
             <p>You are responsible for providing a correct and accessible email address at checkout. We are not liable for non-delivery caused by an incorrect address you have provided.</p>
           </Section>
 
           <Section title="7. Refund Policy &amp; Right to Cancel">
-            <p>Under the Consumer Contracts Regulations 2013, you normally have a 14-day right to cancel a digital purchase. However, this right does not apply where you have given prior explicit consent for delivery to begin before the cancellation period expires and you have acknowledged that you will lose your right to cancel once delivery has begun.</p>
-            <p>By ticking the cancellation waiver checkbox at checkout, you explicitly consent to delivery starting immediately upon payment and acknowledge that you waive your 14-day right to cancel from that point.</p>
-            <p>Due to the instant digital delivery of our products, <strong>we do not offer refunds once your files have been sent</strong>. As delivery is automatic upon payment, this applies in almost all cases.</p>
-            <p>If you have been charged but have not received your files and we are unable to resend them, you are entitled to a full refund. Please contact us within 7 days at <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--accent)' }}>kiira.mei@outlook.com</a>.</p>
-            <p>In exceptional circumstances (e.g. duplicate accidental purchase), we will consider refund requests at our sole discretion.</p>
+            <p>Under the Consumer Contracts Regulations 2013, you have a 14-day right to cancel a digital purchase from the date of contract. We honour this right as our standard refund policy.</p>
+            <p><strong>Refund eligibility — both conditions must be met:</strong></p>
+            <ul>
+              <li>Your refund request is made within <strong>14 days</strong> of purchase, AND</li>
+              <li>You have not yet unlocked Week 3 of the programme (which occurs when you mark Week 2 as complete in the portal).</li>
+            </ul>
+            <p>If both conditions are met, we will issue a full refund — no forms, no questions. To request a refund, email <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--accent)' }}>hello@kiramei.co.uk</a> from the email address used at purchase.</p>
+            <p><strong>Why Week 3 closes the refund window:</strong> unlocking Week 3 confirms you have worked through Weeks 1 and 2, which represents substantive consumption of the programme. After this point a refund would not be fair to either party, and your refund eligibility ends — even within the 14-day window.</p>
+            <p>If you have been charged but have not received your activation link and we are unable to resend it, you are entitled to a full refund regardless of the conditions above. Please contact us within 7 days.</p>
+            <p>In exceptional circumstances (e.g. duplicate accidental purchase, account inaccessibility through no fault of yours), we will consider refund requests at our sole discretion.</p>
             <p>Chargebacks raised without first contacting us will be disputed. Fraudulent chargebacks may result in legal action.</p>
           </Section>
 
@@ -79,7 +84,7 @@ export default function Terms() {
               <li>You are at least 18 years of age</li>
               <li>You will use the products for personal, non-commercial use only</li>
               <li>You will exercise within your own physical limits and stop immediately if you experience pain, dizziness, or discomfort</li>
-              <li>You will not share, distribute, upload, or resell the PDF files to any third party</li>
+              <li>You will not share, distribute, screenshot for re-publication, upload, or resell any part of the programme content (including portal content, exercises, written material or videos) to any third party</li>
             </ul>
           </Section>
 
@@ -102,7 +107,7 @@ export default function Terms() {
 
           <Section title="11. Communications">
             <p>By purchasing, you agree to receive transactional emails related to your order (delivery confirmation, receipt).</p>
-            <p>If you opt in at checkout, we may also send occasional updates about new content. You can opt out at any time by emailing <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--accent)' }}>kiira.mei@outlook.com</a> or clicking "unsubscribe" in any marketing email.</p>
+            <p>If you opt in at checkout, we may also send occasional updates about new content. You can opt out at any time by emailing <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--accent)' }}>hello@kiramei.co.uk</a> or clicking "unsubscribe" in any marketing email.</p>
           </Section>
 
           <Section title="12. Governing Law">
@@ -114,7 +119,7 @@ export default function Terms() {
           </Section>
 
           <Section title="14. Contact">
-            <p>For any questions about these terms or your purchase, contact us at: <a href="mailto:kiira.mei@outlook.com" style={{ color: 'var(--accent)' }}>kiira.mei@outlook.com</a></p>
+            <p>For any questions about these terms or your purchase, contact us at: <a href="mailto:hello@kiramei.co.uk" style={{ color: 'var(--accent)' }}>hello@kiramei.co.uk</a></p>
           </Section>
 
         </div>

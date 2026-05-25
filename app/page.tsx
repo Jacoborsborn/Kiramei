@@ -717,6 +717,15 @@ export default function Page() {
           color: var(--ink-muted); text-transform: uppercase;
         }
         .t-cta-trust span { color: var(--paper-edge); margin: 0 10px; }
+        .t-cta-disclaimer {
+          margin-top: 28px; max-width: 560px;
+          margin-left: auto; margin-right: auto;
+          font-family: var(--serif); font-style: italic;
+          font-size: 12.5px; line-height: 1.6;
+          color: var(--ink-muted);
+          padding-top: 18px;
+          border-top: 1px dashed var(--paper-edge);
+        }
         .t-cta-margin {
           margin-top: 56px;
           font-family: var(--hand); font-size: 30px;
@@ -1541,6 +1550,9 @@ export default function Page() {
             <div className="t-cta-trust">
               Instant access<span>·</span>No subscription<span>·</span>14-day refund
             </div>
+            <p className="t-cta-disclaimer">
+              Educational fitness content, not medical advice. Speak to a qualified professional before starting any new training programme — especially if you&rsquo;re pregnant, postpartum, recovering from injury, or managing a medical condition. For ages 18+.
+            </p>
             <div>
               <span className="t-cta-margin">see you on the other side of week one.</span>
             </div>
