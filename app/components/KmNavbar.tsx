@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 const NAV_LINKS = [
-  { href: '/training',  label: 'Training',  key: 'training' },
+  { href: '/',          label: 'Training',  key: 'training' },
   { href: '/nutrition', label: 'Nutrition', key: 'nutrition' },
   { href: '/bundle',    label: 'Bundle',    key: 'bundle' },
   { href: '/about',     label: 'About',     key: 'about' },
