@@ -848,24 +848,24 @@ export default function Page() {
 
                 {/*
                   ── HEADLINE A/B/C (pick one, swap into the <h1> below) ─────
-                    A · Complete eight weeks. Build your own programme. Never buy another one.
-                    B · Eight weeks to stop guessing in the gym — and start writing your own programme.
-                    C · The last training programme you'll ever need to buy.
+                    A · Learn how training actually works. Once. Then never buy a plan again.
+                    B · You're already going to the gym. Spend eight weeks learning why — and never need a plan again.
+                    C · Stop renting workouts. Learn it once. Own it forever.
                   ───────────────────────────────────────────────────────────
                 */}
                 <h1>
-                  Complete eight weeks. Build your own programme.{' '}
-                  <em>Never buy another one.</em>
+                  Learn how training actually works. <em>Once.</em>{' '}
+                  Then never buy a plan again.
                 </h1>
 
                 <p className="t-hero-lead">
-                  Built for women who&rsquo;ve been to the gym, felt lost, and want to actually understand what they&rsquo;re doing. By day 56 you&rsquo;ll have finished the programme — and written your own.
+                  For women who&rsquo;ve been to the gym, felt lost, and want to actually understand what they&rsquo;re doing. Eight weeks of material that slots into the sessions you&rsquo;re already doing — about 30 minutes a day to learn the <em>why</em>. Not homework. Go at your pace, and keep it for life.
                 </p>
 
                 <div className="t-buy-box">
                   <div>
                     <div className="t-buy-price">&pound;49.99</div>
-                    <div className="t-buy-sub">= &pound;6.24 per week of training education</div>
+                    <div className="t-buy-sub">Once. Less than a single PT session — and it doesn&rsquo;t expire.</div>
                   </div>
                   <BuyButton requireTerms product="training" label="Start Week One →" />
                 </div>
