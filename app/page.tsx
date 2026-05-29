@@ -3,6 +3,7 @@
 import KmNavbar from '@/app/components/KmNavbar'
 import KmFooter from '@/app/components/KmFooter'
 import BuyButton from '@/app/components/BuyButton'
+import PersonaQuiz from '@/app/components/PersonaQuiz'
 
 /* ──────────────────────────────────────────────
    DATA
@@ -873,6 +874,8 @@ export default function Page() {
                 <div className="t-trust">
                   14-day refund<span>·</span>Instant access<span>·</span>Yours forever
                 </div>
+
+                <PersonaQuiz />
               </div>
 
               <div className="t-cover-wrap">

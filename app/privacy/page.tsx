@@ -14,7 +14,7 @@ export default function Privacy() {
           Privacy Policy
         </h1>
         <p style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 48 }}>
-          Last updated: 14 May 2026
+          Last updated: 29 May 2026
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
@@ -45,14 +45,23 @@ export default function Privacy() {
               <li><strong>Country:</strong> Derived from your IP address by our hosting provider (Vercel). We receive the country code only — we do not store your IP address.</li>
             </ul>
             <p>This analytics data is collected by our own first-party tracking system. No third-party analytics provider (e.g. Google Analytics) is used.</p>
+
+            <p><strong>If you take our optional "Is this for you?" quiz:</strong></p>
+            <ul>
+              <li><strong>Diagnostic answers:</strong> Your training experience, your main goal, and the obstacle you identify with</li>
+              <li><strong>Age range:</strong> A broad band (e.g. 25–34), not your date of birth</li>
+              <li><strong>Weight range (optional):</strong> A broad band (e.g. 70–80kg) which you may decline to provide. Because this relates to your physical condition, we treat it as <strong>special-category (health) data</strong> under Article 9 UK GDPR</li>
+              <li><strong>Email address (optional):</strong> Only if you ask us to email your result</li>
+            </ul>
+            <p>Your quiz result is shown to you on screen <strong>whether or not</strong> you let us keep your answers. We store these answers <strong>only if you give explicit, opt-in consent</strong> on the result screen. When stored, they are held against your random visitor cookie (<code>km_v</code>) — <strong>not your name</strong> — and are used in aggregate to understand which audiences our products suit. You can ask us to delete them at any time.</p>
           </Section>
 
           <Section title="3. Why We Collect Your Data (Legal Basis)">
             <p>We process your personal data on the following legal bases under UK GDPR:</p>
             <ul>
               <li><strong>Contract performance:</strong> To process your payment, send your account-activation link, provide access to the web portal, and provide order-related communications.</li>
-              <li><strong>Legitimate interests:</strong> To operate first-party analytics that help us understand how the website is used and improve the experience. This tracking is privacy-friendly — it uses no third-party scripts, does not profile you for advertising, and collects no sensitive personal data.</li>
-              <li><strong>Consent:</strong> For any optional marketing communications you opt into at checkout. You may withdraw consent at any time.</li>
+              <li><strong>Legitimate interests:</strong> To operate first-party analytics that help us understand how the website is used and improve the experience. This automatic tracking is privacy-friendly — it uses no third-party scripts, does not profile you for advertising, and collects no sensitive personal data.</li>
+              <li><strong>Consent:</strong> For optional marketing communications you opt into, and for keeping the answers you give in our optional diagnostic quiz. Where those answers include a weight range, we rely on your <strong>explicit consent</strong> as the Article 9 condition for processing special-category (health) data. You may withdraw any of these consents at any time.</li>
               <li><strong>Legal obligation:</strong> To retain payment and transaction records as required for tax and regulatory purposes.</li>
             </ul>
           </Section>
@@ -68,8 +77,9 @@ export default function Privacy() {
               <li>Measure the effectiveness of our marketing campaigns (via UTM data)</li>
               <li>Improve the website experience based on scroll and click behaviour</li>
               <li>Send occasional updates about new products or content (only with your consent; opt-out at any time)</li>
+              <li>Understand, in aggregate, which audiences our products suit best — using consented quiz answers — so we can improve our products and how we describe them</li>
             </ul>
-            <p>We do not use your data for automated decision-making that produces legal or similarly significant effects. We do not use your data for advertising profiling or sell it to any third party.</p>
+            <p>This aggregate analysis does not make any automated decision about you that produces legal or similarly significant effects, and it has no effect on the price you pay or the access you receive. We do not use your data for advertising profiling, and we do not sell it to any third party.</p>
           </Section>
 
           <Section title="5. Cookies">
@@ -105,6 +115,7 @@ export default function Privacy() {
             <ul>
               <li><strong>Order and customer records:</strong> Retained for 7 years as required by HMRC for tax purposes</li>
               <li><strong>Analytics event data:</strong> Retained for up to 12 months, after which it is deleted or anonymised</li>
+              <li><strong>Quiz answers:</strong> Retained for up to 12 months, after which they are deleted or aggregated into non-identifying statistics</li>
               <li><strong>Marketing consent records:</strong> Retained until you withdraw consent</li>
             </ul>
           </Section>
