@@ -21,8 +21,9 @@ declare global {
 }
 
 const STORAGE_CONSENT_TEXT =
-  'Use my anonymous answers — including my age range and weight range — to help improve Kira Mei. ' +
-  'These are stored against my visitor cookie, not my name, and I can ask for them to be deleted at any time.'
+  'Store and analyse my quiz answers — including my age range and weight range — so Kira Mei can understand ' +
+  'which audiences its products suit. These are kept against my browser identifier (not my name) for up to ' +
+  '12 months, and I can ask for them to be deleted at any time.'
 
 const EMAIL_CONSENT_TEXT =
   'Email me my full breakdown plus occasional Kira Mei updates. I can unsubscribe at any time.'
@@ -325,7 +326,7 @@ export default function PersonaQuiz() {
                         Optional — want it sent to you, and to help shape Kira Mei?
                       </p>
                       <ConsentRow checked={storeConsent} onChange={setStoreConsent}>
-                        Use my anonymous answers — including my age and weight range — to help improve Kira Mei.{' '}
+                        Store and analyse my answers — including my age and weight range — so Kira Mei can understand which audiences its products suit. Kept against my browser, not my name, for up to 12 months.{' '}
                         <a href="/privacy" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>How we handle this.</a>
                       </ConsentRow>
                       <input
