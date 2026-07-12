@@ -57,6 +57,10 @@ export default function KmFooter() {
         </div>
         <div className="km-footer-bottom">
           <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)' }}>© KIRA MEI · MMXXVI</p>
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)' }}>
+            Made by{' '}
+            <a href="https://sitework.uk" target="_blank" rel="noopener" style={{ color: 'var(--ink-muted)', borderBottom: '1px solid var(--paper-edge)' }}>Sitework</a>
+          </p>
           <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.12em', color: 'var(--ink-muted)' }}>KIRAMEI.CO.UK</p>
         </div>
       </div>
